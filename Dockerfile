@@ -1,5 +1,5 @@
-#FROM openanalytics/r-base
-FROM wg99526/micloudtest
+FROM openanalytics/r-base
+#FROM wg99526/micloudtest
 
 #MAINTAINER Tobias Verbeke "tobias.verbeke@openanalytics.eu"
 MAINTAINER Won Gu "rndnjs526@gmail.com"
