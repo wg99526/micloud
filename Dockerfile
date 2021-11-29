@@ -2,7 +2,7 @@
 FROM wg99526/micloudtest
 
 #MAINTAINER Tobias Verbeke "tobias.verbeke@openanalytics.eu"
-MAINTAINER Tobias Verbeke "rndnjs526@gmail.com"
+MAINTAINER Won Gu "rndnjs526@gmail.com"
 
 
 # system libraries of general use
