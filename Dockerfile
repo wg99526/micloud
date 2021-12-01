@@ -34,12 +34,14 @@ RUN R -e "install.packages(c('seqinr', 'shinydashboard', 'dashboardthemes', 'tid
 RUN R -e "install.packages(c('DT', 'htmltools', 'phangorn', 'bios2mds', 'zip', 'zCompositions', 'dplyr', 'forestplot', 'quantreg', 'fossil', 'picante' ), repos='https://cloud.r-project.org/')"
 RUN R -e "install.packages(c('entropart', 'lme4', 'lmerTest', 'broom.mixed', 'gee', 'geepack', 'dirmult', 'robustbase', 'robCompositions', 'BiasedUrn'), repos='https://cloud.r-project.org/')"
 RUN R -e "install.packages(c('CompQuadForm', 'GUniFrac', 'ecodist', 'MiRKAT', 'gridExtra', 'ggplot2', 'patchwork', 'ggthemes', 'erer', 'DiagrammeR', 'stringr'), repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages(c('devtools', 'betareg', 'reticulate', 'nlme', 'glmmTMB', 'glmm'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('devtools', 'betareg', 'reticulate', 'nlme', 'glmmTMB', 'glmm', 'remotes'), repos='https://cloud.r-project.org/')"
 
-RUN R -e "install.packages('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
-RUN R -e "install.packages('phyloseq', repos='https://github.com/joey711/phyloseq.git')"
-RUN R -e "install.packages('biomformat', repos='https://github.com/joey711/biomformat.git')"
-RUN R -e "install.packages('NBZIMM', repos='https://github.com/nyiuab/NBZIMM.git')"
+
+RUN R -e "install.packages(c('phyloseq', 'biomformat'), repos='https://bioconductor.org/biocLite.R')"
+#RUN R -e "install.packages('phyloseq', repos='https://github.com/joey711/phyloseq.git')"
+#RUN R -e "install.packages('biomformat', repos='https://github.com/joey711/biomformat.git')"
+RUN R -e "install.github('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
+RUN R -e "install.github('NBZIMM', repos='https://github.com/nyiuab/NBZIMM.git')"
 
 # copy the app to the image
 #RUN mkdir /root/euler
