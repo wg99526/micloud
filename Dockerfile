@@ -40,8 +40,8 @@ RUN R -e "install.packages(c('devtools', 'betareg', 'reticulate', 'nlme', 'glmmT
 RUN R -e "install.packages(c('phyloseq', 'biomformat'), repos='https://bioconductor.org/biocLite.R')"
 #RUN R -e "install.packages('phyloseq', repos='https://github.com/joey711/phyloseq.git')"
 #RUN R -e "install.packages('biomformat', repos='https://github.com/joey711/biomformat.git')"
-RUN R -e "install.github('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
-RUN R -e "install.github('NBZIMM', repos='https://github.com/nyiuab/NBZIMM.git')"
+RUN R -e "install_github('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
+RUN R -e "install_github('NBZIMM', repos='https://github.com/nyiuab/NBZIMM.git')"
 
 # copy the app to the image
 #RUN mkdir /root/euler
