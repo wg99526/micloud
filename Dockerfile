@@ -37,9 +37,9 @@ RUN R -e "install.packages(c('CompQuadForm', 'GUniFrac', 'ecodist', 'MiRKAT', 'g
 RUN R -e "install.packages(c('devtools', 'betareg', 'reticulate', 'nlme', 'glmmTMB', 'glmm', 'remotes'), repos='https://cloud.r-project.org/')"
 
 
-RUN R -e "install.packages(c('phyloseq', 'biomformat'), repos='https://bioconductor.org/biocLite.R')"
-#RUN R -e "install.packages('phyloseq', repos='https://github.com/joey711/phyloseq.git')"
-#RUN R -e "install.packages('biomformat', repos='https://github.com/joey711/biomformat.git')"
+#RUN R -e "install.packages(c('phyloseq', 'biomformat'), repos='https://bioconductor.org/biocLite.R')"
+RUN R -e "remotes::install_github('joey711/phyloseq')"
+RUN R -e "remotes::install_github('joey711/biomformat')"
 #RUN R -e "remotes::install_github('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
 RUN R -e "remotes::install_github('hk1785/GLMM-MiRKAT')"
 RUN R -e "remotes::install_github('nyiuab/NBZIMM')"
