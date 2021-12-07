@@ -49,8 +49,9 @@ RUN R -e "remotes::install_github('nyiuab/NBZIMM')"
 #COPY euler /root/euler
 RUN mkdir /root/app
 COPY app /root/app
-
 COPY Rprofile.site /usr/lib/R/etc/
+
+COPY sub.biom.Rdata /root/app
 
 EXPOSE 3838
 
