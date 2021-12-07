@@ -1,8 +1,12 @@
+library(devtools)
+library(tidyverse)
+library(phangorn)
+
 library(seqinr)
 library(shiny)
 library(shinydashboard)
 library(dashboardthemes)
-#library(tidyverse)
+
 library(phyloseq)
 library(plotly)
 library(shinyWidgets)
@@ -12,7 +16,7 @@ library(xtable)
 library(DT)
 library(htmltools)
 library(biomformat)
-#library(phangorn)
+
 library(bios2mds)
 library(zip)
 
@@ -39,7 +43,7 @@ library(GUniFrac)
 library(ecodist)  
 library(MiRKAT) 
 library(GLMMMiRKAT)
-#library(devtools)
+
 library(gridExtra) 
 library(ggplot2) 
 library(patchwork) 
