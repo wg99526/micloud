@@ -1,7 +1,8 @@
 server = function(input, output, session){
   options(shiny.maxRequestSize=30*1024^2)
   ## load example data ####
-  load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
+  #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
+  load(file="sub.biom.Rdata")
   biom <- sub.biom
   
   output$downloadData <- downloadHandler(
