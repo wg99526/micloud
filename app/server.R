@@ -44,9 +44,17 @@
 
 server = function(input, output, session){
   options(shiny.maxRequestSize=30*1024^2)
+  source("root/app/MiDataProc.Data.Upload.R")
+  source("root/app/MiDataProc.Alpha.Cross.Sectional.R")
+  source("root/app/MiDataProc.Alpha.Longitudinal.R")
+  source("root/app/MiDataProc.Beta.Cross.Sectional.R")
+  source("root/app/MiDataProc.Beta.Longitudinal.R")
+  source("root/app/MiDataProc.Taxa.Cross.Sectional.R")
+  source("root/app/MiDataProc.Taxa.Longitudinal.R")
+  
   ## load example data ####
   #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
-  load(file="sub.biom.Rdata")
+  load(file="root/app/sub.biom.Rdata")
   biom <- sub.biom
   
   output$downloadData <- downloadHandler(
