@@ -51,7 +51,7 @@ RUN mkdir /root/app
 COPY app /root/app
 COPY Rprofile.site /usr/lib/R/etc/
 
-COPY sub.biom.Rdata /root/app
+COPY app/sub.biom.Rdata /root/app
 
 EXPOSE 3838
 
