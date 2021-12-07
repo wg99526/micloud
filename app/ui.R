@@ -12,7 +12,7 @@ library(xtable)
 library(DT)
 library(htmltools)
 library(biomformat)
-library(phangorn)
+#library(phangorn)
 library(bios2mds)
 library(zip)
 
