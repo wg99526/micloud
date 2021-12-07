@@ -1,3 +1,47 @@
+{
+  INPUT_PHYLOSEQ_COMMENT1 = p("Description:", br(), br(), "This should be an '.Rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
+                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
+                              "). The phyloseq object should contain all the four necessary data, OTU/feature table, taxonomic table,
+                              phylogenetic tree and sample data.", br(), br(), "Details:", br(), br(), 
+                              "1) The OTU/feature table should contain counts, where rows are OTUs and columns are subjects 
+                              (row names are OTU/feature IDs and column names are subject IDs).", br(),
+                              "2) The taxonomic table should contain taxonomic names, where rows are OTUs and columns are seven taxonomic ranks 
+                              (row names are OTU/feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
+                              "3) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
+                              The tip labels of the phylogenetic tree are OTU/feature IDs.", br(), 
+                              "4) The sample data should contain variables for the subjects about host phenotypes, medical interventions, disease status or environmental/behavioral factors, 
+                              where rows are subjects and columns are variables (row names are subject IDs, and column names are variable names).", br(), br(), 
+                              "* The OTUs should be matched and identical across OTU/feature table, taxonomic table and phylogenetic tree. 
+                              The subjects should be matched and identical between OTU/feature table and sample data. MiCloud will analyze only the matched OTUs and subjects."
+                              , style = "font-size:11pt")
+  INPUT_PHYLOSEQ_COMMENT2 = p("You can download example microbiome data 'biom.Rdata' in 'phyloseq' format. The name of the 
+                            phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
+                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
+                              br(), br(), "> setwd('/yourdatadirectory/')", br(), br(), "> load(file = 'biom.Rdata')", br(), br(), 
+                              "> library(phyloseq)", br(), br(), " > otu.tab <- otu_table(biom)", br(), " > tax.tab <- 
+                            tax_table(biom)", br(), " > tree <- phy_tree(biom)", br(), " > sam.dat <- sample_data(biom)", br(),
+                              br(), "You can check if the OTUs are matched and identical across OTU/feature table, taxonomic table and
+                            phylogenetic tree, and the subjects are matched and identical between OTU/feature table and sample data 
+                            using following code.", br(), br(), " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
+                              " > identical(rownames(otu.tab), tree$tip.label)", br(), " > identical(colnames(otu.tab), 
+                            rownames(sam.dat))", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT = p("Description:", br(), br(), 
+                                    "1) The OTU/feature table (.txt or .csv) should contain counts, where rows are OTUs and columns are subjects (row names
+                                  are OTU/feature IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME", br(), 
+                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are OTUs and columns are seven taxonomic ranks (row names
+                                  are OTU/feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus',
+                                  'Species' or 'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME", br(), 
+                                    "3) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud
+                                  automatically roots the tree through midpoint rooting (phangorn::midpoint). The tip labels of the
+                                  phylogenetic tree are OTU/feature IDs.", br(), 
+                                    "4) The sample data (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, disease status or environmental
+                                  /behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and
+                                  column names are variable names).", br(), br(), "* The OTUs should be matched and identical across OTU
+                                  table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between OTU
+                                  table and sample data. MiCloud will analyze only the matched OTUs and subjects.", 
+                                    style = "font-size:11pt")
+}
+
 server = function(input, output, session){
   options(shiny.maxRequestSize=30*1024^2)
   ## load example data ####
