@@ -52,6 +52,13 @@ COPY app /root/app
 COPY Rprofile.site /usr/lib/R/etc/
 
 COPY app/sub.biom.Rdata /root/app
+COPY app/MiDataProc.Data.Upload.R /root/app
+COPY app/MiDataProc.Alpha.Cross.Sectional.R /root/app
+COPY app/MiDataProc.Alpha.Longitudinal.R /root/app
+COPY app/MiDataProc.Beta.Cross.Sectional.R /root/app
+COPY app/MiDataProc.Beta.Longitudinal.R /root/app
+COPY app/MiDataProc.Taxa.Cross.Sectional.R /root/app
+COPY app/MiDataProc.Taxa.Longitudinal.R /root/app
 
 EXPOSE 3838
 
