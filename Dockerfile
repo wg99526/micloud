@@ -17,6 +17,9 @@ RUN apt-get update && apt-get install -y \
     libssh2-1-dev \
     libssl1.1 \
     libxml2-dev \
+    build-essential \
+    r-base-dev \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
 # system library dependency for the euler app
@@ -44,6 +47,7 @@ RUN R -e "remotes::install_github('joey711/biomformat')"
 #RUN R -e "remotes::install_github('GLMMMiRKAT', repos='https://github.com/hk1785/GLMM-MiRKAT.git')"
 RUN R -e "remotes::install_github('hk1785/GLMM-MiRKAT')"
 RUN R -e "remotes::install_github('nyiuab/NBZIMM')"
+RUN R -e "install.packages(c('gridGraphics', 'compositions'), repos = 'https://cloud.r-project.org/')"
 
 # copy the app to the image
 #RUN mkdir /root/euler
