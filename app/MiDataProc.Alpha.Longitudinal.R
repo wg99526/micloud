@@ -328,9 +328,9 @@ alpha.lmer.bin.id.func <- function(bin.var, id.var, alpha.div, scale = TRUE) {
 
 alpha.forest.lmer.plot <- function(out, mult.test.cor = TRUE) {
   
-  if (!mult.test.cor) {
-    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "Est", "SE", "P-value"), 
-                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]))))
+  if (mult.test.cor) {
+    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "Est", "SE", "P-value", "Q-value"), 
+                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]), p.value.0.1(out[,7]))))
     ci.tab.all <- as.matrix(rbind(c(NA, NA, NA), cbind(out[,1], out[,c(4,5)])))
     
     forestplot(labeltext=text.tab.all, mean=ci.tab.all[,1], lower=ci.tab.all[,2], upper=ci.tab.all[,3], 
@@ -340,11 +340,9 @@ alpha.forest.lmer.plot <- function(out, mult.test.cor = TRUE) {
                               ticks=gpar(fontfamily="", cex=0.7),
                               xlab=gpar(fontfamily="", cex=0.7)))
     #plot.taxa <- grid.grab()
-  }
-  
-  if (mult.test.cor) {
-    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "Est", "SE", "P-value", "Q-value"), 
-                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]), p.value.0.1(out[,7]))))
+  }else{
+    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "Est", "SE", "P-value"), 
+                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]))))
     ci.tab.all <- as.matrix(rbind(c(NA, NA, NA), cbind(out[,1], out[,c(4,5)])))
     
     forestplot(labeltext=text.tab.all, mean=ci.tab.all[,1], lower=ci.tab.all[,2], upper=ci.tab.all[,3], 
@@ -359,9 +357,9 @@ alpha.forest.lmer.plot <- function(out, mult.test.cor = TRUE) {
 
 alpha.forest.lmer.or.plot <- function(out, mult.test.cor = TRUE) {
   
-  if (!mult.test.cor) {
-    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "OR", "SE", "P-value"), 
-                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]))))
+  if (mult.test.cor) {
+    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "OR", "SE", "P-value", "Q-value"), 
+                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]), p.value.0.1(out[,7]))))
     ci.tab.all <- as.matrix(rbind(c(NA, NA, NA), cbind(out[,1], out[,c(4,5)])))
     
     forestplot(labeltext=text.tab.all, mean=ci.tab.all[,1], lower=ci.tab.all[,2], upper=ci.tab.all[,3], 
@@ -372,10 +370,9 @@ alpha.forest.lmer.or.plot <- function(out, mult.test.cor = TRUE) {
                               xlab=gpar(fontfamily="", cex=0.7)))
     #plot.taxa <- grid.grab()
   }
-  
-  if (mult.test.cor) {
-    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "OR", "SE", "P-value", "Q-value"), 
-                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]), p.value.0.1(out[,7]))))
+  else{
+    text.tab.all <- as.matrix(rbind(c("Alpha Diversity", "OR", "SE", "P-value"), 
+                                    cbind(rownames(out), format(round(out[, c(1, 2)], digits = 3), nsmall = 3), p.value.0.1(out[,6]))))
     ci.tab.all <- as.matrix(rbind(c(NA, NA, NA), cbind(out[,1], out[,c(4,5)])))
     
     forestplot(labeltext=text.tab.all, mean=ci.tab.all[,1], lower=ci.tab.all[,2], upper=ci.tab.all[,3], 
