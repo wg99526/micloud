@@ -339,7 +339,7 @@ alpha.forest.lmer.plot <- function(out, mult.test.cor = TRUE) {
                txt_gp=fpTxtGp(label=list(gpar(fontfamily="", cex=0.7), gpar(fontfamily="", cex=0.7)),
                               ticks=gpar(fontfamily="", cex=0.7),
                               xlab=gpar(fontfamily="", cex=0.7)))
-    plot.taxa <- grid.grab()
+    #plot.taxa <- grid.grab()
   }
   
   if (mult.test.cor) {
@@ -353,7 +353,7 @@ alpha.forest.lmer.plot <- function(out, mult.test.cor = TRUE) {
                txt_gp=fpTxtGp(label=list(gpar(fontfamily="", cex=0.7), gpar(fontfamily="", cex=0.7)),
                               ticks=gpar(fontfamily="", cex=0.7),
                               xlab=gpar(fontfamily="", cex=0.7)))
-    plot.taxa <- grid.grab()
+    #plot.taxa <- grid.grab()
   }
 }
 
@@ -370,7 +370,7 @@ alpha.forest.lmer.or.plot <- function(out, mult.test.cor = TRUE) {
                txt_gp=fpTxtGp(label=list(gpar(fontfamily="", cex=0.7), gpar(fontfamily="", cex=0.7)),
                               ticks=gpar(fontfamily="", cex=0.7),
                               xlab=gpar(fontfamily="", cex=0.7)))
-    plot.taxa <- grid.grab()
+    #plot.taxa <- grid.grab()
   }
   
   if (mult.test.cor) {
@@ -384,7 +384,7 @@ alpha.forest.lmer.or.plot <- function(out, mult.test.cor = TRUE) {
                txt_gp=fpTxtGp(label=list(gpar(fontfamily="", cex=0.7), gpar(fontfamily="", cex=0.7)),
                               ticks=gpar(fontfamily="", cex=0.7),
                               xlab=gpar(fontfamily="", cex=0.7)))
-    plot.taxa <- grid.grab()
+    #plot.taxa <- grid.grab()
   }
 }
 
