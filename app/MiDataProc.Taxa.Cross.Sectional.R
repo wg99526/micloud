@@ -126,6 +126,229 @@ tax.trans2 <- function(otu.tab, tax.tab, rare.otu.tab, rare.tax.tab, sub.com = T
 # Binary - No covariates #
 ##########################
 
+taxa.ind.sum.func <- function(x) {
+  sum.out <- c(length(x), mean(x), quantile(x))
+  names(sum.out) <-  c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
+  return(sum.out)
+}
+
+taxa.bin.sum.func <- function(bin.var, taxa) {
+  
+  if(is.null(ncol(taxa))){
+    out <- NULL
+    
+  }else{
+    n.taxa <- ncol(taxa)
+    ref.sum <- matrix(NA, n.taxa, 7)
+    com.sum <- matrix(NA, n.taxa, 7)
+    for (i in 1:n.taxa) {
+      ind.taxa <- taxa[,i]
+      sum.out <- tapply(ind.taxa, bin.var, taxa.ind.sum.func)
+      ref.sum[i,] <- sum.out[[1]]
+      com.sum[i,] <- sum.out[[2]]
+    }
+    rownames(ref.sum) <- colnames(taxa)
+    colnames(ref.sum) <- c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
+    rownames(com.sum) <- colnames(taxa)
+    colnames(com.sum) <- c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
+    out <- list(as.data.frame(ref.sum), as.data.frame(com.sum))
+    names(out) <- levels(bin.var)
+  }
+  return(out)
+}
+
+taxa.bin.sum.united.func <- function(bin.var, taxa.out) {
+  taxa.bin.sum <-list()
+  for(i in 1:6) {
+    taxa.bin.sum[[i]] <- taxa.bin.sum.func(bin.var, taxa.out[[i]])
+  }
+  names(taxa.bin.sum) <- names(taxa.out)
+  return(taxa.bin.sum)
+}
+
+# Multiple testing correction
+
+bin.q.func <- function(out, method = c("BH", "BY")) {
+  if(is.null(out)){
+    return(NULL)
+  }else{
+    Q.value <- p.adjust(out$P.value, method = method)
+    return(cbind(out, Q.value))
+  }
+}
+
+bin.q.united.func <- function(taxa.out, method = "BH") {
+  q.out <- list()
+  for(i in 1:6) {
+    q.out[[i]] <- bin.q.func(taxa.out[[i]], method)
+  }
+  names(q.out) <- names(taxa.out)
+  return(q.out)
+}
+
+bin.t.test.q.fcr.func <- function(bin.var, taxa, method = c("BH", "BY")) {
+  n.taxa <- ncol(taxa)
+  out <- matrix(NA, n.taxa, 6)
+  for (i in 1:n.taxa) {
+    fit <- t.test(taxa[,i] ~ bin.var)
+    out[i,] <- c(fit$statistic, fit$stderr, fit$parameter, fit$conf.int, fit$p.value)   
+  }
+  out <- as.data.frame(out)
+  rownames(out) <- colnames(taxa)
+  colnames(out) <- c("t", "Std Err", "DF", "Lower", "Upper", "P.value")
+  Q.value <- p.adjust(out$P.value, method = method)
+  R <- sum(Q.value < 0.05)
+  conf.level <- 1 - R*0.05/n.taxa
+  fcr.out <- matrix(NA, n.taxa, 2)
+  for (i in 1:n.taxa) {
+    fit <- t.test(taxa[,i] ~ bin.var, conf.level = conf.level)
+    fcr.out[i,] <- fit$conf.int   
+  }
+  fcr.out <- as.data.frame(fcr.out)
+  rownames(fcr.out) <- colnames(taxa)
+  colnames(fcr.out) <- c("FCR.Lower", "FCR.Upper")
+  return(cbind(out, fcr.out, Q.value))
+}
+
+taxa.bin.cat.ref.logit.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {  
+  bin.var <- sam.dat[,sel.bin.var]
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
+  colnames(bin.var) <- sel.bin.var
+  #bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
+  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
+  
+  return(list(bin.var = bin.var, taxa = taxa))
+}
+
+taxa.bin.cat.ref.logit.united.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {  
+  bin.var <- sam.dat[,sel.bin.var]
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
+  colnames(bin.var) <- sel.bin.var
+  #bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
+  taxa.out <- list()
+  for(i in 1:6) {
+    taxon <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
+    taxa.out[[i]] <- taxon
+  }
+  names(taxa.out) <- names(taxa)
+  
+  return(list(bin.var = bin.var, taxa = taxa.out))
+}
+
+taxa.bin.cat.ref.beta.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa){
+  bin.var <- sam.dat[,sel.bin.var]
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
+  colnames(bin.var) <- sel.bin.var
+  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
+  
+  #taxa <- zCompositions::cmultRepl(taxa)
+  
+  return(list(bin.var = bin.var, taxa = taxa))
+}
+
+taxa.bin.var.func <- function(sam.dat) {
+  var.names <- colnames(sam.dat)
+  return(var.names)
+}
+
+taxa.bin.cat.func <- function(sam.dat, sel.bin.var) {
+  bin.var <- unlist(sam.dat[,sel.bin.var])
+  bin.var.no.na <- bin.var[!is.na(bin.var)]
+  bin.cat <- unique(bin.var.no.na)
+  if (length(bin.cat) != 2) {
+    stop(paste(sel.bin.var, " is not binary", sep = ""))
+  }
+  return(bin.cat)
+}
+
+taxa.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
+  return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))
+}
+
+taxa.bin.cat.recode.func <- function(sam.dat, sel.bin.var = "ecig_status", ori.cat, rename.ref, rename.com) {
+  ind.ref <- which(sam.dat[,sel.bin.var] == ori.cat[1])
+  ind.com <- which(sam.dat[,sel.bin.var] == ori.cat[2])
+  sam.dat[ind.ref,sel.bin.var] <- rename.ref
+  sam.dat[ind.com,sel.bin.var] <- rename.com
+  return(sam.dat)
+}
+
+taxa.bin.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {
+  bin.var <- unlist(sam.dat[,sel.bin.var])
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
+  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
+  
+  return(list(bin.var = bin.var, taxa = taxa))
+}
+
+taxa.bin.cat.ref.united.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {
+  bin.var <- unlist(sam.dat[,sel.bin.var])
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
+  taxa.out <- list()
+  for(i in 1:6) {
+    taxon <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
+    taxa.out[[i]] <- taxon
+  }
+  names(taxa.out) <- names(taxa)
+  
+  return(list(bin.var = bin.var, taxa = taxa.out))
+}
+
+taxa.bin.cov.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sel.cov.var, sam.dat, taxa) { ## 0527
+  bin.var <- unlist(sam.dat[,sel.bin.var])
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
+  colnames(bin.var) <- sel.bin.var
+  cov.var <- sam.dat[,sel.cov.var]
+  cov.var <- as.data.frame(rbind(cov.var[ind.ref,], cov.var[ind.com,]))
+  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
+  
+  return(list(bin.var = bin.var, cov.var = cov.var, taxa = taxa))
+}
+
+taxa.bin.cov.cat.ref.united.func <- function(sel.bin.var, sel.ref, sel.com, sel.cov.var, sam.dat, taxa) {
+  bin.var <- unlist(sam.dat[,sel.bin.var])
+  ind.ref <- which(bin.var == sel.ref)
+  ind.com <- which(bin.var == sel.com)
+  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
+  colnames(bin.var) <- sel.bin.var
+  cov.var <- sam.dat[,sel.cov.var]
+  cov.var <- as.data.frame(rbind(cov.var[ind.ref,], cov.var[ind.com,]))
+  taxa.list <- list()
+  for (i in 1:6) {
+    taxa.rank <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
+    taxa.list[[i]] <- taxa.rank
+  }
+  names(taxa.list) <- names(taxa)
+  return(list(bin.var = bin.var, cov.var = cov.var, taxa = taxa.list))
+}
+
+get.or.se <- function(model) {
+  broom::tidy(model) %>%
+    mutate(or = exp(estimate),
+           var.diag = diag(vcov(model)),
+           or.se = sqrt(or^2 * var.diag)) %>%
+    select(or.se) %>% unlist %>% unname
+}
+
+get.or.se2 <- function(model){
+  or = exp(broom::tidy(model)$estimate)
+  var.diag = diag(vcov(model))
+  or.se = sqrt(or^2 * var.diag)
+  return(unname(unlist(or.se)))
+}
+
 taxa.bin.t.test <- function(bin.var, taxa) {
   if(is.null(taxa)){
     out <- NULL
@@ -208,36 +431,6 @@ taxa.wilcox.test.est.func <- function(bin.var, taxa, sel.ref, sel.com, q.out) {
     
   }
   return(q.out)
-}
-
-taxa.bin.glm.nb.func <- function(bin.var, taxa) {
-  n.tax <- ncol(taxa)
-  lmer.out <- matrix(NA, n.tax, 6)
-  library.size <- apply(taxa,1, sum)
-  print(n.tax)
-  for (i in 1:n.tax) {
-    taxon <- taxa[,i]
-    print(i)
-    dat <- as.data.frame(cbind(bin.var, taxon))
-    dat[,2] <- as.numeric(dat[,2])
-    dat[,1] <- as.numeric(dat[,1])
-    f <- formula(paste(colnames(dat)[2], " ~ ", colnames(dat)[1], "+ offset(log(library.size))", sep = ""))
-    #f <- formula(paste(colnames(dat)[2], " ~ ", colnames(dat)[1], sep = ""))
-    fit <- try(glm.nb(f, data = dat), silent = TRUE)
-    
-    est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
-    std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
-    DF <- NA
-    ci <- c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err)
-    p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
-    out <- c(est, std.err, DF, ci, p.val)
-    
-    lmer.out[i,] <- out
-  }
-  lmer.out <- as.data.frame(lmer.out)
-  rownames(lmer.out) <- colnames(taxa)
-  colnames(lmer.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
-  return(lmer.out)
 }
 
 all.taxa.bin.t.test <- function(taxa.out, multi.method = "BH") {
@@ -327,6 +520,47 @@ all.taxa.bin.wilcox.test.united <- function(taxa.out, sam.dat, multi.method = "B
   return(tax.out)
 }
 
+taxa.bin.lm.func <- function(bin.var, taxa) {  # without covariate
+  
+  n.tax <- ncol(taxa)
+  lm.out <- matrix(NA, n.tax, 6)
+  for (i in 1:n.tax) {
+    taxon <- taxa[,i]
+    fit <- try(lm(taxon ~ bin.var), silent = TRUE)
+    
+    est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
+    std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
+    df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
+    if(is.na(df)){
+      ci <- tryCatch(c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err), error = function(err) C(NA,NA))
+    }else{
+      ci <- tryCatch(c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err), error = function(err) C(NA,NA))
+    }
+    
+    p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
+    
+    out <- c(est, std.err, df, ci, p.val)
+    
+    #out.lm <- c(summary(fit.lm)$coefficients[2,c(1,2)], summary(fit.lm)$df[2], confint(fit.lm)[2,], summary(fit.lm)$coefficients[2,4])
+    lm.out[i,] <- out
+  }
+  #here3
+  lm.out <- as.data.frame(lm.out)
+  rownames(lm.out) <- colnames(taxa)
+  colnames(lm.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
+  return(lm.out)
+}
+
+taxa.bin.lm.united.func <- function(bin.var, taxa) {
+  lm.test <- list()
+  for(i in 1:6) {
+    taxon <- taxa[[i]]
+    lm.test[[i]] <- taxa.bin.lm.func(bin.var, taxon)
+  }
+  names(lm.test) <- names(taxa)
+  return(lm.test)
+}
+
 all.taxa.bin.glm.nb <- function(bin.var, taxa, multi.method = "BH") {
   tax.out <- list()
   for (i in 1:6) {
@@ -338,252 +572,59 @@ all.taxa.bin.glm.nb <- function(bin.var, taxa, multi.method = "BH") {
   return(tax.out)
 }
 
-taxa.bin.var.func <- function(sam.dat) {
-  var.names <- colnames(sam.dat)
-  return(var.names)
-}
-
-taxa.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  if (length(bin.cat) != 2) {
-    stop(paste(sel.bin.var, " is not binary", sep = ""))
-  }
-  return(bin.cat)
-}
-
-taxa.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
-  return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))
-}
-
-taxa.bin.cat.recode.func <- function(sam.dat, sel.bin.var = "ecig_status", ori.cat, rename.ref, rename.com) {
-  ind.ref <- which(sam.dat[,sel.bin.var] == ori.cat[1])
-  ind.com <- which(sam.dat[,sel.bin.var] == ori.cat[2])
-  sam.dat[ind.ref,sel.bin.var] <- rename.ref
-  sam.dat[ind.com,sel.bin.var] <- rename.com
-  return(sam.dat)
-}
-
-taxa.bin.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
-  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
-  
-  return(list(bin.var = bin.var, taxa = taxa))
-}
-
-taxa.bin.cat.ref.united.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
-  taxa.out <- list()
-  for(i in 1:6) {
-    taxon <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
-    taxa.out[[i]] <- taxon
-  }
-  names(taxa.out) <- names(taxa)
-  
-  return(list(bin.var = bin.var, taxa = taxa.out))
-}
-
-taxa.bin.cov.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sel.cov.var, sam.dat, taxa) { ## 0527
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
-  colnames(bin.var) <- sel.bin.var
-  cov.var <- sam.dat[,sel.cov.var]
-  cov.var <- as.data.frame(rbind(cov.var[ind.ref,], cov.var[ind.com,]))
-  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
-  
-  return(list(bin.var = bin.var, cov.var = cov.var, taxa = taxa))
-}
-
-taxa.bin.cov.cat.ref.united.func <- function(sel.bin.var, sel.ref, sel.com, sel.cov.var, sam.dat, taxa) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
-  colnames(bin.var) <- sel.bin.var
-  cov.var <- sam.dat[,sel.cov.var]
-  cov.var <- as.data.frame(rbind(cov.var[ind.ref,], cov.var[ind.com,]))
-  taxa.list <- list()
-  for (i in 1:6) {
-    taxa.rank <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
-    taxa.list[[i]] <- taxa.rank
-  }
-  names(taxa.list) <- names(taxa)
-  return(list(bin.var = bin.var, cov.var = cov.var, taxa = taxa.list))
-}
-
-taxa.ind.sum.func <- function(x) {
-  sum.out <- c(length(x), mean(x), quantile(x))
-  names(sum.out) <-  c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
-  return(sum.out)
-}
-
-taxa.bin.sum.func <- function(bin.var, taxa) {
-  
-  if(is.null(ncol(taxa))){
-    out <- NULL
-    
-  }else{
-    n.taxa <- ncol(taxa)
-    ref.sum <- matrix(NA, n.taxa, 7)
-    com.sum <- matrix(NA, n.taxa, 7)
-    for (i in 1:n.taxa) {
-      ind.taxa <- taxa[,i]
-      sum.out <- tapply(ind.taxa, bin.var, taxa.ind.sum.func)
-      ref.sum[i,] <- sum.out[[1]]
-      com.sum[i,] <- sum.out[[2]]
-    }
-    rownames(ref.sum) <- colnames(taxa)
-    colnames(ref.sum) <- c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
-    rownames(com.sum) <- colnames(taxa)
-    colnames(com.sum) <- c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
-    out <- list(as.data.frame(ref.sum), as.data.frame(com.sum))
-    names(out) <- levels(bin.var)
-  }
-  return(out)
-}
-
-taxa.bin.sum.united.func <- function(bin.var, taxa.out) {
-  taxa.bin.sum <-list()
-  for(i in 1:6) {
-    taxa.bin.sum[[i]] <- taxa.bin.sum.func(bin.var, taxa.out[[i]])
-  }
-  names(taxa.bin.sum) <- names(taxa.out)
-  return(taxa.bin.sum)
-}
-
-# Multiple testing correction
-
-bin.q.func <- function(out, method = c("BH", "BY")) {
-  if(is.null(out)){
-    return(NULL)
-  }else{
-  Q.value <- p.adjust(out$P.value, method = method)
-  return(cbind(out, Q.value))
-  }
-}
-
-bin.q.united.func <- function(taxa.out, method = "BH") {
-  q.out <- list()
-  for(i in 1:6) {
-    q.out[[i]] <- bin.q.func(taxa.out[[i]], method)
-  }
-  names(q.out) <- names(taxa.out)
-  return(q.out)
-}
-
-bin.t.test.q.fcr.func <- function(bin.var, taxa, method = c("BH", "BY")) {
-  n.taxa <- ncol(taxa)
-  out <- matrix(NA, n.taxa, 6)
-  for (i in 1:n.taxa) {
-    fit <- t.test(taxa[,i] ~ bin.var)
-    out[i,] <- c(fit$statistic, fit$stderr, fit$parameter, fit$conf.int, fit$p.value)   
-  }
-  out <- as.data.frame(out)
-  rownames(out) <- colnames(taxa)
-  colnames(out) <- c("t", "Std Err", "DF", "Lower", "Upper", "P.value")
-  Q.value <- p.adjust(out$P.value, method = method)
-  R <- sum(Q.value < 0.05)
-  conf.level <- 1 - R*0.05/n.taxa
-  fcr.out <- matrix(NA, n.taxa, 2)
-  for (i in 1:n.taxa) {
-    fit <- t.test(taxa[,i] ~ bin.var, conf.level = conf.level)
-    fcr.out[i,] <- fit$conf.int   
-  }
-  fcr.out <- as.data.frame(fcr.out)
-  rownames(fcr.out) <- colnames(taxa)
-  colnames(fcr.out) <- c("FCR.Lower", "FCR.Upper")
-  return(cbind(out, fcr.out, Q.value))
-}
-
-taxa.bin.cat.ref.logit.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {  
-  bin.var <- sam.dat[,sel.bin.var]
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
-  colnames(bin.var) <- sel.bin.var
-  #bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
-  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
-  
-  return(list(bin.var = bin.var, taxa = taxa))
-}
-
-taxa.bin.cat.ref.logit.united.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa) {  
-  bin.var <- sam.dat[,sel.bin.var]
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
-  colnames(bin.var) <- sel.bin.var
-  #bin.var <- factor(c(bin.var[ind.ref], bin.var[ind.com]), levels = c(sel.ref, sel.com))
-  taxa.out <- list()
-  for(i in 1:6) {
-    taxon <- rbind(taxa[[i]][ind.ref,], taxa[[i]][ind.com,])
-    taxa.out[[i]] <- taxon
-  }
-  names(taxa.out) <- names(taxa)
-  
-  return(list(bin.var = bin.var, taxa = taxa.out))
-}
-
-taxa.bin.cat.ref.beta.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, taxa){
-  bin.var <- sam.dat[,sel.bin.var]
-  ind.ref <- which(bin.var == sel.ref)
-  ind.com <- which(bin.var == sel.com)
-  bin.var <- as.data.frame(c(rep(0, length(ind.ref)), rep(1, length(ind.com))))
-  colnames(bin.var) <- sel.bin.var
-  taxa <- rbind(taxa[ind.ref,], taxa[ind.com,])
-  
-  #taxa <- zCompositions::cmultRepl(taxa)
-  
-  return(list(bin.var = bin.var, taxa = taxa))
-}
-
-get.or.se <- function(model) {
-  broom::tidy(model) %>%
-    mutate(or = exp(estimate),
-           var.diag = diag(vcov(model)),
-           or.se = sqrt(or^2 * var.diag)) %>%
-    select(or.se) %>% unlist %>% unname
-}
-
-get.or.se2 <- function(model){
-  or = exp(broom::tidy(model)$estimate)
-  var.diag = diag(vcov(model))
-  or.se = sqrt(or^2 * var.diag)
-  return(unname(unlist(or.se)))
-}
-
-taxa.bin.logit.func <- function(bin.var, taxa){
+taxa.bin.glm.nb.func <- function(bin.var, taxa) {
   n.tax <- ncol(taxa)
-  log.out <- matrix(NA, n.tax, 6)
+  lmer.out <- matrix(NA, n.tax, 6)
+  library.size <- apply(taxa,1, sum)
+  print(n.tax)
   for (i in 1:n.tax) {
     taxon <- taxa[,i]
-    fit <- try(glm(unlist(bin.var) ~ taxon, family = binomial()), silent = TRUE)
-    #here1
+    print(i)
+    dat <- as.data.frame(cbind(bin.var, taxon))
+    dat[,2] <- as.numeric(dat[,2])
+    dat[,1] <- as.numeric(dat[,1])
+    f <- formula(paste(colnames(dat)[2], " ~ ", colnames(dat)[1], "+ offset(log(library.size))", sep = ""))
+    #f <- formula(paste(colnames(dat)[2], " ~ ", colnames(dat)[1], sep = ""))
+    fit <- try(glm.nb(f, data = dat), silent = TRUE)
     
     est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
     std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
-    df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
+    DF <- NA
     ci <- c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err)
     p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
+    out <- c(est, std.err, DF, ci, p.val)
     
-    out <- c(est, std.err, df, ci, p.val)
-    #out.log <- c(summary(fit.log)$coefficients[2,c(1,2)], summary(fit.log)$df[2], confint(fit.log)[2,], summary(fit.log)$coefficients[2,4])
-    log.out[i,] <- out
+    lmer.out[i,] <- out
   }
-  log.out <- as.data.frame(log.out)
-  rownames(log.out) <- colnames(taxa)
-  colnames(log.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
-  return(log.out)
+  lmer.out <- as.data.frame(lmer.out)
+  rownames(lmer.out) <- colnames(taxa)
+  colnames(lmer.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
+  return(lmer.out)
 }
+
+# taxa.bin.logit.func <- function(bin.var, taxa){
+#   n.tax <- ncol(taxa)
+#   log.out <- matrix(NA, n.tax, 6)
+#   for (i in 1:n.tax) {
+#     taxon <- taxa[,i]
+#     fit <- try(glm(unlist(bin.var) ~ taxon, family = binomial()), silent = TRUE)
+#     #here1
+#     
+#     est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
+#     std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
+#     df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
+#     ci <- c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err)
+#     p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
+#     
+#     out <- c(est, std.err, df, ci, p.val)
+#     #out.log <- c(summary(fit.log)$coefficients[2,c(1,2)], summary(fit.log)$df[2], confint(fit.log)[2,], summary(fit.log)$coefficients[2,4])
+#     log.out[i,] <- out
+#   }
+#   log.out <- as.data.frame(log.out)
+#   rownames(log.out) <- colnames(taxa)
+#   colnames(log.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
+#   return(log.out)
+# }
 
 all.taxa.logit.reg.coef.bin.func <- function(bin.var, taxa.out, scale = TRUE) {
   all.logit.out <- list()
@@ -615,12 +656,6 @@ all.taxa.logit.reg.coef.bin.func <- function(bin.var, taxa.out, scale = TRUE) {
         
         out <- c(est, std.err, df, ci, p.val)
         
-        # est <- summary(fit)$coefficients[2,1]
-        # std.err <- summary(fit)$coefficients[2,2]
-        # df <- summary(fit)$df[2]
-        # ci <- c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err)
-        # 
-        # out <- c(est, std.err, df, ci, summary(fit)$coefficients[2,4])
         logit.out[j,] <- out
       }
       logit.out <- as.data.frame(logit.out)
@@ -630,6 +665,49 @@ all.taxa.logit.reg.coef.bin.func <- function(bin.var, taxa.out, scale = TRUE) {
       all.logit.out[[i]] <-logit.out
     }
     
+  }
+  names(all.logit.out) <- names(taxa.out)
+  return(all.logit.out)
+}
+
+all.taxa.logit.bin.func <- function(bin.var, taxa.out, scale = TRUE) {
+  all.logit.out <- list()
+  for(i in 1:6) {
+    if(!is.null(taxa.out[[i]])){
+      taxa <- taxa.out[[i]]
+      n.tax <- ncol(taxa)
+      logit.out <- matrix(NA, n.tax, 6)
+      for (j in 1:n.tax) {
+        taxon <- taxa[,j]
+        d <- as.data.frame(cbind(bin.var, taxon))
+        #d[,1] <- as.numeric(d[,1])
+        #d[,2] <- as.numeric(d[,2])
+        if(scale){
+          logit.f <- formula(paste(colnames(bin.var), "~" , "scale(taxon)"))
+        } else {
+          logit.f <- formula(paste(colnames(bin.var), "~" , "taxon"))
+        }
+        #here7
+        fit <- try(glm(logit.f, data = d , family = "binomial"), silent = TRUE)
+
+        or <- tryCatch(exp(summary(fit)$coefficients[2,1]), error = function(err) NA)
+        or.se <- tryCatch(sqrt(or^2*diag(vcov(fit)))[2], error = function(err) NA)
+        df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
+        if(is.na(df)){
+          ci <- tryCatch(c(exp(summary(fit)$coefficients[2,1] - qnorm(0.975)*summary(fit)$coefficients[2,2]), exp(summary(fit)$coefficients[2,1] + qnorm(0.975)*summary(fit)$coefficients[2,2])), error = function(err) C(NA,NA))
+        }else{
+          ci <- tryCatch(c(exp(summary(fit)$coefficients[2,1] - qt(0.975, df = df)*summary(fit)$coefficients[2,2]), exp(summary(fit)$coefficients[2,1] + qt(0.975, df = df)*summary(fit)$coefficients[2,2])), error = function(err) C(NA,NA))
+        }
+        p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
+        out <- c(or, or.se, df, ci, p.val)
+        logit.out[j,] <- out
+      }
+      logit.out <- as.data.frame(logit.out)
+      rownames(logit.out) <- colnames(taxa)
+      colnames(logit.out) <- c("OR", "Std Err", "DF", "Lower", "Upper", "P.value")
+      logit.q.out <- bin.q.func
+      all.logit.out[[i]] <-logit.out
+    }
   }
   names(all.logit.out) <- names(taxa.out)
   return(all.logit.out)
@@ -687,80 +765,39 @@ taxa.bin.beta.func <- function(bin.var, taxa) {
 # Binary - Covariates #     need to add covariate
 #######################
 
-taxa.bin.lm.func <- function(bin.var, taxa) {  # without covariate
-  
-  n.tax <- ncol(taxa)
-  lm.out <- matrix(NA, n.tax, 6)
-  for (i in 1:n.tax) {
-    taxon <- taxa[,i]
-    fit <- try(lm(taxon ~ bin.var), silent = TRUE)
-    
-    est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
-    std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
-    df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
-    if(is.na(df)){
-      ci <- tryCatch(c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err), error = function(err) C(NA,NA))
-    }else{
-      ci <- tryCatch(c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err), error = function(err) C(NA,NA))
-    }
-    
-    p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
-    
-    out <- c(est, std.err, df, ci, p.val)
-    
-    #out.lm <- c(summary(fit.lm)$coefficients[2,c(1,2)], summary(fit.lm)$df[2], confint(fit.lm)[2,], summary(fit.lm)$coefficients[2,4])
-    lm.out[i,] <- out
-  }
-  #here3
-  lm.out <- as.data.frame(lm.out)
-  rownames(lm.out) <- colnames(taxa)
-  colnames(lm.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
-  return(lm.out)
-}
-
-taxa.bin.lm.united.func <- function(bin.var, taxa) {
-  lm.test <- list()
-  for(i in 1:6) {
-    taxon <- taxa[[i]]
-    lm.test[[i]] <- taxa.bin.lm.func(bin.var, taxon)
-  }
-  names(lm.test) <- names(taxa)
-  return(lm.test)
-}
-
-taxa.bin.cov.lm.func <- function(bin.var, cov.var, taxa) {   
-  n.cov <- ncol(cov.var)
-  n.tax <- ncol(taxa)
-  d <- as.data.frame(cbind(bin.var, cov.var, taxa))
-  lm.out <- matrix(NA, n.tax, 6)
-  for (i in 1:n.tax) {
-    taxon <- taxa[,i]
-    #here4
-    lm.f <- formula(paste("taxon", "~", colnames(bin.var), "+", paste(colnames(cov.var), collapse = "+")))
-    fit <- try(lm(lm.f, data = d), silent = TRUE)
-    
-    est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
-    std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
-    df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
-    if(is.na(df)){
-      ci <- tryCatch(c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err), error = function(err) C(NA,NA))
-    }else{
-      ci <- tryCatch(c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err), error = function(err) C(NA,NA))
-    }
-    
-    p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
-    
-    out <- c(est, std.err, df, ci, p.val)
-    
-    #out.lm <- c(summary(fit.lm)$coefficients[2,c(1,2)], summary(fit.lm)$df[2], confint(fit.lm)[2,], summary(fit.lm)$coefficients[2,4])
-    lm.out[i,] <- out
-  }
-  lm.out <- as.data.frame(lm.out)
-  rownames(lm.out) <- colnames(taxa)
-  colnames(lm.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
-  return(lm.out)
-  
-}
+# taxa.bin.cov.lm.func <- function(bin.var, cov.var, taxa) {   
+#   n.cov <- ncol(cov.var)
+#   n.tax <- ncol(taxa)
+#   d <- as.data.frame(cbind(bin.var, cov.var, taxa))
+#   lm.out <- matrix(NA, n.tax, 6)
+#   for (i in 1:n.tax) {
+#     taxon <- taxa[,i]
+#     #here4
+#     lm.f <- formula(paste("taxon", "~", colnames(bin.var), "+", paste(colnames(cov.var), collapse = "+")))
+#     fit <- try(lm(lm.f, data = d), silent = TRUE)
+#     
+#     est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
+#     std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
+#     df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
+#     if(is.na(df)){
+#       ci <- tryCatch(c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err), error = function(err) C(NA,NA))
+#     }else{
+#       ci <- tryCatch(c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err), error = function(err) C(NA,NA))
+#     }
+#     
+#     p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
+#     
+#     out <- c(est, std.err, df, ci, p.val)
+#     
+#     #out.lm <- c(summary(fit.lm)$coefficients[2,c(1,2)], summary(fit.lm)$df[2], confint(fit.lm)[2,], summary(fit.lm)$coefficients[2,4])
+#     lm.out[i,] <- out
+#   }
+#   lm.out <- as.data.frame(lm.out)
+#   rownames(lm.out) <- colnames(taxa)
+#   colnames(lm.out) <- c("Est", "Std Err", "DF", "Lower", "Upper", "P.value")
+#   return(lm.out)
+#   
+# }
 
 taxa.bin.cov.lm.united.func <- function(bin.var, cov.var, taxa) {
   n.cov <- ncol(cov.var)
@@ -925,16 +962,19 @@ all.taxa.logit.bin.cov.func <- function(bin.var, cov.var, taxa.out, scale = TRUE
         #here7
         fit <- try(glm(logit.f, data = d , family = "binomial"), silent = TRUE)
         
-        est <- tryCatch(summary(fit)$coefficients[2,1], error = function(err) NA)
-        std.err <- tryCatch(summary(fit)$coefficients[2,2], error = function(err) NA)
+        #or.se <- sqrt(exp(est)^2*diag(vcov(fit.logit)))[2]
+        #ci <- c(exp(est - qt(0.975, df)*std.err), exp(est + qt(0.975, df)*std.err))
+        
+        or <- tryCatch(exp(summary(fit)$coefficients[2,1]), error = function(err) NA)
+        or.se <- tryCatch(sqrt(or^2*diag(vcov(fit)))[2], error = function(err) NA)
         df <- tryCatch(summary(fit)$df[2], error = function(err) NA)
         if(is.na(df)){
-          ci <- tryCatch(c(est - qnorm(0.975)*std.err, est + qnorm(0.975)*std.err), error = function(err) C(NA,NA))
+          ci <- tryCatch(c(exp(summary(fit)$coefficients[2,1] - qnorm(0.975)*summary(fit)$coefficients[2,2]), exp(summary(fit)$coefficients[2,1] + qnorm(0.975)*summary(fit)$coefficients[2,2])), error = function(err) C(NA,NA))
         }else{
-          ci <- tryCatch(c(est - qt(0.975, df = df)*std.err, est + qt(0.975, df = df)*std.err), error = function(err) C(NA,NA))
+          ci <- tryCatch(c(exp(summary(fit)$coefficients[2,1] - qt(0.975, df = df)*summary(fit)$coefficients[2,2]), exp(summary(fit)$coefficients[2,1] + qt(0.975, df = df)*summary(fit)$coefficients[2,2])), error = function(err) C(NA,NA))
         }
         p.val <- tryCatch(summary(fit)$coefficients[2,4], error = function(err) NA)
-        out <- c(est, std.err, df, ci, p.val)
+        out <- c(or, or.se, df, ci, p.val)
         logit.out[j,] <- out
       }
       logit.out <- as.data.frame(logit.out)
