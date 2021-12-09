@@ -53,7 +53,6 @@ server = function(input, output, session){
   source("MiDataProc.Taxa.Longitudinal.R")
   
   ## load example data ####
-  #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
   load(file="sub.biom.Rdata")
   biom <- sub.biom
   
@@ -132,11 +131,7 @@ server = function(input, output, session){
   ## options to change theme ####
   observeEvent(input$selectTheme, {
     output$themes <- renderUI({
-      if(input$selectTheme == "Blue Gradient"){ 
-        shinyDashboardThemes(
-          theme = "blue_gradient"
-        )
-      }else if(input$selectTheme == "Flat Red"){
+      if(input$selectTheme == "Flat Red"){
         shinyDashboardThemes(
           theme = "flat_red"
         )
@@ -278,6 +273,10 @@ server = function(input, output, session){
           name <- load(phyloseq.dataPath, envir = e)
           data <- e[[name]]
           
+          if(sum(sapply(sample_data(data),is.factor))!=0){
+            sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
+          }
+          
           colnames(tax_table(data)) = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
           
           if(sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))){
@@ -289,6 +288,9 @@ server = function(input, output, session){
           phyloseq.dataPath = phyloseq.data$datapath
           data <- readRDS(phyloseq.dataPath)
           
+          if(sum(sapply(sample_data(data),is.factor))!=0){
+            sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
+          }
           colnames(tax_table(data)) = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
           
           if(sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))){
@@ -374,10 +376,11 @@ server = function(input, output, session){
               
               if (ext3 == "txt") {
                 sam.dat <- read.table(sam.data.path, header=TRUE, check.names = FALSE)
-                rownames(sam.dat) = sam.dat[,1]
+                #rownames(sam.dat) = sam.dat[,1]
               }else if(ext3 == "csv"){
                 sam.dat <- read.csv(sam.data.path, check.names = FALSE)
                 rownames(sam.dat) = sam.dat[,1]
+                sam.dat = sam.dat[,-1]
               }
               
               if (ext4 == "tre") {
@@ -1344,7 +1347,7 @@ server = function(input, output, session){
                     output$chooseTest_taxa <- renderUI({
                       tagList(
                         selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
-                                                                                                                 "Welch t-test", "Wilcoxon rank-sum test"),
+                                                                                                                 "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
                                     width = '80%')
                       )
                     })
@@ -1355,7 +1358,7 @@ server = function(input, output, session){
                 output$chooseTest_taxa <- renderUI({
                   tagList(
                     selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
-                                                                                                             "Welch t-test", "Wilcoxon rank-sum test"),
+                                                                                                             "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
                                 width = '80%')
                   )
                 })
@@ -3236,11 +3239,21 @@ server = function(input, output, session){
                                             rename.cats_ref, rename.cats_com)
         
         if(input$covariates_taxa == "None"){
-          taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
-                                                       rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
-          
-          taxa.results$bin.var <- taxa.bin.out$bin.var
-          taxa.results$taxa <- taxa.bin.out$taxa
+          if(input$chooseMethod_taxa == "Logistic regression"){
+            
+            taxa.bin.logit.out <- taxa.bin.cat.ref.logit.united.func(input$primvar_taxa, rename.cats_ref,
+                                                                     rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
+            taxa.results$bin.var <- taxa.bin.logit.out$bin.var
+            taxa.results$taxa <- taxa.bin.logit.out$taxa
+            
+          }else{
+            taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
+                                                         rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
+            
+            taxa.results$bin.var <- taxa.bin.out$bin.var
+            taxa.results$taxa <- taxa.bin.out$taxa
+            
+          }
           
         } else if(input$covariates_taxa == "Covariate(s)"){
           if(input$chooseMethod_taxa == "Negative binomial regression"){
@@ -3361,54 +3374,105 @@ server = function(input, output, session){
           
         }
         else if(input$chooseMethod_taxa == "Linear regression" | input$chooseMethod_taxa == "Logistic regression" | input$chooseMethod_taxa == "Negative binomial regression" | input$chooseMethod_taxa == "Beta regression"){
-          
-          if(input$chooseMethod_taxa =="Linear regression"){
-            incProgress(5/10, message = "Linear regression")
-            taxa.lm.bin.cov.out <- taxa.bin.cov.lm.united.func(bin.var = taxa.results$bin.var, 
-                                                               cov.var = taxa.results$cov.var,
-                                                               taxa = taxa.results$taxa)
+          if(input$covariates_taxa == "None"){
+            if(input$chooseMethod_taxa =="Linear regression"){
+              incProgress(5/10, message = "Linear regression")
+              
+              taxa.lm.bin.out <- taxa.bin.lm.united.func(bin.var = taxa.results$bin.var, taxa = taxa.results$taxa)
+              
+              taxa.lm.bin.q.out <- bin.q.united.func(taxa.lm.bin.out, method = "BH")
+              
+              #taxa.data.results$table.out = taxa.lm.bin.cov.q.out
+              taxa.outputs$DAoutput = taxa.lm.bin.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.lm.bin.q.out, species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Logistic regression"){
+              incProgress(5/10, message = "Logistic regression")
+              taxa.logit.reg.coef.out <- all.taxa.logit.reg.coef.bin.func(taxa.results$bin.var, taxa.results$taxa, scale = TRUE)
+              taxa.logit.reg.coef.q.out <- bin.q.united.func(taxa.logit.reg.coef.out, method = "BH")
+              
+              taxa.logit.out <- all.taxa.logit.bin.func(taxa.results$bin.var, taxa.results$taxa, scale = TRUE)
+              taxa.logit.q.out <- bin.q.united.func(taxa.logit.out, method = "BH")
+              
+              taxa.outputs$DAoutput_or <- taxa.logit.q.out
+              taxa.outputs$DAoutput <- taxa.logit.reg.coef.q.out
+              
+              nrow1 <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+              nrow2 <- taxa.forest.plot.pages(taxa.outputs$DAoutput_or, species.include = include)
+              
+              forestplot.or.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput_or, chooseData$taxa.names.out, report.type = "OR", species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Negative binomial regression"){
+              incProgress(5/10, message = "Negative binomial regression")
+              taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa, rarefy = FALSE)
+              
+              #taxa.data.results$table.out <- taxa.bin.glm.nb.q.out
+              taxa.outputs$DAoutput <- taxa.bin.glm.nb.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Beta regression"){
+              incProgress(5/10, message = "Beta regression")
+              taxa.bin.beta.q.out <- all.taxa.bin.beta(taxa.results$bin.var, taxa.results$taxa)
+              
+              #taxa.data.results$table.out <- taxa.bin.cov.beta.q.out
+              taxa.outputs$DAoutput <- taxa.bin.beta.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+            }
             
-            taxa.lm.bin.cov.q.out <- bin.q.united.func(taxa.lm.bin.cov.out, method = "BH")
-            
-            #taxa.data.results$table.out = taxa.lm.bin.cov.q.out
-            taxa.outputs$DAoutput = taxa.lm.bin.cov.q.out
-            
-            nrow <- taxa.forest.plot.pages(taxa.lm.bin.cov.q.out, species.include = include)
-            
-          }else if(input$chooseMethod_taxa == "Logistic regression"){
-            incProgress(5/10, message = "Logistic regression")
-            taxa.logit.reg.coef.cov.out <- all.taxa.logit.reg.coef.bin.cov.func(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, scale = TRUE)
-            taxa.logit.reg.coef.cov.q.out <- bin.q.united.func(taxa.logit.reg.coef.cov.out, method = "BH")
-            
-            taxa.logit.cov.out <- all.taxa.logit.bin.cov.func(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, scale = TRUE)
-            taxa.logit.cov.q.out <- bin.q.united.func(taxa.logit.cov.out, method = "BH")
-            
-            taxa.outputs$DAoutput_or <- taxa.logit.cov.q.out
-            taxa.outputs$DAoutput <- taxa.logit.reg.coef.cov.q.out
-            
-            nrow1 <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
-            nrow2 <- taxa.forest.plot.pages(taxa.outputs$DAoutput_or, species.include = include)
-            
-            forestplot.or.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput_or, chooseData$taxa.names.out, report.type = "OR", species.include = include)
-            
-          }else if(input$chooseMethod_taxa == "Negative binomial regression"){
-            incProgress(5/10, message = "Negative binomial regression")
-            taxa.bin.cov.glm.nb.q.out <- all.taxa.bin.cov.glm.nb(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, rarefy = FALSE)
-            
-            #taxa.data.results$table.out <- taxa.bin.cov.glm.nb.q.out
-            taxa.outputs$DAoutput <- taxa.bin.cov.glm.nb.q.out
-            
-            nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
-            
-          }else if(input$chooseMethod_taxa == "Beta regression"){
-            incProgress(5/10, message = "Beta regression")
-            taxa.bin.cov.beta.q.out <- all.taxa.bin.cov.beta(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa)
-            
-            #taxa.data.results$table.out <- taxa.bin.cov.beta.q.out
-            taxa.outputs$DAoutput <- taxa.bin.cov.beta.q.out
-            
-            nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+          }else if(input$covariates_taxa == "Covariate(s)"){
+            if(input$chooseMethod_taxa =="Linear regression"){
+              incProgress(5/10, message = "Linear regression")
+              
+              taxa.lm.bin.cov.out <- taxa.bin.cov.lm.united.func(bin.var = taxa.results$bin.var, 
+                                                                 cov.var = taxa.results$cov.var,
+                                                                 taxa = taxa.results$taxa)
+              
+              taxa.lm.bin.cov.q.out <- bin.q.united.func(taxa.lm.bin.cov.out, method = "BH")
+              
+              #taxa.data.results$table.out = taxa.lm.bin.cov.q.out
+              taxa.outputs$DAoutput = taxa.lm.bin.cov.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.lm.bin.cov.q.out, species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Logistic regression"){
+              incProgress(5/10, message = "Logistic regression")
+              taxa.logit.reg.coef.cov.out <- all.taxa.logit.reg.coef.bin.cov.func(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, scale = TRUE)
+              taxa.logit.reg.coef.cov.q.out <- bin.q.united.func(taxa.logit.reg.coef.cov.out, method = "BH")
+              
+              taxa.logit.cov.out <- all.taxa.logit.bin.cov.func(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, scale = TRUE)
+              taxa.logit.cov.q.out <- bin.q.united.func(taxa.logit.cov.out, method = "BH")
+              
+              taxa.outputs$DAoutput_or <- taxa.logit.cov.q.out
+              taxa.outputs$DAoutput <- taxa.logit.reg.coef.cov.q.out
+              
+              nrow1 <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+              nrow2 <- taxa.forest.plot.pages(taxa.outputs$DAoutput_or, species.include = include)
+              
+              forestplot.or.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput_or, chooseData$taxa.names.out, report.type = "OR", species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Negative binomial regression"){
+              incProgress(5/10, message = "Negative binomial regression")
+              taxa.bin.cov.glm.nb.q.out <- all.taxa.bin.cov.glm.nb(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, rarefy = FALSE)
+              
+              #taxa.data.results$table.out <- taxa.bin.cov.glm.nb.q.out
+              taxa.outputs$DAoutput <- taxa.bin.cov.glm.nb.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+              
+            }else if(input$chooseMethod_taxa == "Beta regression"){
+              incProgress(5/10, message = "Beta regression")
+              taxa.bin.cov.beta.q.out <- all.taxa.bin.cov.beta(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa)
+              
+              #taxa.data.results$table.out <- taxa.bin.cov.beta.q.out
+              taxa.outputs$DAoutput <- taxa.bin.cov.beta.q.out
+              
+              nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
+            }
           }
+          
           
           #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
           #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
@@ -3426,7 +3490,7 @@ server = function(input, output, session){
                                 do.call(tabsetPanel, lapply(1:nrow1, function(i) {
                                   tabPanel(title = paste0("Page ", i),
                                            plotOutput(paste0("forest", i), height = 800, width = 750),
-                                           plotOutput(paste0("duplicates", i), height = 75*duplicate.texts+10, width = 750))
+                                           plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
                                 }))
                                 
                        )
@@ -3435,7 +3499,7 @@ server = function(input, output, session){
                                 do.call(tabsetPanel, lapply(1:nrow2, function(i) {
                                   tabPanel(title = paste0("Page ", i),
                                            plotOutput(paste0("forest_or", i), height = 800, width = 750),
-                                           plotOutput(paste0("duplicates_or", i), height = 70*duplicate.texts+10, width = 750))
+                                           plotOutput(paste0("duplicates_or", i), height = 35*duplicate.texts+10, width = 750))
                                 }))
                                 
                        )
@@ -3494,7 +3558,7 @@ server = function(input, output, session){
                 do.call(tabsetPanel, lapply(1:nrow, function(i) {
                   tabPanel(title = paste0("Page ", i), align = "center",
                            plotOutput(paste0("forest", i), height = 800, width = 750),
-                           plotOutput(paste0("duplicates", i), height = 70*duplicate.texts+10, width = 750))
+                           plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
                 })) 
               )
             })
@@ -3753,7 +3817,7 @@ server = function(input, output, session){
           do.call(tabsetPanel, lapply(1:nrow, function(i) {
             tabPanel(title = paste0("Page ", i), align = "center",
                      plotOutput(paste0("forest", i), height = 800, width = 750),
-                     plotOutput(paste0("duplicates", i), height = 70*duplicate.texts+10, width = 750))
+                     plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
           }))
           
         })
@@ -4043,7 +4107,7 @@ server = function(input, output, session){
           do.call(tabsetPanel, lapply(1:nrow, function(i) {
             tabPanel(title = paste0("Page ", i), align = "center",
                      plotOutput(paste0("forestlong", i), height = 800, width = 750),
-                     plotOutput(paste0("duplicateslong", i), height = 70*duplicate.texts+10, width = 750))
+                     plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
           }))
         })
         
@@ -4304,7 +4368,7 @@ server = function(input, output, session){
           do.call(tabsetPanel, lapply(1:nrow, function(i) {
             tabPanel(title = paste0("Page ", i), align = "center",
                      plotOutput(paste0("forestlong", i), height = 800, width = 750), 
-                     plotOutput(paste0("duplicateslong", i), height = 70*duplicate.texts+10, width = 750))
+                     plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
           }))
         })
         
