@@ -61,7 +61,7 @@ library(glmm)
 
 {
   TITLE = p("MiCloud: Statistical Analysis of Microbiome Data", style = "font-size:18pt")
-  HOME_COMMENT = p("MiCloud is a web application for statistical analysis of microbiome data. 
+  HOME_COMMENT = p(strong("MiCloud", style = "font-size:15pt"), "is a web application for statistical analysis of microbiome data. 
                    MiCloud provides step-by-step web environments for a breadth of data processing, analytic and graphical procedures. 
                    MiCloud can conduct both ecological (alpha- and beta-diversity) and taxonomical (phylum, class, order, family, genus, species) analyses for various types of host phenotypes (or disease status) and study designs with or without covariate adjustment(s). More details are as follows.", style = "font-size:13pt")
   HOME_COMMENT1 = ("Interactive procedures for various data inputs (.rdata, .rds, .biom, .txt, .csv, .tsv, .tre), quality controls (kingdom, library size, mean proportion) and data transformations (alpha- and beta-diversity, rarefaction, proportion, centered log-ratio).")
@@ -103,8 +103,7 @@ library(glmm)
                          ##### HOME ####
                          tabItem(tabName = "home",
                                  #uiOutput("showhomepage"),
-                                 div(id = "homepage", br(),
-                                     strong("About", style = "font-size:17pt"), br(), HOME_COMMENT,
+                                 div(id = "homepage", br(), HOME_COMMENT,
                                      tags$ol(
                                        tags$li(HOME_COMMENT1),
                                        tags$li(HOME_COMMENT2),
@@ -117,7 +116,7 @@ library(glmm)
                                        column(3,
                                               selectInput("selectTheme", strong("Select Theme", style = "font-size:14pt"), 
                                                           c("Choose one" = "", 
-                                                            "Blue Gradient", "Flat Red", "Gray Dark", "Gray Light",
+                                                            "Flat Red", "Gray Dark", "Gray Light",
                                                             "Onenote (Default)", "Poor Mans Flatly", "Purple Gradient"
                                                           )))))
                          ),
