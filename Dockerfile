@@ -57,6 +57,30 @@ COPY app /root/app
 COPY Rprofile.site /usr/lib/R/etc/
 
 COPY app/sub.biom.Rdata /root/app
+COPY Data/Frankel/Frankel.Rdata /root/Data
+COPY Data/Frankel/Frankel.otu.tab.txt /root/Data
+COPY Data/Frankel/Frankel.sam.dat.txt /root/Data
+COPY Data/Frankel/Frankel.tax.tab.txt /root/Data
+COPY Data/Frankel/Frankel.tree.tre /root/Data
+
+COPY Data/Gopalakrishnan/Gopalakrishnan.Rdata /root/Data
+COPY Data/Frankel/Gopalakrishnan.otu.tab.txt /root/Data
+COPY Data/Frankel/Gopalakrishnan.sam.dat.txt /root/Data
+COPY Data/Frankel/Gopalakrishnan.tax.tab.txt /root/Data
+COPY Data/Frankel/Gopalakrishnan.tree.tre /root/Data
+
+COPY Data/Matson/Matson.Rdata /root/Data
+COPY Data/Frankel/Matson.otu.tab.txt /root/Data
+COPY Data/Frankel/Matson.sam.dat.txt /root/Data
+COPY Data/Frankel/Matson.tax.tab.txt /root/Data
+COPY Data/Frankel/Matson.tree.tre /root/Data
+
+COPY Data/Matson/Peters.Rdata /root/Data
+COPY Data/Frankel/Peters.otu.tab.txt /root/Data
+COPY Data/Frankel/Peters.sam.dat.txt /root/Data
+COPY Data/Frankel/Peters.tax.tab.txt /root/Data
+COPY Data/Frankel/Peters.tree.tre /root/Data
+
 COPY app/MiDataProc.Data.Upload.R /root/app
 COPY app/MiDataProc.Alpha.Cross.Sectional.R /root/app
 COPY app/MiDataProc.Alpha.Longitudinal.R /root/app
