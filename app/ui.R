@@ -69,6 +69,11 @@ library(glmm)
   HOME_COMMENT3 = ("Comparative/association analysis for both binary and continuous traits of host phenotypes (or medical interventions, disease status or environmental/behavioral factors).")
   HOME_COMMENT4 = ("Comparative/association analysis with or without covariate (e.g., age, gender) adjustment(s) for either cross-sectional or longitudinal/family-based microbiome studies.")
   HOME_COMMENT5 = ("Customizable/publishable data, graphs and tables.")
+  
+  ALPHA_COMMENT = "Calculate alpha-diversity indices: Richness (Observed), Shannon (Shannon, 1948), Simpson (Simpson, 1949), Inverse Simpson (Simpson, 1949), 
+                                       Fisher (Fisher et al., 1943), Chao1 (Chao, 1984), ACE (Chao and Lee, 1992), ICE (Lee and Chao, 1994), PD (Faith, 1992)."
+  BETA_COMMENT = "Calculate beta-diversity indices: Jaccard dissimilarity (Jaccard, 1912), Bray-Curtis dissimilarity (Bray and Curtis, 1957), 
+                                       Unweighted UniFrac distance (Lozupone and Knight, 2005), Generalized UniFrac distance (Chen et al., 2012), Weighted UniFrac distance (Lozupone et al., 2007)."
 }
 
 
