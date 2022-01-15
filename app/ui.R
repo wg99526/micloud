@@ -74,9 +74,7 @@ library(glmm)
 
 {
   ui = dashboardPage(title="MiCloud",
-                     #skin = "blue",
-                     dashboardHeader(title=span(TITLE, 
-                                                style = "font-size: 20px"), titleWidth = 550),
+                     dashboardHeader(title=span(TITLE, style = "font-size: 20px"), titleWidth = 550),
                      dashboardSidebar(
                        tags$script(JS("document.getElementsByClassName('sidebar-toggle')[0].style.visibility = 'hidden';")),
                        sidebarMenu(id = "side_menu",
@@ -102,7 +100,6 @@ library(glmm)
                        tabItems(
                          ##### HOME ####
                          tabItem(tabName = "home",
-                                 #uiOutput("showhomepage"),
                                  div(id = "homepage", br(), HOME_COMMENT,
                                      tags$ol(
                                        tags$li(HOME_COMMENT1),
@@ -122,7 +119,6 @@ library(glmm)
                          ),
                          ##### DATA INPUT ####
                          tabItem(tabName = "step1", br(),
-                                 # div(strong("Step 1: Data Input", style = "font-size:17pt")),
                                  column(width = 6, style='padding-left:0px',
                                         box(
                                           width = NULL, status = "primary", solidHeader = TRUE,
@@ -142,10 +138,8 @@ library(glmm)
                                  )
                                  
                          ),
-                         #),
                          ##### QC ####
                          tabItem(tabName = "step2", br(), 
-                                 # strong("Step 2: Quality Control", style = "font-size:17pt"),
                                  sidebarLayout(
                                    position = "left",
                                    sidebarPanel(
@@ -167,8 +161,6 @@ library(glmm)
                                      p("Remove OTUs/features that have low mean relative abundances (Unit: %). Default is 0.002%.",style = "font-size:11pt"),
                                      p("Mean proportion: The average of relative abundances (i.e., proportions) per OTU/feature.", style = "font-size:11pt"),             
                                      actionButton("run", (strong("Run!")), class = "btn-info"), 
-                                     # actionButton("skip", (strong("Skip QC, Rarefy only")), class = "btn-info",
-                                     #              style="background-color: #E1E0DD; border-color: #E1E0DD"), 
                                      br(), br(),
                                      uiOutput("moreControls")
                                    ),
@@ -214,15 +206,12 @@ library(glmm)
                          ),
                          ##### DIVERSITY Calculation ####
                          tabItem(tabName = "divCalculation", br(),
-                                 # div(strong("Diversity Calculation", style = "font-size:17pt")),
                                  column(
                                    width = 6, style='padding-left:0px',
                                    box(title = strong("Diversity Calculation", style = "color:black"), 
                                        width = NULL, status = "primary", solidHeader = TRUE,
-                                       p("Calculate alpha-diversity indices: Richness (Observed), Shannon (Shannon, 1948), Simpson (Simpson, 1949), Inverse Simpson (Simpson, 1949), 
-                                       Fisher (Fisher et al., 1943), Chao1 (Chao, 1984), ACE (Chao and Lee, 1992), ICE (Lee and Chao, 1994), PD (Faith, 1992)."), 
-                                       p("Calculate beta-diversity indices: Jaccard dissimilarity (Jaccard, 1912), Bray-Curtis dissimilarity (Bray and Curtis, 1957), 
-                                       Unweighted UniFrac distance (Lozupone and Knight, 2005), Generalized UniFrac distance (Chen et al., 2012), Weighted UniFrac distance (Lozupone et al., 2007)."), 
+                                       p(ALPHA_COMMENT), 
+                                       p(BETA_COMMENT), 
                                        actionButton("divCalcRun", (strong("Run!")), class = "btn-info"), 
                                    ),
                                    uiOutput("divCalcDownload")),
@@ -248,7 +237,6 @@ library(glmm)
                          ),
                          ##### ALPHA DIVERSITY ####
                          tabItem(tabName = "alphaDivanalysis", br(),
-                                 # strong("Alpha Diversity", style = "font-size:17pt"),
                                  fluidRow(
                                    tabBox(width = 12,
                                           tabPanel(
@@ -286,7 +274,6 @@ library(glmm)
                          ),
                          ##### BETA DIVERSITY ####
                          tabItem(tabName = "betaDivanalysis", br(),
-                                 # strong("Beta Diversity", style = "font-size:17pt"),
                                  fluidRow(
                                    tabBox(width = 12,
                                           tabPanel(title ="Cross-Sectional",
@@ -294,7 +281,6 @@ library(glmm)
                                                      position = "left",
                                                      sidebarPanel(
                                                        width = 3,
-                                                       #uiOutput("beta_expandCSoptions_croos"),
                                                        uiOutput("beta_primvar_cross"),
                                                        uiOutput("beta_prim_vars_types_cross"),
                                                        uiOutput("beta_covariates_cross"), 
@@ -305,16 +291,13 @@ library(glmm)
                                                      mainPanel(width = 9,
                                                                fluidRow(width = 12, 
                                                                         uiOutput("beta_display_results_cross")
-                                                               )
-                                                     )
-                                                   )
+                                                               )))
                                           ),
                                           tabPanel(title ="Longitudinal",
                                                    sidebarLayout(
                                                      position = "left",
                                                      sidebarPanel(
                                                        width = 3,
-                                                       #uiOutput("beta_expandCSoptionslong"),
                                                        uiOutput("beta_primvars_long"),
                                                        uiOutput("beta_prim_vars_types_long"),
                                                        uiOutput("beta_covariates_long"), 
@@ -325,16 +308,10 @@ library(glmm)
                                                      mainPanel(width = 9,
                                                                fluidRow(width = 12, 
                                                                         uiOutput("beta_display_resultslong")
-                                                               )
-                                                     )
-                                                   )
-                                          )
-                                   )
-                                 )
+                                                               ))))))
                          ),
                          ##### Data Transformation ####
                          tabItem(tabName = "dataTransform", br(),
-                                 # div(strong("Data Transformation", style = "font-size:17pt")),
                                  column(
                                    width = 6, style='padding-left:0px',
                                    box(title = strong("Data Transformation", style = "color:black"), 
@@ -353,7 +330,6 @@ library(glmm)
                          ),
                          ##### Taxa Analysis ####
                          tabItem(tabName = "taxaAnalysis", br(),
-                                 #h2(strong("Comparison / Association", style = "font-family: 'Verdana'; font-size:20pt")),
                                  fluidRow(
                                    tabBox(width = 12,
                                           tabPanel(
@@ -374,9 +350,7 @@ library(glmm)
                                                                  div(style='height:800px;overflow-y: scroll;', uiOutput("taxa_display")),
                                                                  br(),br(),
                                                                  uiOutput("taxa_display_dend")
-                                                        )
-                                              )
-                                            )
+                                                        )))
                                           ),
                                           tabPanel(
                                             title = "Longitudinal",
