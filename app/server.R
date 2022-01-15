@@ -51,42 +51,160 @@ server = function(input, output, session){
   source("MiDataProc.Beta.Longitudinal.R")
   source("MiDataProc.Taxa.Cross.Sectional.R")
   source("MiDataProc.Taxa.Longitudinal.R")
-  
   ## load example data ####
-  load(file="sub.biom.Rdata")
+  #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
+  
+  sub.biom <- readRDS("Data/val_physeq.rds")
   biom <- sub.biom
   
-  output$downloadData <- downloadHandler(
-    filename = function() {
-      paste("biom",".Rdata", sep="")
-    },
-    content = function(file1) {
-      save(biom, file = file1)
-    })
+  env <- new.env()
+  nm <- load(file = "Data/Frankel/Frankel.Rdata", env)[1]
+  Frankel <- env[[nm]]
+  
+  env <- new.env()
+  nm <- load(file = "Data/Gopalakrishnan/Gopalakrishnan.Rdata", env)[1]
+  Gopalakrishnan <- env[[nm]]
+  
+  env <- new.env()
+  nm <- load(file = "Data/Matson/Matson.Rdata", env)[1]
+  Matson <- env[[nm]]
+  
+  env <- new.env()
+  nm <- load(file = "Data/Peters/Peters.Rdata", env)[1]
+  Peters <- env[[nm]]
   
   ori.biom <- biom
-  
   otu.tab <- otu_table(ori.biom)
   tax.tab <- tax_table(ori.biom)
   tree <- phy_tree(ori.biom)
   sam.dat <- sample_data(ori.biom)
   
+  F.otu.tab <- otu_table(Frankel)
+  F.tax.tab <- tax_table(Frankel)
+  F.tree <- phy_tree(Frankel)
+  F.sam.dat <- sample_data(Frankel)
+  
+  G.otu.tab <- otu_table(Gopalakrishnan)
+  G.tax.tab <- tax_table(Gopalakrishnan)
+  G.tree <- phy_tree(Gopalakrishnan)
+  G.sam.dat <- sample_data(Gopalakrishnan)
+  
+  M.otu.tab <- otu_table(Matson)
+  M.tax.tab <- tax_table(Matson)
+  M.tree <- phy_tree(Matson)
+  M.sam.dat <- sample_data(Matson)
+  
+  P.otu.tab <- otu_table(Peters)
+  P.tax.tab <- tax_table(Peters)
+  P.tree <- phy_tree(Peters)
+  P.sam.dat <- sample_data(Peters)
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste("biom",".Rdata", sep = "")
+    },
+    content = function(file1) {
+      save(biom, file = file1)
+    })
+  output$downloadData.Frankel <- downloadHandler(
+    filename = function() {
+      paste("Frankel.Rdata", sep = "")
+    },
+    content = function(file1) {
+      save(Frankel, file = file1)
+    })
+  output$downloadData.Gopalakrishnan <- downloadHandler(
+    filename = function() {
+      paste("Gopalakrishnan.Rdata", sep = "")
+    },
+    content = function(file1) {
+      save(Gopalakrishnan, file = file1)
+    })
+  output$downloadData.Matson <- downloadHandler(
+    filename = function() {
+      paste("Matson.Rdata", sep = "")
+    },
+    content = function(file1) {
+      save(Matson, file = file1)
+    })
+  output$downloadData.Peters <- downloadHandler(
+    filename = function() {
+      paste("Peters.Rdata", sep = "")
+    },
+    content = function(file1) {
+      save(Peters, file = file1)
+    })
+  
   output$downloadZip <- downloadHandler(
     filename = function() {
-      paste("biom",".zip", sep="")
+      paste("biom",".zip", sep = "")
     },
     content <- function(fname) {
       temp <- setwd(tempdir())
       on.exit(setwd(temp))
       dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      
       write.table(otu.tab, "otu.tab.txt")
       write.table(tax.tab, "tax.tab.txt")
       write.table(sam.dat, "sam.dat.txt")
       write.tree(tree, "tree.tre")
       zip(zipfile=fname, files=dataFiles)
-    }
-  )
+    })
+  output$downloadZip.Frankel <- downloadHandler(
+    filename = function() {
+      paste("biom",".zip", sep = "")
+    },
+    content <- function(fname) {
+      temp <- setwd(tempdir())
+      on.exit(setwd(temp))
+      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
+      write.table(F.otu.tab, "otu.tab.txt")
+      write.table(F.tax.tab, "tax.tab.txt")
+      write.table(F.sam.dat, "sam.dat.txt")
+      write.tree(F.tree, "tree.tre")
+      zip(zipfile=fname, files=dataFiles)
+    })
+  output$downloadZip.Gopalakrishnan <- downloadHandler(
+    filename = function() {
+      paste("biom",".zip", sep = "")
+    },
+    content <- function(fname) {
+      temp <- setwd(tempdir())
+      on.exit(setwd(temp))
+      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
+      write.table(G.otu.tab, "otu.tab.txt")
+      write.table(G.tax.tab, "tax.tab.txt")
+      write.table(G.sam.dat, "sam.dat.txt")
+      write.tree(G.tree, "tree.tre")
+      zip(zipfile=fname, files=dataFiles)
+    })
+  output$downloadZip.Matson <- downloadHandler(
+    filename = function() {
+      paste("biom",".zip", sep = "")
+    },
+    content <- function(fname) {
+      temp <- setwd(tempdir())
+      on.exit(setwd(temp))
+      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
+      write.table(M.otu.tab, "otu.tab.txt")
+      write.table(M.tax.tab, "tax.tab.txt")
+      write.table(M.sam.dat, "sam.dat.txt")
+      write.tree(M.tree, "tree.tre")
+      zip(zipfile=fname, files=dataFiles)
+    })
+  output$downloadZip.Peters <- downloadHandler(
+    filename = function() {
+      paste("biom",".zip", sep = "")
+    },
+    content <- function(fname) {
+      temp <- setwd(tempdir())
+      on.exit(setwd(temp))
+      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
+      write.table(P.otu.tab, "otu.tab.txt")
+      write.table(P.tax.tab, "tax.tab.txt")
+      write.table(P.sam.dat, "sam.dat.txt")
+      write.tree(P.tree, "tree.tre")
+      zip(zipfile=fname, files=dataFiles)
+    })
   
   ## variable define ####
   infile = reactiveValues(biom = NULL, qc_biom = NULL, rare_biom = NULL)
@@ -186,7 +304,11 @@ server = function(input, output, session){
         output$addDownloadinfo <- renderUI({
           tagList(
             box(title = strong("Example Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                downloadButton("downloadData", "Download", width = '30%', style = "color:black; background-color: red2"),br(),br(),
+                downloadButton("downloadData", "Download", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadData.Frankel", "Frankel", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadData.Gopalakrishnan", "Gopalakrishnan", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadData.Matson", "Matson", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadData.Peters", "Peters", width = '30%', style = "color:black; background-color: red2"),br(),br(),
                 INPUT_PHYLOSEQ_COMMENT2
             )
           )
@@ -223,7 +345,11 @@ server = function(input, output, session){
         output$addDownloadinfo <- renderUI({
           tagList(
             box(title = strong("Example Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                downloadButton("downloadZip", "Download", width = '30%', style = "color:black; background-color: red2"),br(),br(),
+                downloadButton("downloadZip", "Download", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadZip.Frankel", "Frankel", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadZip.Gopalakrishnan", "Gopalakrishnan", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadZip.Matson", "Matson", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadZip.Peters", "Peters", width = '30%', style = "color:black; background-color: red2"),br(),br(),
                 p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, OTU/feature table (otu.tab.txt), 
                   taxonomic table (tax.tab.txt), phylogenetic tree (tree.tre) and sample data (sam.dat.txt).", br(), br(),
                   "> setwd('/yourdatadirectory/')", br(), br(), "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
@@ -358,7 +484,7 @@ server = function(input, output, session){
               tree.data.path = tree.data$datapath
               
               if (ext1 == "txt") {
-                otu.tab <- read.table(otu.table.path, header=TRUE, check.names = FALSE)
+                otu.tab <- read.table(otu.table.path, header=TRUE, check.names = FALSE, sep = "\t")
               }else if(ext1 == "csv"){
                 otu.tab <- read.csv(otu.table.path, check.names = FALSE)
                 rownames(otu.tab) = otu.tab[,1];otu.tab = otu.tab[,-1]
@@ -368,14 +494,14 @@ server = function(input, output, session){
               }
               
               if (ext2 == "txt") {
-                tax.tab <- read.table(tax.table.path, header=TRUE, check.names = FALSE)
+                tax.tab <- read.table(tax.table.path, header=TRUE, check.names = FALSE, sep = "\t")
               }else if(ext2 == "tsv"){
                 tax.tab <- read.table(tax.table.path, header=TRUE, sep="\t")
                 tax.tab = preprocess.tax.tab(tax.tab)
               }
               
               if (ext3 == "txt") {
-                sam.dat <- read.table(sam.data.path, header=TRUE, check.names = FALSE)
+                sam.dat <- read.table(sam.data.path, header=TRUE, check.names = FALSE, sep = "\t")
                 #rownames(sam.dat) = sam.dat[,1]
               }else if(ext3 == "csv"){
                 sam.dat <- read.csv(sam.data.path, check.names = FALSE)
@@ -1338,7 +1464,7 @@ server = function(input, output, session){
                       tagList(
                         selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
                                     c("Choose one" = "",
-                                      taxa.types$regression, "Logistic regression"),
+                                      taxa.types$regression, "Logistic regression"), selected = taxa.types$regression,
                                     width = '80%')
                       )
                     })
@@ -1348,6 +1474,7 @@ server = function(input, output, session){
                       tagList(
                         selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
                                                                                                                  "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                                    selected = "Welch t-test",
                                     width = '80%')
                       )
                     })
@@ -1359,6 +1486,7 @@ server = function(input, output, session){
                   tagList(
                     selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
                                                                                                              "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                                selected = "Welch t-test",
                                 width = '80%')
                   )
                 })
@@ -1408,6 +1536,7 @@ server = function(input, output, session){
                 tagList(
                   selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
                               c("Choose one" = "", taxa.types$regression),
+                              selected = taxa.types$regression,
                               width = '80%')
                 )
               })
@@ -1482,7 +1611,8 @@ server = function(input, output, session){
                 tagList(
                   selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
                               c("Choose one" = "",
-                                taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"), #, "Quantile Regression"), 
+                                taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"), #, "Quantile Regression"),
+                              selected = taxa.types$regression.long,
                               width = '80%')
                 )
               })
@@ -1542,6 +1672,7 @@ server = function(input, output, session){
                 tagList(
                   selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
                               c("Choose one" = "", taxa.types$regression.long),
+                              selected = taxa.types$regression.long,
                               width = '80%')
                 )
               })
@@ -2660,7 +2791,6 @@ server = function(input, output, session){
   ##########################################
   ## Beta Cross-Sectional Data Analysis ###
   ##########################################
-  
   observeEvent(input$beta_runbtn_cross_bin,{
     validate(
       if(input$beta_covariates_bin == "Covariate(s)" & is.null(input$beta_covariatesOptions_bin)){
@@ -3405,7 +3535,7 @@ server = function(input, output, session){
               
             }else if(input$chooseMethod_taxa == "Negative binomial regression"){
               incProgress(5/10, message = "Negative binomial regression")
-              taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa, rarefy = FALSE)
+              taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa)
               
               #taxa.data.results$table.out <- taxa.bin.glm.nb.q.out
               taxa.outputs$DAoutput <- taxa.bin.glm.nb.q.out
@@ -3477,38 +3607,58 @@ server = function(input, output, session){
           #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
           #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
           forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput, chooseData$taxa.names.out, report.type = "Est", species.include = include)
-          duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-          
-          
+          duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+          #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+          taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
           
           if(input$chooseMethod_taxa == "Logistic regression"){
-            
-            output$taxa_display = renderUI({
-              tagList(
-                tabBox(title = strong("Forest plot", style = "color:black"), width = NULL,
-                       tabPanel("Coefficient", align = "center",
-                                do.call(tabsetPanel, lapply(1:nrow1, function(i) {
-                                  tabPanel(title = paste0("Page ", i),
-                                           plotOutput(paste0("forest", i), height = 800, width = 750),
-                                           plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
-                                }))
-                                
-                       )
-                       ,
-                       tabPanel("Odds Ratio", align = "center",
-                                do.call(tabsetPanel, lapply(1:nrow2, function(i) {
-                                  tabPanel(title = paste0("Page ", i),
-                                           plotOutput(paste0("forest_or", i), height = 800, width = 750),
-                                           plotOutput(paste0("duplicates_or", i), height = 35*duplicate.texts+10, width = 750))
-                                }))
-                                
-                       )
-                       #,
-                       #plotOutput(duplicates, height = 300, width = 750)
+            if(duplicate.texts >0){
+              output$taxa_display = renderUI({
+                tagList(
+                  tabBox(title = strong("Forest plot", style = "color:black"), width = NULL,
+                         tabPanel("Coefficient", align = "center",
+                                  do.call(tabsetPanel, lapply(1:nrow1, function(i) {
+                                    tabPanel(title = paste0("Page ", i),
+                                             plotOutput(paste0("forest", i), height = 800, width = 750),
+                                             plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+                                  }))
+                                  
+                         )
+                         ,
+                         tabPanel("Odds Ratio", align = "center",
+                                  do.call(tabsetPanel, lapply(1:nrow2, function(i) {
+                                    tabPanel(title = paste0("Page ", i),
+                                             plotOutput(paste0("forest_or", i), height = 800, width = 750),
+                                             plotOutput(paste0("duplicates_or", i), height = 35*duplicate.texts+10, width = 750))
+                                  }))
+                                  
+                         )
+                  )
                 )
-                #plotOutput(duplicates, height = 300, width = 750)
-              )
-            })
+              })
+            }else{
+              output$taxa_display = renderUI({
+                tagList(
+                  tabBox(title = strong("Forest plot", style = "color:black"), width = NULL,
+                         tabPanel("Coefficient", align = "center",
+                                  do.call(tabsetPanel, lapply(1:nrow1, function(i) {
+                                    tabPanel(title = paste0("Page ", i),
+                                             plotOutput(paste0("forest", i), height = 800, width = 750))
+                                  }))
+                                  
+                         )
+                         ,
+                         tabPanel("Odds Ratio", align = "center",
+                                  do.call(tabsetPanel, lapply(1:nrow2, function(i) {
+                                    tabPanel(title = paste0("Page ", i),
+                                             plotOutput(paste0("forest_or", i), height = 800, width = 750))
+                                  })) 
+                         )
+                  )
+                )
+              })
+            }
             
             lapply(1:nrow1, function(j) {
               output[[paste0("forest", j)]] <- renderPlot({
@@ -3552,16 +3702,27 @@ server = function(input, output, session){
             })
             
           }else {
+            if(duplicate.texts>0){
+              output$taxa_display = renderUI({
+                tagList(
+                  do.call(tabsetPanel, lapply(1:nrow, function(i) {
+                    tabPanel(title = paste0("Page ", i), align = "center",
+                             plotOutput(paste0("forest", i), height = 800, width = 750),
+                             plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+                  })) 
+                )
+              })
+            }else{
+              output$taxa_display = renderUI({
+                tagList(
+                  do.call(tabsetPanel, lapply(1:nrow, function(i) {
+                    tabPanel(title = paste0("Page ", i), align = "center",
+                             plotOutput(paste0("forest", i), height = 800, width = 750))
+                  })) 
+                )
+              })
+            }
             
-            output$taxa_display = renderUI({
-              tagList(
-                do.call(tabsetPanel, lapply(1:nrow, function(i) {
-                  tabPanel(title = paste0("Page ", i), align = "center",
-                           plotOutput(paste0("forest", i), height = 800, width = 750),
-                           plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
-                })) 
-              )
-            })
             
             lapply(1:nrow, function(j) {
               output[[paste0("forest", j)]] <- renderPlot({
@@ -3776,14 +3937,14 @@ server = function(input, output, session){
           incProgress(5/10, message = "Negative binomial regression")
           if(input$covariates_taxa == "Covariate(s)"){
             
-            taxa.con.cov.glm.nb.out <- all.taxa.con.cov.glm.nb(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, "BH", rarefy = FALSE) ### should I use sam.dat or rare.sam.dat?
+            taxa.con.cov.glm.nb.out <- all.taxa.con.cov.glm.nb(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, "BH", rarefy = FALSE) 
             
             taxa.outputs$DAoutput <- taxa.con.cov.glm.nb.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
           }else if(input$covariates_taxa == "None"){
             
-            taxa.con.glm.nb.out <- all.taxa.con.glm.nb(taxa.results$con.var, taxa.results$taxa, "BH", rarefy = FALSE) ### should I use sam.dat or rare.sam.dat?
+            taxa.con.glm.nb.out <- all.taxa.con.glm.nb(taxa.results$con.var, taxa.results$taxa, "BH", rarefy = FALSE) 
             
             taxa.outputs$DAoutput <- taxa.con.glm.nb.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
@@ -3808,19 +3969,33 @@ server = function(input, output, session){
         }
         
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput, chooseData$taxa.names.out, species.include = include)
-        duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-        
+        #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+        #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
         
         incProgress(2/10, message = "Displaying Results in progress")
         
-        output$taxa_display = renderUI({
-          do.call(tabsetPanel, lapply(1:nrow, function(i) {
-            tabPanel(title = paste0("Page ", i), align = "center",
-                     plotOutput(paste0("forest", i), height = 800, width = 750),
-                     plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
-          }))
-          
-        })
+        if(duplicate.texts>0){
+          output$taxa_display = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forest", i), height = 800, width = 750),
+                       plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+            }))
+            
+          })
+        }else{
+          output$taxa_display = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forest", i), height = 800, width = 750))
+            }))
+            
+          })
+        }
+        
         
         lapply(1:nrow, function(j) {
           output[[paste0("forest", j)]] <- renderPlot({
@@ -4101,15 +4276,30 @@ server = function(input, output, session){
         
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutputlong, chooseData$taxa.names.out, species.include = include)
         
-        duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+        #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+        #here
         
-        output$taxa_displaylong = renderUI({
-          do.call(tabsetPanel, lapply(1:nrow, function(i) {
-            tabPanel(title = paste0("Page ", i), align = "center",
-                     plotOutput(paste0("forestlong", i), height = 800, width = 750),
-                     plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
-          }))
-        })
+        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+        
+        if(duplicate.texts >0){
+          output$taxa_displaylong = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forestlong", i), height = 800, width = 750),
+                       plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
+            }))
+          })
+        }else{
+          output$taxa_displaylong = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forestlong", i), height = 800, width = 750))
+            }))
+          })
+        }
+        
         
         lapply(1:nrow, function(j) {
           output[[paste0("forestlong", j)]] <- renderPlot({
@@ -4358,19 +4548,31 @@ server = function(input, output, session){
           }
         }
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutputlong, chooseData$taxa.names.out, species.include = include)
-        duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-        # taxa.outputs$DAoutput<- taxa.outputs$DAoutput
-        # taxa.outputs$DAoutput <- taxa.data.results$table.out
+        #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+        
+        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
         
         incProgress(2/10, message = "Displaying Results in progress")
         
-        output$taxa_displaylong = renderUI({
-          do.call(tabsetPanel, lapply(1:nrow, function(i) {
-            tabPanel(title = paste0("Page ", i), align = "center",
-                     plotOutput(paste0("forestlong", i), height = 800, width = 750), 
-                     plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
-          }))
-        })
+        if(duplicate.texts >0){
+          output$taxa_displaylong = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forestlong", i), height = 800, width = 750), 
+                       plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
+            }))
+          })
+        }else{
+          output$taxa_displaylong = renderUI({
+            do.call(tabsetPanel, lapply(1:nrow, function(i) {
+              tabPanel(title = paste0("Page ", i), align = "center",
+                       plotOutput(paste0("forestlong", i), height = 800, width = 750))
+            }))
+          })
+        }
+        
         
         lapply(1:nrow, function(j) {
           output[[paste0("forestlong", j)]] <- renderPlot({
