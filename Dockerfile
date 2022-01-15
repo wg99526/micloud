@@ -81,6 +81,8 @@ COPY Data/Frankel/Peters.sam.dat.txt /root/Data
 COPY Data/Frankel/Peters.tax.tab.txt /root/Data
 COPY Data/Frankel/Peters.tree.tre /root/Data
 
+COPY Data/val_physeq.rds /root/Data
+
 COPY app/MiDataProc.Data.Upload.R /root/app
 COPY app/MiDataProc.Alpha.Cross.Sectional.R /root/app
 COPY app/MiDataProc.Alpha.Longitudinal.R /root/app
