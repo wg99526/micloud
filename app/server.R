@@ -58,19 +58,19 @@ server = function(input, output, session){
   biom <- sub.biom
   
   env <- new.env()
-  nm <- load(file = "/Frandkel/Frankel.Rdata", env)[1]
+  nm <- load(file = "Frankel.Rdata", env)[1]
   Frankel <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "/Gopalakrishnan/Gopalakrishnan.Rdata", env)[1]
+  nm <- load(file = "Gopalakrishnan.Rdata", env)[1]
   Gopalakrishnan <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "/Matson/Matson.Rdata", env)[1]
+  nm <- load(file = "Matson.Rdata", env)[1]
   Matson <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "/Peters/Peters.Rdata", env)[1]
+  nm <- load(file = "Peters.Rdata", env)[1]
   Peters <- env[[nm]]
   
   ori.biom <- biom
