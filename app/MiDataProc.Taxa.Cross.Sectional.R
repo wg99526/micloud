@@ -1271,11 +1271,30 @@ taxa.forest.plot.pages2 <- function(page.taxa.q.out, page) {
   
   #unlist(taxa.names.rank.out$duplicates)[!is.na(unlist(taxa.names.rank.out$duplicates))]
   
+  
   if(is.null(text.tab.all) & is.null(ci.tab.all)){
     plot.new()
     text(x = 0.5, y = 0.5, "No significant taxa are found.", 
          cex = 1.2, col = "black")
   }else{
+    str.max <- lapply(page.taxa.q.out$all.text.tab, nchar)
+    for(i in 1:length(page.taxa.q.out$all.text.tab)){
+      str.max[[i]] <- str.max[[i]][,3]
+    }
+    maxStr <- max(unlist(str.max))
+    if(!is.numeric(maxStr)){
+      maxStr <- 0
+    }
+    
+    if(maxStr<=55){
+      text.tab.all[,3][1] <- paste(paste(rep(" ", (maxStr)),collapse =""),(forestplot.data$all.text.tab[[1]][,3][1]))
+    }else{
+      text.tab.all[,3][1] <- paste(paste(rep(" ", 55),collapse =""),(forestplot.data$all.text.tab[[1]][,3][1]))
+    }
+
+    #print(text.tab.all[[,3]][1])
+    text.tab.all[,3] <- substr(text.tab.all[,3], 1, 55)
+    
     if(text.tab.all[1,4] == "Est."){
       forestplot(labeltext=text.tab.all, mean=ci.tab.all[,1], lower=ci.tab.all[,2], upper=ci.tab.all[,3],
                  hrzl_lines=TRUE, new_page=TRUE, boxsize=0.25, line.margin=0.1, grid=0, colgap = unit(1, "cm"), graphwidth = unit(6, "cm"), #lineheight = unit(0.4,"cm"),
@@ -1290,10 +1309,8 @@ taxa.forest.plot.pages2 <- function(page.taxa.q.out, page) {
                  txt_gp=fpTxtGp(label=list(gpar(fontfamily="", cex=0.7), gpar(fontfamily="", cex=0.7)),
                                 ticks=gpar(fontfamily="", cex=0.7),
                                 xlab=gpar(fontfamily="", cex=0.7)))
-    }
-    
+    } 
   }
-  
 }
 
 duplicate.list <- function(taxa.names.out, species.include = FALSE){
