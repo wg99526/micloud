@@ -54,23 +54,23 @@ server = function(input, output, session){
   ## load example data ####
   #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
   
-  sub.biom <- readRDS("Data/val_physeq.rds")
+  sub.biom <- readRDS("val_physeq.rds")
   biom <- sub.biom
   
   env <- new.env()
-  nm <- load(file = "Data/Frankel/Frankel.Rdata", env)[1]
+  nm <- load(file = "Frankel.Rdata", env)[1]
   Frankel <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "Data/Gopalakrishnan/Gopalakrishnan.Rdata", env)[1]
+  nm <- load(file = "Gopalakrishnan.Rdata", env)[1]
   Gopalakrishnan <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "Data/Matson/Matson.Rdata", env)[1]
+  nm <- load(file = "Matson.Rdata", env)[1]
   Matson <- env[[nm]]
   
   env <- new.env()
-  nm <- load(file = "Data/Peters/Peters.Rdata", env)[1]
+  nm <- load(file = "Peters.Rdata", env)[1]
   Peters <- env[[nm]]
   
   ori.biom <- biom
