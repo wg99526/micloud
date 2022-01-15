@@ -64,22 +64,22 @@ COPY Data/Frankel/Frankel.tax.tab.txt /root/Data
 COPY Data/Frankel/Frankel.tree.tre /root/Data
 
 COPY Data/Gopalakrishnan/Gopalakrishnan.Rdata /root/Data
-COPY Data/Frankel/Gopalakrishnan.otu.tab.txt /root/Data
-COPY Data/Frankel/Gopalakrishnan.sam.dat.txt /root/Data
-COPY Data/Frankel/Gopalakrishnan.tax.tab.txt /root/Data
-COPY Data/Frankel/Gopalakrishnan.tree.tre /root/Data
+COPY Data/Gopalakrishnan/Gopalakrishnan.otu.tab.txt /root/Data
+COPY Data/Gopalakrishnan/Gopalakrishnan.sam.dat.txt /root/Data
+COPY Data/Gopalakrishnan/Gopalakrishnan.tax.tab.txt /root/Data
+COPY Data/Gopalakrishnan/Gopalakrishnan.tree.tre /root/Data
 
 COPY Data/Matson/Matson.Rdata /root/Data
-COPY Data/Frankel/Matson.otu.tab.txt /root/Data
-COPY Data/Frankel/Matson.sam.dat.txt /root/Data
-COPY Data/Frankel/Matson.tax.tab.txt /root/Data
-COPY Data/Frankel/Matson.tree.tre /root/Data
+COPY Data/Matson/Matson.otu.tab.txt /root/Data
+COPY Data/Matson/Matson.sam.dat.txt /root/Data
+COPY Data/Matson/Matson.tax.tab.txt /root/Data
+COPY Data/Matson/Matson.tree.tre /root/Data
 
-COPY Data/Matson/Peters.Rdata /root/Data
-COPY Data/Frankel/Peters.otu.tab.txt /root/Data
-COPY Data/Frankel/Peters.sam.dat.txt /root/Data
-COPY Data/Frankel/Peters.tax.tab.txt /root/Data
-COPY Data/Frankel/Peters.tree.tre /root/Data
+COPY Data/Peters/Peters.Rdata /root/Data
+COPY Data/Peters/Peters.otu.tab.txt /root/Data
+COPY Data/Peters/Peters.sam.dat.txt /root/Data
+COPY Data/Peters/Peters.tax.tab.txt /root/Data
+COPY Data/Peters/Peters.tree.tre /root/Data
 
 COPY Data/val_physeq.rds /root/Data
 
