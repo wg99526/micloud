@@ -56,30 +56,13 @@ RUN mkdir /root/app
 COPY app /root/app
 COPY Rprofile.site /usr/lib/R/etc/
 
-COPY app/sub.biom.Rdata /root/app
-COPY app/Data/Frankel/Frankel.Rdata /root/app
-COPY app/Data/Frankel/Frankel.otu.tab.txt /root/app
-COPY app/Data/Frankel/Frankel.sam.dat.txt /root/app
-COPY app/Data/Frankel/Frankel.tax.tab.txt /root/app
-COPY app/Data/Frankel/Frankel.tree.tre /root/app
+#COPY app/sub.biom.Rdata /root/app
 
-COPY app/Data/Gopalakrishnan/Gopalakrishnan.Rdata /root/app
-COPY app/Data/Gopalakrishnan/Gopalakrishnan.otu.tab.txt /root/app
-COPY app/Data/Gopalakrishnan/Gopalakrishnan.sam.dat.txt /root/app
-COPY app/Data/Gopalakrishnan/Gopalakrishnan.tax.tab.txt /root/app
-COPY app/Data/Gopalakrishnan/Gopalakrishnan.tree.tre /root/app
-
-COPY app/Data/Matson/Matson.Rdata /root/app
-COPY app/Data/Matson/Matson.otu.tab.txt /root/app
-COPY app/Data/Matson/Matson.sam.dat.txt /root/app
-COPY app/Data/Matson/Matson.tax.tab.txt /root/app
-COPY app/Data/Matson/Matson.tree.tre /root/app
-
-COPY app/Data/Peters/Peters.Rdata /root/app
-COPY app/Data/Peters/Peters.otu.tab.txt /root/app
-COPY app/Data/Peters/Peters.sam.dat.txt /root/app
-COPY app/Data/Peters/Peters.tax.tab.txt /root/app
-COPY app/Data/Peters/Peters.tree.tre /root/app
+COPY app/Data/BMI/biom.MZ.BMI.Rdata /root/app
+COPY app/Data/BMI/otu.tab.txt /root/app
+COPY app/Data/BMI/sam.dat.txt /root/app
+COPY app/Data/BMI/tax.tab.txt /root/app
+COPY app/Data/BMI/tree.tre /root/app
 
 COPY app/Data/val_physeq.rds /root/app
 
