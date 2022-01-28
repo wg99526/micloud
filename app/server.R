@@ -1,48 +1,68 @@
 {
   INPUT_PHYLOSEQ_COMMENT1 = p("Description:", br(), br(), "This should be an '.Rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
-                              "). The phyloseq object should contain all the four necessary data, OTU/feature table, taxonomic table,
-                              phylogenetic tree and sample data.", br(), br(), "Details:", br(), br(), 
-                              "1) The OTU/feature table should contain counts, where rows are OTUs and columns are subjects 
-                              (row names are OTU/feature IDs and column names are subject IDs).", br(),
-                              "2) The taxonomic table should contain taxonomic names, where rows are OTUs and columns are seven taxonomic ranks 
-                              (row names are OTU/feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
-                              "3) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
-                              The tip labels of the phylogenetic tree are OTU/feature IDs.", br(), 
-                              "4) The sample data should contain variables for the subjects about host phenotypes, medical interventions, disease status or environmental/behavioral factors, 
-                              where rows are subjects and columns are variables (row names are subject IDs, and column names are variable names).", br(), br(), 
-                              "* The OTUs should be matched and identical across OTU/feature table, taxonomic table and phylogenetic tree. 
-                              The subjects should be matched and identical between OTU/feature table and sample data. MiCloud will analyze only the matched OTUs and subjects."
+                              "). The phyloseq object should contain all the four necessary data, feature (OTU or ASV) table, taxonomic table, 
+                              metadata/sample information, and phylogenetic tree.", 
+                              br(), br(), "Details:", br(), br(), 
+                              "1) The feature (OTU or ASV) table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                              (row names are feature (OTU or ASV) IDs and column names are subject IDs).", br(),
+                              "2) The taxonomic table should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
+                              (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                              'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
+                              "3) The metadata/sample information should contain variables for the subjects about host phenotypes, medical interventions, 
+                              disease status or environmental/behavioral factors, where rows are subjects and columns are variables 
+                              (row names are subject IDs, and column names are variable names).", br(), 
+                              "4) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
+                              The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
+                              "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
+                              The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
+                              MiCloud will analyze only the matched features (OTUs or ASVs) and subjects."
                               , style = "font-size:11pt")
   INPUT_PHYLOSEQ_COMMENT2 = p("You can download example microbiome data 'biom.Rdata' in 'phyloseq' format. The name of the 
-                            phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
-                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
-                              br(), br(), "> setwd('/yourdatadirectory/')", br(), br(), "> load(file = 'biom.Rdata')", br(), br(), 
-                              "> library(phyloseq)", br(), br(), " > otu.tab <- otu_table(biom)", br(), " > tax.tab <- 
-                            tax_table(biom)", br(), " > tree <- phy_tree(biom)", br(), " > sam.dat <- sample_data(biom)", br(),
-                              br(), "You can check if the OTUs are matched and identical across OTU/feature table, taxonomic table and
-                            phylogenetic tree, and the subjects are matched and identical between OTU/feature table and sample data 
-                            using following code.", br(), br(), " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
-                              " > identical(rownames(otu.tab), tree$tip.label)", br(), " > identical(colnames(otu.tab), 
-                            rownames(sam.dat))", style = "font-size:11pt")
+                              phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
+                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"), br(), br(), 
+                              "> setwd('/yourdatadirectory/')", br(), br(), 
+                              "> load(file = 'biom.Rdata')", br(), br(), 
+                              "> library(phyloseq)", br(), br(), 
+                              " > otu.tab <- otu_table(biom)", br(), 
+                              " > tax.tab <- tax_table(biom)", br(), 
+                              " > tree <- phy_tree(biom)", br(), 
+                              " > sam.dat <- sample_data(biom)", br(), br(), 
+                              "You can check if the features (OTUs or ASVs) are matched and identical across feature (OTU or ASV) table, taxonomic table and 
+                              phylogenetic tree, and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information 
+                              using following code.", br(), br(), 
+                              " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
+                              " > identical(rownames(otu.tab), tree$tip.label)", br(), 
+                              " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
   INPUT_INDIVIDUAL_DATA_COMMENT = p("Description:", br(), br(), 
-                                    "1) The OTU/feature table (.txt or .csv) should contain counts, where rows are OTUs and columns are subjects (row names
-                                  are OTU/feature IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME", br(), 
-                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are OTUs and columns are seven taxonomic ranks (row names
-                                  are OTU/feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus',
-                                  'Species' or 'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME", br(), 
-                                    "3) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud
-                                  automatically roots the tree through midpoint rooting (phangorn::midpoint). The tip labels of the
-                                  phylogenetic tree are OTU/feature IDs.", br(), 
-                                    "4) The sample data (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, disease status or environmental
-                                  /behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and
-                                  column names are variable names).", br(), br(), "* The OTUs should be matched and identical across OTU
-                                  table, taxonomic table and phylogenetic tree. The subjects should be matched and identical between OTU
-                                  table and sample data. MiCloud will analyze only the matched OTUs and subjects.", 
-                                    style = "font-size:11pt")
+                                    "1) The feature (OTU or ASV) table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                                    (row names are feature (OTU or ASV) IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
+                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
+                                    (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                                    'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME.", br(), 
+                                    "3) The metadata/sample information (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, 
+                                    disease status or environmental/behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and 
+                                    column names are variable names).", br(), 
+                                    "4) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint 
+                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
+                                    "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
+                                    The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
+                                    MiCloud will analyze only the matched features (OTUs or ASVs) and subjects.", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature (OTU or ASV) table (otu.tab.txt), 
+                                     taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre).", br(), br(),
+                                     "> setwd('/yourdatadirectory/')", br(), br(), 
+                                     "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
+                                     "> tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)", br(), 
+                                     " > sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE) ", br(),
+                                     "> tree <- read.tree(file = 'tree.tre')", br(), br(), 
+                                     "You can check if the OTUs are matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree, 
+                                     and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information using following code.", br(), br(), 
+                                     " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
+                                     " > identical(rownames(otu.tab), tree$tip.label)", br(), 
+                                     " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
 }
 
-server = function(input, output, session){
+server = function(input, output, session) {
   options(shiny.maxRequestSize=30*1024^2)
   source("MiDataProc.Data.Upload.R")
   source("MiDataProc.Alpha.Cross.Sectional.R")
@@ -51,27 +71,14 @@ server = function(input, output, session){
   source("MiDataProc.Beta.Longitudinal.R")
   source("MiDataProc.Taxa.Cross.Sectional.R")
   source("MiDataProc.Taxa.Longitudinal.R")
-  ## load example data ####
-  #load(file="Data/Cross-sectional/Cohort 1/sub.biom.Rdata")
   
-  sub.biom <- readRDS("val_physeq.rds")
+  ## load example data ####
+  sub.biom <- readRDS("Data/val_physeq.rds")
   biom <- sub.biom
   
   env <- new.env()
-  nm <- load(file = "Frankel.Rdata", env)[1]
-  Frankel <- env[[nm]]
-  
-  env <- new.env()
-  nm <- load(file = "Gopalakrishnan.Rdata", env)[1]
-  Gopalakrishnan <- env[[nm]]
-  
-  env <- new.env()
-  nm <- load(file = "Matson.Rdata", env)[1]
-  Matson <- env[[nm]]
-  
-  env <- new.env()
-  nm <- load(file = "Peters.Rdata", env)[1]
-  Peters <- env[[nm]]
+  nm <- load(file = "Data/BMI/biom.MZ.BMI.Rdata", env)[1]
+  BMI <- env[[nm]]
   
   ori.biom <- biom
   otu.tab <- otu_table(ori.biom)
@@ -79,25 +86,10 @@ server = function(input, output, session){
   tree <- phy_tree(ori.biom)
   sam.dat <- sample_data(ori.biom)
   
-  F.otu.tab <- otu_table(Frankel)
-  F.tax.tab <- tax_table(Frankel)
-  F.tree <- phy_tree(Frankel)
-  F.sam.dat <- sample_data(Frankel)
-  
-  G.otu.tab <- otu_table(Gopalakrishnan)
-  G.tax.tab <- tax_table(Gopalakrishnan)
-  G.tree <- phy_tree(Gopalakrishnan)
-  G.sam.dat <- sample_data(Gopalakrishnan)
-  
-  M.otu.tab <- otu_table(Matson)
-  M.tax.tab <- tax_table(Matson)
-  M.tree <- phy_tree(Matson)
-  M.sam.dat <- sample_data(Matson)
-  
-  P.otu.tab <- otu_table(Peters)
-  P.tax.tab <- tax_table(Peters)
-  P.tree <- phy_tree(Peters)
-  P.sam.dat <- sample_data(Peters)
+  B.otu.tab <- otu_table(BMI)
+  B.tax.tab <- tax_table(BMI)
+  B.tree <- phy_tree(BMI)
+  B.sam.dat <- sample_data(BMI)
   
   output$downloadData <- downloadHandler(
     filename = function() {
@@ -106,33 +98,12 @@ server = function(input, output, session){
     content = function(file1) {
       save(biom, file = file1)
     })
-  output$downloadData.Frankel <- downloadHandler(
+  output$downloadData.BMI <- downloadHandler(
     filename = function() {
-      paste("Frankel.Rdata", sep = "")
+      paste("biom.MZ.BMI.Rdata", sep = "")
     },
     content = function(file1) {
-      save(Frankel, file = file1)
-    })
-  output$downloadData.Gopalakrishnan <- downloadHandler(
-    filename = function() {
-      paste("Gopalakrishnan.Rdata", sep = "")
-    },
-    content = function(file1) {
-      save(Gopalakrishnan, file = file1)
-    })
-  output$downloadData.Matson <- downloadHandler(
-    filename = function() {
-      paste("Matson.Rdata", sep = "")
-    },
-    content = function(file1) {
-      save(Matson, file = file1)
-    })
-  output$downloadData.Peters <- downloadHandler(
-    filename = function() {
-      paste("Peters.Rdata", sep = "")
-    },
-    content = function(file1) {
-      save(Peters, file = file1)
+      save(BMI, file = file1)
     })
   
   output$downloadZip <- downloadHandler(
@@ -143,77 +114,32 @@ server = function(input, output, session){
       temp <- setwd(tempdir())
       on.exit(setwd(temp))
       dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      write.table(otu.tab, "otu.tab.txt")
-      write.table(tax.tab, "tax.tab.txt")
-      write.table(sam.dat, "sam.dat.txt")
+      write.table(otu.tab, "otu.tab.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
+      write.table(tax.tab, "tax.tab.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
+      write.table(sam.dat, "sam.dat.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
       write.tree(tree, "tree.tre")
       zip(zipfile=fname, files=dataFiles)
     })
-  output$downloadZip.Frankel <- downloadHandler(
+  output$downloadZip.BMI <- downloadHandler(
     filename = function() {
-      paste("biom",".zip", sep = "")
+      paste("BMI",".zip", sep = "")
     },
     content <- function(fname) {
       temp <- setwd(tempdir())
       on.exit(setwd(temp))
-      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      write.table(F.otu.tab, "otu.tab.txt")
-      write.table(F.tax.tab, "tax.tab.txt")
-      write.table(F.sam.dat, "sam.dat.txt")
-      write.tree(F.tree, "tree.tre")
-      zip(zipfile=fname, files=dataFiles)
-    })
-  output$downloadZip.Gopalakrishnan <- downloadHandler(
-    filename = function() {
-      paste("biom",".zip", sep = "")
-    },
-    content <- function(fname) {
-      temp <- setwd(tempdir())
-      on.exit(setwd(temp))
-      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      write.table(G.otu.tab, "otu.tab.txt")
-      write.table(G.tax.tab, "tax.tab.txt")
-      write.table(G.sam.dat, "sam.dat.txt")
-      write.tree(G.tree, "tree.tre")
-      zip(zipfile=fname, files=dataFiles)
-    })
-  output$downloadZip.Matson <- downloadHandler(
-    filename = function() {
-      paste("biom",".zip", sep = "")
-    },
-    content <- function(fname) {
-      temp <- setwd(tempdir())
-      on.exit(setwd(temp))
-      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      write.table(M.otu.tab, "otu.tab.txt")
-      write.table(M.tax.tab, "tax.tab.txt")
-      write.table(M.sam.dat, "sam.dat.txt")
-      write.tree(M.tree, "tree.tre")
-      zip(zipfile=fname, files=dataFiles)
-    })
-  output$downloadZip.Peters <- downloadHandler(
-    filename = function() {
-      paste("biom",".zip", sep = "")
-    },
-    content <- function(fname) {
-      temp <- setwd(tempdir())
-      on.exit(setwd(temp))
-      dataFiles = c("otu.tab.txt", "tax.tab.txt", "sam.dat.txt" ,"tree.tre")
-      write.table(P.otu.tab, "otu.tab.txt")
-      write.table(P.tax.tab, "tax.tab.txt")
-      write.table(P.sam.dat, "sam.dat.txt")
-      write.tree(P.tree, "tree.tre")
+      dataFiles = c("BMI.otu.tab.txt", "BMI.tax.tab.txt", "BMI.sam.dat.txt" ,"BMI.tree.tre")
+      write.table(B.otu.tab, "BMI.otu.tab.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
+      write.table(B.tax.tab, "BMI.tax.tab.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
+      write.table(B.sam.dat, "BMI.sam.dat.txt", row.names = TRUE, col.names = TRUE, sep = "\t")
+      write.tree(B.tree, "BMI.tree.tre")
       zip(zipfile=fname, files=dataFiles)
     })
   
   ## variable define ####
   infile = reactiveValues(biom = NULL, qc_biom = NULL, rare_biom = NULL)
-  
-  # alpha input
   ds.Ks <- reactiveValues(res = NULL)
   chooseData = reactiveValues(sam.dat = NULL, mon.sin.rev.bin.con = NULL, prim_vars = NULL, alpha.div = NULL,
                               alpha.div.rare = NULL, alpha.div.qc = NULL, taxa.out = NULL, tax.tab = NULL)
-  #chosenDatalong = reactiveValues(sam.dat_long=NULL, mon.sin.rev.bin.con = NULL, alpha.div_long = NULL)
   is.results = reactiveValues(result = NULL)
   is.results.long = reactiveValues(result = NULL)
   multi.test = reactiveValues(boolval = FALSE)
@@ -243,33 +169,33 @@ server = function(input, output, session){
   taxa.results = reactiveValues(bin.var = NULL, cov.var = NULL, id.var = NULL, taxa = NULL, taxa.bin.sum.out = NULL, con.var = NULL, taxa.con.sum.out = NULL)
   taxa.types = reactiveValues(dataType = NULL, regression = NULL)
   taxa.outputs = reactiveValues(DAoutput = NULL, DAoutput_or = NULL, DAoutputlong = NULL)
-  
+
   rcol = reactiveValues(selected = "lightblue") 
   
   ## options to change theme ####
   observeEvent(input$selectTheme, {
     output$themes <- renderUI({
-      if(input$selectTheme == "Flat Red"){
+      if (input$selectTheme == "Flat Red") {
         shinyDashboardThemes(
           theme = "flat_red"
         )
-      }else if(input$selectTheme == "Gray Dark"){
+      } else if (input$selectTheme == "Gray Dark") {
         shinyDashboardThemes(
           theme = "grey_dark"
         )
-      } else if(input$selectTheme =="Gray Light"){
+      } else if (input$selectTheme =="Gray Light") {
         shinyDashboardThemes(
           theme = "grey_light"
         )
-      }else if(input$selectTheme =="Onenote (Default)"){
+      } else if (input$selectTheme =="Onenote (Default)") {
         shinyDashboardThemes(
           theme = "onenote"
         )
-      }else if(input$selectTheme == "Poor Mans Flatly"){
+      } else if (input$selectTheme == "Poor Mans Flatly") {
         shinyDashboardThemes(
           theme = "poor_mans_flatly"
         )
-      }else if(input$selectTheme == "Purple Gradient"){
+      } else if (input$selectTheme == "Purple Gradient") {
         shinyDashboardThemes(
           theme = "purple_gradient"
         )
@@ -279,7 +205,7 @@ server = function(input, output, session){
   ## options to input ####
   observeEvent(input$inputOption,{
     observe({
-      if(input$inputOption == "Phyloseq"){
+      if (input$inputOption == "Phyloseq") {
         shinyjs::hide(id = "optionsInfo")
         output$moreOptions <- renderUI({
           tagList(
@@ -304,17 +230,14 @@ server = function(input, output, session){
         output$addDownloadinfo <- renderUI({
           tagList(
             box(title = strong("Example Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                downloadButton("downloadData", "Download", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadData.Frankel", "Frankel", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadData.Gopalakrishnan", "Gopalakrishnan", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadData.Matson", "Matson", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadData.Peters", "Peters", width = '30%', style = "color:black; background-color: red2"),br(),br(),
+                downloadButton("downloadData.BMI", "16S", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadData", "Shotgun", width = '30%', style = "color:black; background-color: red2"),
+                br(),br(),
                 INPUT_PHYLOSEQ_COMMENT2
             )
           )
         })
-      }
-      else if(input$inputOption == "Individual Data"){
+      } else if (input$inputOption == "Individual Data") {
         shinyjs::hide(id = "optionsInfo")
         output$moreOptions <- renderUI({
           tagList(
@@ -324,13 +247,13 @@ server = function(input, output, session){
                        border-top-right-radius: 0px !important; border-bottom-right-radius: 0px !important; border-right-width: 0px !important;
                        }"
             ),
-            fileInput("otuTable", strong("Please upload your OTU/feature table (.txt, .csv, .biom)", style = "color:black"), 
+            fileInput("otuTable", strong("Please upload your feature (OTU or ASV) table (.txt, .csv, .biom)", style = "color:black"), 
                       accept = c(".txt", ".csv", ".biom"), width = '80%'), div(style = "margin-top: -15px"),
             fileInput("taxTable", strong("Please upload your taxonomic table (.txt, .tsv)", style = "color:black"), 
                       accept = c(".txt", ".tsv"), width = '80%'), div(style = "margin-top: -15px"),
-            fileInput("samData", strong("Please upload your sample data (.txt, .csv)", style = "color:black"), 
+            fileInput("samData", strong("Please upload your metadata/sample information (.txt, .csv)", style = "color:black"), 
                       accept = c(".txt", ".csv"), width = '80%'), div(style = "margin-top: -15px"),
-            fileInput("tree", strong("Please upload your tree (.tre, .nwk)", style = "color:black"), 
+            fileInput("tree", strong("Please upload your phylogenetic tree (.tre, .nwk)", style = "color:black"), 
                       accept = c(".tre", ".nwk"), width = '80%'), div(style = "margin-top: -15px"),
             actionButton('Load_Individual_Data', 'Upload', class = "btn-info"), br(),br(),
             shinyjs::hidden(
@@ -345,22 +268,10 @@ server = function(input, output, session){
         output$addDownloadinfo <- renderUI({
           tagList(
             box(title = strong("Example Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                downloadButton("downloadZip", "Download", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadZip.Frankel", "Frankel", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadZip.Gopalakrishnan", "Gopalakrishnan", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadZip.Matson", "Matson", width = '30%', style = "color:black; background-color: red2"),
-                downloadButton("downloadZip.Peters", "Peters", width = '30%', style = "color:black; background-color: red2"),br(),br(),
-                p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, OTU/feature table (otu.tab.txt), 
-                  taxonomic table (tax.tab.txt), phylogenetic tree (tree.tre) and sample data (sam.dat.txt).", br(), br(),
-                  "> setwd('/yourdatadirectory/')", br(), br(), "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
-                  "> tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)", br(), " > sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE) ", br(),
-                  "> tree <- read.tree(file = 'tree.tre')", br(),
-                  br(), "You can check if the OTUs are matched and identical across OTU/feature table, 
-                  taxonomic table and phylogenetic tree, and the subjects are matched and identical between OTU/feature table and sample data using following code. ", 
-                  br(), br(), 
-                  " > identical(rownames(otu.tab), rownames(tax.tab))", br(), " > identical(rownames(otu.tab), tree$tip.label)",
-                  br(), " > identical(colnames(otu.tab), rownames(sam.dat))", 
-                  style = "font-size:11pt")
+                downloadButton("downloadZip.BMI", "16S", width = '30%', style = "color:black; background-color: red2"),
+                downloadButton("downloadZip", "Shotgun", width = '30%', style = "color:black; background-color: red2"),
+                br(),br(),
+                INPUT_INDIVIDUAL_DATA_COMMENT2
             )
           )
         })
@@ -387,61 +298,58 @@ server = function(input, output, session){
   
   observeEvent(input$Load_Phyloseq_Data, {
     
-    if(!is.null(input$phyloseqData)){
+    if (!is.null(input$phyloseqData)) {
       dataInfile  = reactive({
         phyloseq.data = input$phyloseqData
         ext <- tools::file_ext(phyloseq.data$datapath)
         
         req(phyloseq.data)
-        if(ext == "Rdata"){
+        if (ext == "Rdata") {
           phyloseq.dataPath = phyloseq.data$datapath
           e = new.env()
           name <- load(phyloseq.dataPath, envir = e)
           data <- e[[name]]
           
-          if(sum(sapply(sample_data(data),is.factor))!=0){
+          if (sum(sapply(sample_data(data),is.factor))!=0) {
             sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
           }
           
           colnames(tax_table(data)) = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
           
-          if(sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))){
+          if (sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))) {
             otu_table(data) = t(otu_table(data))
           }
           
           return(data)
-        }else if(ext == "rds"){
+        } else if (ext == "rds") {
           phyloseq.dataPath = phyloseq.data$datapath
           data <- readRDS(phyloseq.dataPath)
           
-          if(sum(sapply(sample_data(data),is.factor))!=0){
+          if (sum(sapply(sample_data(data),is.factor))!=0) {
             sample_data(data)[,which(sapply(sample_data(data), is.factor))] = lapply(sample_data(data)[,which(sapply(sample_data(data), is.factor))], as.character)
           }
           colnames(tax_table(data)) = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
           
-          if(sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))){
+          if (sum(colnames(otu_table(data)) %in% rownames(sample_data(data))) < sum(rownames(otu_table(data)) %in% rownames(sample_data(data)))) {
             otu_table(data) = t(otu_table(data))
           }
           
           return(data)
-        }
-        else{
+        } else {
           shinyjs::toggle(id = "phyloseqUpload_error", anim = TRUE, time = 1, animType = "fade")
           shinyjs::delay(5000, shinyjs::toggle(id = "phyloseqUpload_error", anim = TRUE, time = 1, animType = "fade"))
           return(NULL)
         }
       })
-    }
-    else{
+    } else {
       return(NULL)
     }
     
-    if(is.null(dataInfile)){
+    if (is.null(dataInfile)) {
       infile$biom <- NULL
       infile$qc_biom <- NULL
       infile$rare_biom = NULL
-    }
-    else{
+    } else {
       infile$biom <- dataInfile()
       infile$qc_biom <- dataInfile()
       infile$rare_biom = NULL
@@ -449,7 +357,6 @@ server = function(input, output, session){
     
     updateTabsetPanel(session, "side_menu",
                       selected = "step2")
-    #print(infile$biom)
     rcol$selected = "lightblue"
     
     if (!is.null(infile$biom)) QC$resume()
@@ -461,7 +368,7 @@ server = function(input, output, session){
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         incProgress(3/10, message = "File Check")
-        if(!is.null(input$otuTable) & !is.null(input$taxTable) & !is.null(input$samData) & !is.null(input$tree)){
+        if (!is.null(input$otuTable) & !is.null(input$taxTable) & !is.null(input$samData) & !is.null(input$tree)) {
           dataInfile  = reactive({
             otu.table = input$otuTable
             ext1 <- tools::file_ext(otu.table$datapath)
@@ -476,8 +383,8 @@ server = function(input, output, session){
             ext4 <- tools::file_ext(tree.data$datapath)
             
             req(otu.table, tax.table, sam.data, tree.data)
-            if((ext1 == "txt"| ext1 == "csv" | ext1 == "biom") & (ext2 == "txt" | ext2 == "tsv") &
-               (ext3 == "txt" | ext3 == "csv") & (ext4 == "tre" | ext4 == "nwk")){
+            if ((ext1 == "txt"| ext1 == "csv" | ext1 == "biom") & (ext2 == "txt" | ext2 == "tsv") &
+               (ext3 == "txt" | ext3 == "csv") & (ext4 == "tre" | ext4 == "nwk")) {
               otu.table.path = otu.table$datapath
               tax.table.path = tax.table$datapath
               sam.data.path = sam.data$datapath
@@ -485,25 +392,24 @@ server = function(input, output, session){
               
               if (ext1 == "txt") {
                 otu.tab <- read.table(otu.table.path, header=TRUE, check.names = FALSE, sep = "\t")
-              }else if(ext1 == "csv"){
+              } else if (ext1 == "csv") {
                 otu.tab <- read.csv(otu.table.path, check.names = FALSE)
                 rownames(otu.tab) = otu.tab[,1];otu.tab = otu.tab[,-1]
-              }else if(ext1 == "biom"){
+              } else if (ext1 == "biom") {
                 biom <- read_biom(otu.table.path)
                 otu.tab <- as.matrix(biom_data(biom))
               }
               
               if (ext2 == "txt") {
                 tax.tab <- read.table(tax.table.path, header=TRUE, check.names = FALSE, sep = "\t")
-              }else if(ext2 == "tsv"){
+              } else if (ext2 == "tsv") {
                 tax.tab <- read.table(tax.table.path, header=TRUE, sep="\t")
                 tax.tab = preprocess.tax.tab(tax.tab)
               }
               
               if (ext3 == "txt") {
                 sam.dat <- read.table(sam.data.path, header=TRUE, check.names = FALSE, sep = "\t")
-                #rownames(sam.dat) = sam.dat[,1]
-              }else if(ext3 == "csv"){
+              } else if (ext3 == "csv") {
                 sam.dat <- read.csv(sam.data.path, check.names = FALSE)
                 rownames(sam.dat) = sam.dat[,1]
                 sam.dat = sam.dat[,-1]
@@ -511,7 +417,7 @@ server = function(input, output, session){
               
               if (ext4 == "tre") {
                 tree <- read.tree(file = tree.data.path)
-              }else if(ext4 == "nwk"){
+              } else if (ext4 == "nwk") {
                 tree <- read.tree(file = tree.data.path) 
               }
               
@@ -520,25 +426,25 @@ server = function(input, output, session){
               sam.dat <- sample_data(sam.dat)
               tree <- phy_tree(tree)
               
-              if(sum(colnames(otu.tab) %in% rownames(sam.dat)) < sum(rownames(otu.tab) %in% rownames(sam.dat))){
+              if (sum(colnames(otu.tab) %in% rownames(sam.dat)) < sum(rownames(otu.tab) %in% rownames(sam.dat))) {
                 otu.tab = t(otu.tab)
               }
               
               incProgress(3/10, message = "Validating")
               validate(
-                if(biom.check.samples(otu.tab, sam.dat)){
-                  if(biom.check.otu(otu.tab, tax.tab, tree)){
+                if (biom.check.samples(otu.tab, sam.dat)) {
+                  if (biom.check.otu(otu.tab, tax.tab, tree)) {
                     showNotification(h4("Error: There is no common samples among OTU/feature table and Sample Data. And
                                         there is no common OTUs among OTU/feature table, taxonomic table and tree tip labels"),
                                      type = "error")
-                  }else{
+                  } else {
                     showNotification(h4("Error: There is no common samples among OTU/feature table and Sample Data"),
                                      type = "error")
                   }
-                }else if(biom.check.otu(otu.tab, tax.tab, tree)){
+                } else if (biom.check.otu(otu.tab, tax.tab, tree)) {
                   showNotification(h4("Error: There is no common OTUs among OTU/feature table, taxonomic table and tree tip labels"),
                                    type = "error")
-                }else{
+                } else {
                   NULL
                 }
               )
@@ -546,23 +452,21 @@ server = function(input, output, session){
               incProgress(1/10, message = "Merging")
               biomData <- merge_phyloseq(otu.tab, tax.tab, sam.dat, tree)
               return(biomData)
-            }else{
+            } else {
               shinyjs::toggle(id = "textfilesUpload_error", anim = TRUE, time = 1, animType = "fade")
               shinyjs::delay(5000, shinyjs::toggle(id = "textfilesUpload_error", anim = TRUE, time = 1, animType = "fade"))
               return(NULL)
             }
           })
-        }
-        else{
+        } else {
           return(NULL)
         }
         
-        if(is.null(dataInfile)){
+        if (is.null(dataInfile)) {
           infile$biom <- NULL
           infile$qc_biom <- NULL
           infile$rare_biom = NULL
-        }
-        else{
+        } else {
           infile$biom <- dataInfile()
           infile$qc_biom <- dataInfile()
           infile$rare_biom = NULL
@@ -570,7 +474,6 @@ server = function(input, output, session){
         
         updateTabsetPanel(session, "side_menu",
                           selected = "step2")
-        #print(infile$biom)
         rcol$selected = "lightblue"
         
         if (!is.null(infile$biom)) QC$resume()
@@ -583,64 +486,45 @@ server = function(input, output, session){
   ######################################
   # This reactive expression stores the input data from either the individual data or phyloseq data
   QC = observe(suspended = T,{
-    #####
-    #print(infile$qc_biom)
     # Plots graphs using example infile data
-    
     output$hist <- renderPlotly({
       lib_size = lib.size.func(infile$qc_biom)$lib.size
       plot_ly(x = ~lib_size, nbinsx = input$binwidth,
               type = "histogram",
-              marker = list(color = rcol$selected,
-                            line = list(color = "black",
-                                        width = 2))) %>%
+              marker = list(color = rcol$selected, line = list(color = "black", width = 2))) %>%
         layout(
-          yaxis = list(title = "Frequency",
-                       zeroline = FALSE),
-          xaxis = list(title = "Library Size",
-                       zeroline = FALSE))
+          yaxis = list(title = "Frequency", zeroline = FALSE),
+          xaxis = list(title = "Library Size", zeroline = FALSE))
     })
     
     output$hist2 <- renderPlotly({
       mean_prop = mean.prop.func(infile$qc_biom)$mean.prop
       plot_ly(x = ~mean_prop, nbinsx = input$binwidth2,
               type = "histogram",
-              marker = list(color = rcol$selected,
-                            line = list(color = "black",
-                                        width = 2))) %>%
+              marker = list(color = rcol$selected, line = list(color = "black", width = 2))) %>%
         layout(
-          yaxis = list(title = "Frequency",
-                       zeroline = FALSE),
-          xaxis = list(title = "Mean Proportion",
-                       zeroline = FALSE))
+          yaxis = list(title = "Frequency", zeroline = FALSE),
+          xaxis = list(title = "Mean Proportion", zeroline = FALSE))
     })
     
     output$boxplot<- renderPlotly({
       lib_size = lib.size.func(infile$qc_biom)$lib.size
       
       plot_ly(x = ~lib_size, type = "box", notched=TRUE, name = "Library Size",
-              color = ~"lib_size", colors = rcol$selected,
-              line = list(color = 'black'))%>%
+              color = ~"lib_size", colors = rcol$selected, line = list(color = 'black'))%>%
         layout(
-          yaxis = list(title = "",
-                       zeroline = FALSE),
-          xaxis = list(title = "",
-                       zeroline = FALSE),
-          showlegend = FALSE)
+          yaxis = list(title = "", zeroline = FALSE),
+          xaxis = list(title = "", zeroline = FALSE), showlegend = FALSE)
     })
     
     output$boxplot2<- renderPlotly({
       mean_prop = mean.prop.func(infile$qc_biom)$mean.prop
       
       plot_ly(x = ~mean_prop, type = "box", notched=TRUE, name = "Mean Proportion",
-              color = ~"mean_prop", colors = rcol$selected,
-              line = list(color = 'black'))%>%
+              color = ~"mean_prop", colors = rcol$selected, line = list(color = 'black'))%>%
         layout(
-          yaxis = list(title = "",
-                       zeroline = FALSE),
-          xaxis = list(title = "",
-                       zeroline = FALSE),
-          showlegend = FALSE)
+          yaxis = list(title = "", zeroline = FALSE),
+          xaxis = list(title = "", zeroline = FALSE), showlegend = FALSE)
     })
     
     ## Number of Taxonomic Rank for biom before QC
@@ -653,79 +537,55 @@ server = function(input, output, session){
     output$sample_Size <- renderValueBox({
       valueBox(
         value = tags$p(paste0(lib.size.func(infile$qc_biom)$num.sams), style = "font-size: 75%;"),
-        "Sample Size",
-        icon = icon("user-circle"),
-        color = "fuchsia"
-      )
+        "Sample Size", icon = icon("user-circle"), color = "fuchsia")
     })
     
     output$OTUs_Size <- renderValueBox({
       valueBox(
         value = tags$p(paste0(lib.size.func(infile$qc_biom)$num.otus), style = "font-size: 75%;"),
-        "Number of OTUs/Features",
-        icon = icon("dna"),
-        color = "aqua"
-      )
+        "Number of Features (OTUs or ASVs)", icon = icon("dna"), color = "aqua")
     })
     
     output$phyla <- renderValueBox({
       num.phyla = num_tax.rank()[1]
       valueBox(
         value = tags$p(paste0(num.phyla), style = "font-size: 75%;"),
-        "Number of Phyla",
-        icon = icon("sitemap"),
-        color = "orange"
-      )
+        "Number of Phyla", icon = icon("sitemap"), color = "orange")
     })
     
     output$classes <- renderValueBox({
       num.classes = num_tax.rank()[2]
       valueBox(
         value = tags$p(paste0(num.classes), style = "font-size: 75%;"),
-        "Number of Classes",
-        icon = icon("sitemap"),
-        color = "purple"
-      )
+        "Number of Classes", icon = icon("sitemap"), color = "purple")
     })
     
     output$orders <- renderValueBox({
       num.orders = num_tax.rank()[3]
       valueBox(
         value = tags$p(paste0(num.orders), style = "font-size: 75%;"),
-        "Number of Orders",
-        icon = icon("sitemap"),
-        color = "blue"
-      )
+        "Number of Orders", icon = icon("sitemap"), color = "blue")
     })
     
     output$families <- renderValueBox({
       num.families = num_tax.rank()[4]
       valueBox(
         value = tags$p(paste0(num.families), style = "font-size: 75%;"),
-        "Number of Families", 
-        icon = icon("sitemap"),
-        color = "red"
-      )
+        "Number of Families", icon = icon("sitemap"), color = "red")
     })
     
     output$genera <- renderValueBox({
       num.genera = num_tax.rank()[5]
       valueBox(
         value = tags$p(paste0(num.genera), style = "font-size: 75%;"),
-        "Number of Genera", 
-        icon = icon("sitemap"),
-        color = "lime"
-      )
+        "Number of Genera", icon = icon("sitemap"), color = "lime")
     })
     
     output$species <- renderValueBox({
       num.species = num_tax.rank()[6]
       valueBox(
         value = tags$p(paste0(num.species), style = "font-size: 75%;"),
-        "Number of Species", 
-        icon = icon("sitemap"),
-        color = "teal"
-      )
+        "Number of Species", icon = icon("sitemap"), color = "teal" )
     })
     
     ## This event handler checks whether there is an input file and updates the slider options accordingly
@@ -733,7 +593,7 @@ server = function(input, output, session){
     max.mean.prop = as.numeric(mean.prop.func(infile$qc_biom)$mean.prop.sum["3rd quartile"])
     maxi.slider2 = round(max.mean.prop, digits = 6)
     
-    if(maxi.slider2 < 2e-05){
+    if (maxi.slider2 < 2e-05) {
       maxi.slider2 = 2e-05
     }
     
@@ -760,151 +620,120 @@ server = function(input, output, session){
     output$primvars <- renderUI({
       tagList(
         selectInput("primvar", label = h4(strong("Primary Variable?", style = "color:black")),
-                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1],
-                    width = '70%')
-      )
+                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1], width = '70%'))
     })
+    
     output$prim_vars_types <- renderUI({
       tagList(
-        uiOutput("morePrimvar_opt")
-      )
+        uiOutput("morePrimvar_opt"))
     })
+    
     observeEvent(input$primvar,{
       ## user selects whether to use rarefied or non rarefied biom data
       
-      if(input$primvar %in% chooseData$prim_vars){
+      if (input$primvar %in% chooseData$prim_vars) {
         is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar)
         # if variable is binary, perform data analysis
-        if(is.results$result == "Binary"){
+        if (is.results$result == "Binary") {
           alpha.categos$cat1 = alpha.bin.cat.func(chooseData$sam.dat, input$primvar)[1]
           alpha.categos$cat2 = alpha.bin.cat.func(chooseData$sam.dat, input$primvar)[2]
           
           output$morePrimvar_opt <- renderUI({
             tagList(
-              h4(strong("Rename Categories?", style = "color:black")), 
-              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("alphaCat1", label = (paste0("Reference: ",alpha.categos$cat1)), value = alpha.categos$cat1,
-                        width = '80%'),
-              textInput("alphaCat2", label = (paste0("Comparison: ",alpha.categos$cat2)), value = alpha.categos$cat2,
-                        width = '80%')
-            )
+              h4(strong("Rename Categories?", style = "color:black")),
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("alphaCat1", label = (paste0("Reference: ",alpha.categos$cat1)), value = alpha.categos$cat1, width = '80%'),
+              textInput("alphaCat2", label = (paste0("Comparison: ",alpha.categos$cat2)), value = alpha.categos$cat2, width = '80%'))
           }) 
           
           ntselected.prim_vars = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar)
           output$covariates <- renderUI({
             tagList(
               prettyRadioButtons("covariates",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "covariates_variables",
-                           style = "margin-left: 2%",
+                shiny::div(id = "covariates_variables", style = "margin-left: 2%",
                            prettyCheckboxGroup("covariatesOptions"," Please select covariate(s)", status = "primary",
-                                               ntselected.prim_vars, width = '70%')
-                )
-              ),
+                                               ntselected.prim_vars, width = '70%'))),
+              
               uiOutput("chooseTest"),
               
               prettyRadioButtons("chooseAdjustment", label = h4(strong("Multiple Testing Adjustment?", style = "color:black")), c("Yes", "No (Default)"), selected = "No (Default)",
-                                 icon = icon("check"),
-                                 animation = "jelly",
-                                 status = "primary",
-                                 width = '80%'),
+                                 icon = icon("check"), animation = "jelly", status = "primary", width = '80%'),
+              
               actionButton("runbtn_bin", (strong("Run!")), class = "btn-info")
-            )
-          })
+              )
+            })
           
           observeEvent(input$covariates,{
-            if(input$covariates == "Covariate(s)"){
+            if (input$covariates == "Covariate(s)") {
               
               shinyjs::show("covariates_variables")
               
               observeEvent(input$covariatesOptions,{
-                if(!is.null(input$covariatesOptions)){
+                if (!is.null(input$covariatesOptions)) {
                   output$chooseTest <- renderUI({
                     tagList(
                       selectInput("chooseMethod", label = h4(strong("Method?", style = "color:black")),
-                                  c("Choose one" = "",
-                                    "Linear regression", "Logistic regression"), selected = "Linear regression",
-                                  width = '80%'),
+                                  c("Choose one" = "", "Linear regression", "Logistic regression"), selected = "Linear regression", width = '80%'),
                       div(id = "tauopt",
-                          uiOutput("tauSlider")
-                      )
-                    )
+                          uiOutput("tauSlider")))
                   })
-                }
-                else{
+                } else {
                   output$chooseTest <- renderUI({
                     tagList(
                       selectInput("chooseMethod", label = h4(strong("Method?", style = "color:black")),
-                                  c("Choose one" = "",
-                                    "Welch t-test", "Wilcoxon rank-sum test"), selected = "Welch t-test",
-                                  width = '80%')
-                    )
+                                  c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test"), selected = "Welch t-test", width = '80%'))
                   })
                 }
               })
-            }
-            else if(input$covariates == "None"){
+            } else if (input$covariates == "None") {
               shinyjs::hide("covariates_variables")
               output$chooseTest <- renderUI({
                 tagList(
                   selectInput("chooseMethod", label = h4(strong("Method?", style = "color:black")), 
-                              c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test"), selected = "Welch t-test",
-                              width = '80%')
-                )
+                              c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test"), selected = "Welch t-test", width = '80%'))
               })
             }
           })
-        }
-        else if(is.results$result == "Continuous"){
+        } else if (is.results$result == "Continuous") {
           
           #if variable is continous, perform data analysis
           output$morePrimvar_opt <- renderUI({
             tagList(
-              
-              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("rename.con.var", label = h4(strong("Rename Primary Variable?", style = "color:black")),
-                        value = input$primvar,
-                        width = '80%')
-            )
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+              textInput("rename.con.var", label = NULL, value = input$primvar, width = '80%'))
           })
           
           ntselected.prim_vars = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar)
           output$covariates <- renderUI({
             tagList(
               prettyRadioButtons("covariates_cont",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "covariates_variables",
-                           style = "margin-left: 2%",
+                shiny::div(id = "covariates_variables", style = "margin-left: 2%",
                            prettyCheckboxGroup("covariatesOptions_cont"," Please select covariate(s)", status = "primary",
-                                               ntselected.prim_vars, width = '70%')
-                )
-              ),
+                                               ntselected.prim_vars, width = '70%'))),
               
               selectInput("chooseMethod_cont", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "Linear regression"), selected = "Linear regression",
-                          width = '80%'),
+                          c("Choose one" = "", "Linear regression"), selected = "Linear regression", width = '80%'),
+              
               prettyRadioButtons("chooseAdjustment_cont", label = h4(strong("Multiple Testing Adjustment?", style = "color:black")), c("Yes", "No (Default)"), selected = "No (Default)",
-                                 icon = icon("check"),
-                                 animation = "jelly",
-                                 status = "primary",
-                                 width = '80%'),
-              actionButton("runbtn_cont", (strong("Run!")), class = "btn-info")
-            )
+                                 icon = icon("check"), animation = "jelly", status = "primary", width = '80%'),
+              
+              actionButton("runbtn_cont", (strong("Run!")), class = "btn-info"))
           })
+          
           observeEvent(input$covariates_cont,{
-            if(input$covariates_cont == "Covariate(s)"){shinyjs::show("covariates_variables")}
-            else if(input$covariates_cont == "None"){shinyjs::hide("covariates_variables")}
+            if (input$covariates_cont == "Covariate(s)") {shinyjs::show("covariates_variables")
+            } else if (input$covariates_cont == "None") {shinyjs::hide("covariates_variables")
+            }
           })
         }
-        
       }
-      
     })
     
     ######################################
@@ -913,176 +742,136 @@ server = function(input, output, session){
     output$primvars_long <- renderUI({
       tagList(
         selectInput("primvarlong", label = h4(strong("Primary Variable?", style = "color:black")),
-                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1],
-                    width = '70%')
-      )
+                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1], width = '70%'))
     })
+    
     output$prim_vars_types_long <- renderUI({
       tagList(
-        uiOutput("morePrimvar_optlong")
-      )
+        uiOutput("morePrimvar_optlong"))
     })
+    
     observeEvent(input$primvarlong,{
       ## user selects whether to use rarefied or non rarefied biom data
-      if(input$primvarlong %in% chooseData$prim_vars){
+      if (input$primvarlong %in% chooseData$prim_vars) {
         is.results.long$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvarlong)
         # if variable is binary, perform data analysis
-        if(is.results.long$result == "Binary"){
+        if (is.results.long$result == "Binary") {
           
           alpha.categos.long$cat1 = alpha.bin.cat.func(chooseData$sam.dat, input$primvarlong)[1]
           alpha.categos.long$cat2 = alpha.bin.cat.func(chooseData$sam.dat, input$primvarlong)[2]
-          
           
           ntselected.prim_varslong = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvarlong)
           
           output$morePrimvar_optlong <- renderUI({
             tagList(
               h4(strong("Rename Categories?", style = "color:black")), 
-              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("alphaCat1long", label = (paste0("Reference: ",alpha.categos.long$cat1)), value = alpha.categos.long$cat1,
-                        width = '80%'),
-              textInput("alphaCat2long", label = (paste0("Comparison: ",alpha.categos.long$cat2)), value = alpha.categos.long$cat2,
-                        width = '80%'),
-              #textInput("alphaCat1long", p(h4(strong(alpha.categoslong$cat1())), "Reference"), value = alpha.categoslong$cat1()),
-              #textInput("alphaCat2long", p(h4(strong(alpha.categoslong$cat2())), "Comparison"), value = alpha.categoslong$cat2())
-              
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+              textInput("alphaCat1long", label = (paste0("Reference: ",alpha.categos.long$cat1)), value = alpha.categos.long$cat1, width = '80%'),
+              textInput("alphaCat2long", label = (paste0("Comparison: ",alpha.categos.long$cat2)), value = alpha.categos.long$cat2, width = '80%'),
               
               h4(strong("Cluster Variable?", style = "color:black")), 
               p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures
               designs or family IDs for family-based studies.", style = "font-size:11pt"),
-              prettyRadioButtons("clustervar",label = "", status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 ntselected.prim_varslong, selected = ntselected.prim_varslong[1], width = '70%')
-            )
+              prettyRadioButtons("clustervar",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_varslong, selected = ntselected.prim_varslong[1], width = '70%'))
           })
           
-          #here1
           output$covariates_long <- renderUI({
             ntselected.clustervar = ntselected.prim_varslong[which(ntselected.prim_varslong != input$clustervar)]
-            print(ntselected.clustervar)
             
             tagList(
               prettyRadioButtons("covariateslong",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "covariates_variableslong",
-                           style = "margin-left: 2%",
+                shiny::div(id = "covariates_variableslong", style = "margin-left: 2%",
                            prettyCheckboxGroup("covariatesOptionslong"," Please select covariate(s)", status = "primary",
-                                               ntselected.clustervar, width = '70%')
-                )
-              ),
-              uiOutput("chooseTestLong")
-              ,
+                                               ntselected.clustervar, width = '70%'))),
+              
+              uiOutput("chooseTestLong"),
+              
               prettyRadioButtons("chooseAdjustmentlong", label = h4(strong("Multiple Testing Adjustment?", style = "color:black")), c("Yes", "No (Default)"), selected = "No (Default)",
-                                 icon = icon("check"),
-                                 animation = "jelly",
-                                 status = "primary",
-                                 width = '80%'),
+                                 icon = icon("check"), animation = "jelly", status = "primary", width = '80%'),
+              
               actionButton("runbtnlong_bin", (strong("Run!")), class = "btn-info")
             )
           })
           
           observeEvent(input$covariateslong,{
-            if(input$covariateslong == "Covariate(s)"){
+            if (input$covariateslong == "Covariate(s)") {
               shinyjs::show("covariates_variableslong")
               observeEvent(input$covariatesOptionslong,{
-                if(!is.null(input$covariatesOptionslong)){
+                if (!is.null(input$covariatesOptionslong)) {
                   output$chooseTestLong <- renderUI({
                     tagList(
                       selectInput("chooseMethodlong", label = h4(strong("Method?", style = "color:black")),
-                                  c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"),
-                                  selected = "LMM",
-                                  width = '80%')
-                    )
+                                  c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"), selected = "LMM", width = '80%'))
                   })
-                }else{
+                } else {
                   output$chooseTestLong <- renderUI({
                     tagList(
                       selectInput("chooseMethodlong", label = h4(strong("Method?", style = "color:black")),
-                                  c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"),
-                                  selected = "LMM",
-                                  width = '80%')
-                    )
+                                  c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"), selected = "LMM", width = '80%'))
                   })
                 }
               })
-            }
-            else if(input$covariateslong == "None"){
+            } else if (input$covariateslong == "None") {
               shinyjs::hide("covariates_variableslong")
               output$chooseTestLong <- renderUI({
                 tagList(
                   selectInput("chooseMethodlong", label = h4(strong("Method?", style = "color:black")),
-                              c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"), 
-                              selected = "LMM",
-                              width = '80%')
-                )
+                              c("Choose one" = "", "LMM", "GEE (Binomial)", "GLMM (Binomial)"), selected = "LMM", width = '80%'))
               })
             }
           })
-        }
-        else if(is.results.long$result == "Continuous"){
+        } else if (is.results.long$result == "Continuous") {
           
           ntselected.prim_vars.con_long = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvarlong)
           
           output$morePrimvar_optlong <- renderUI({
             tagList(
-              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("rename.con.varlong", label = h4(strong("Rename Primary Variable?", style = "color:black")), 
-                        value = input$primvarlong,
-                        width = '80%'),
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("rename.con.varlong", label = NULL, value = input$primvarlong, width = '80%'),
               
               h4(strong("Cluster Variable?", style = "color:black")),
               p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures
-              designs or family IDs for family-based studies.",
-                style = "font-size:11pt"),
-              prettyRadioButtons("clustervar.cont",label = "", status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 ntselected.prim_vars.con_long, selected = ntselected.prim_vars.con_long[1], width = '70%')
-            )
+              designs or family IDs for family-based studies.", style = "font-size:11pt"),
+              prettyRadioButtons("clustervar.cont",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_vars.con_long, selected = ntselected.prim_vars.con_long[1], width = '70%'))
           })
           
           output$covariates_long <- renderUI({
             
             ntselected.clustervar.cont = ntselected.prim_vars.con_long[which(ntselected.prim_vars.con_long != input$clustervar.cont)]
-            print(ntselected.clustervar.cont) #here2
             
             tagList(
               prettyRadioButtons("covariates_contlong",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "covariates_variableslong",
-                           style = "margin-left: 2%",
+                shiny::div(id = "covariates_variableslong", style = "margin-left: 2%",
                            prettyCheckboxGroup("covariatesOptions_contlong"," Please select covariate(s)", status = "primary",
-                                               ntselected.clustervar.cont, width = '70%')
-                )
-              ),
+                                               ntselected.clustervar.cont, width = '70%'))),
+              
               selectInput("chooseMethodlong_cont", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "LMM"),
-                          selected = "LMM",
-                          width = '80%'),
+                          c("Choose one" = "", "LMM"), selected = "LMM", width = '80%'),
+              
               prettyRadioButtons("chooseAdjustment_contlong", label = h4(strong("Multiple Testing Adjustment?", style = "color:black")), c("Yes", "No (Default)"), selected = "No (Default)",
-                                 icon = icon("check"),
-                                 animation = "jelly",
-                                 status = "primary",
-                                 width = '80%'),
-              actionButton("runbtnlong_cont", (strong("Run!")), class = "btn-info")
-            )
+                                 icon = icon("check"), animation = "jelly", status = "primary", width = '80%'),
+              
+              actionButton("runbtnlong_cont", (strong("Run!")), class = "btn-info"))
           })
           
           ntselected.prim_vars = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvarlong)
           
           observeEvent(input$covariates_contlong,{
-            if(input$covariates_contlong == "Covariate(s)"){shinyjs::show("covariates_variableslong")}
-            else if(input$covariates_contlong == "None"){shinyjs::hide("covariates_variableslong")}
+            if (input$covariates_contlong == "Covariate(s)") {shinyjs::show("covariates_variableslong")
+            } else if (input$covariates_contlong == "None") {shinyjs::hide("covariates_variableslong")
+            }
           })
         }
       }
-      
-      
     })
     ################################################################################################
     
@@ -1101,34 +890,29 @@ server = function(input, output, session){
     output$beta_primvar_cross <- renderUI({
       tagList(
         selectInput("beta.primvar_cross", label = h4(strong("Primary Variable?", style = "color:black")),
-                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1],
-                    width = '70%')
-      )
+                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1], width = '70%'))
     })
+    
     output$beta_prim_vars_types_cross <- renderUI({
       tagList(
-        uiOutput("beta_morePrimvar_optcross")
-      )
+        uiOutput("beta_morePrimvar_optcross"))
     })
+    
     observeEvent(input$beta.primvar_cross,{
       
-      if(input$beta.primvar_cross %in% chooseData$prim_vars){
+      if (input$beta.primvar_cross %in% chooseData$prim_vars) {
         is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$beta.primvar_cross)
         
-        if(is.results$result == "Binary"){
+        if (is.results$result == "Binary") {
           beta.categos$cat1 = beta.bin.cat.func(chooseData$sam.dat, input$beta.primvar_cross)[1]
           beta.categos$cat2 = beta.bin.cat.func(chooseData$sam.dat, input$beta.primvar_cross)[2]
           
           output$beta_morePrimvar_optcross <- renderUI({
             tagList(
-              h4(strong("Rename Categories?", style = "color:black")), 
-              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("betaCat1", label = (paste0("Reference: ",beta.categos$cat1)), value = beta.categos$cat1,
-                        width = '80%'),
-              textInput("betaCat2", label = (paste0("Comparison: ",beta.categos$cat2)), value = beta.categos$cat2,
-                        width = '80%')
-            )
+              h4(strong("Rename Categories?", style = "color:black")),
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("betaCat1", label = (paste0("Reference: ",beta.categos$cat1)), value = beta.categos$cat1, width = '80%'),
+              textInput("betaCat2", label = (paste0("Comparison: ",beta.categos$cat2)), value = beta.categos$cat2, width = '80%'))
           }) 
           
           ntselected.prim_varsbin = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$beta.primvar_cross)
@@ -1136,44 +920,34 @@ server = function(input, output, session){
           output$beta_covariates_cross <- renderUI({
             tagList(
               prettyRadioButtons("beta_covariates_bin",label = h4(strong("Covariate(s)?", style = "color:black")), 
-                                 status = "primary", icon = icon("check"),
-                                 animation = "jelly",
+                                 status = "primary", icon = icon("check"), animation = "jelly",
                                  c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "beta_covariates_variables_bin",
-                           style = "margin-left: 2%",
+                shiny::div(id = "beta_covariates_variables_bin", style = "margin-left: 2%",
                            prettyCheckboxGroup("beta_covariatesOptions_bin"," Please select covariate(s)", status = "primary",
-                                               ntselected.prim_varsbin, width = '70%')
-                )
-              ),
+                                               ntselected.prim_varsbin, width = '70%'))),
+              
               selectInput("beta_chooseMethod_bin", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "MiRKAT"),
-                          selected = "MiRKAT",
-                          width = '80%'),
-              actionButton("beta_runbtn_cross_bin", (strong("Run!")), class = "btn-info")
-            )
+                          c("Choose one" = "", "MiRKAT"), selected = "MiRKAT", width = '80%'),
+              
+              actionButton("beta_runbtn_cross_bin", (strong("Run!")), class = "btn-info"))
           })
           
           observeEvent(input$beta_covariates_bin,{
-            if(input$beta_covariates_bin == "Covariate(s)"){
-              shinyjs::show("beta_covariates_variables_bin")}
-            else if(input$beta_covariates_bin == "None"){
+            if (input$beta_covariates_bin == "Covariate(s)") {
+              shinyjs::show("beta_covariates_variables_bin")
+            } else if (input$beta_covariates_bin == "None") {
               shinyjs::hide("beta_covariates_variables_bin")
             }
           })
-          
-        }
-        else if(is.results$result == "Continuous"){
+        } else if (is.results$result == "Continuous") {
           #if variable is continous, perform data analysis
           output$beta_morePrimvar_optcross <- renderUI({
             tagList(
-              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("beta.rename.con.var", label = h4(strong("Rename Primary Variable?", style = "color:black")), 
-                        value = input$beta.primvar_cross,
-                        width = '80%'),
-              
-            )
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+              textInput("beta.rename.con.var", label = NULL, value = input$beta.primvar_cross, width = '80%'))
           })
           
           ntselected.prim_vars = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$beta.primvar_cross)
@@ -1181,27 +955,23 @@ server = function(input, output, session){
           output$beta_covariates_cross <- renderUI({
             tagList(
               prettyRadioButtons("beta.covariates_cont",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "beta_covariates_variables_cont",
-                           style = "margin-left: 2%",
+                shiny::div(id = "beta_covariates_variables_cont", style = "margin-left: 2%",
                            prettyCheckboxGroup("beta.covariatesOptions_cont"," Please select covariate(s)", status = "primary",
-                                               ntselected.prim_vars, width = '70%')
-                )
-              ),
+                                               ntselected.prim_vars, width = '70%'))),
+              
               selectInput("beta.chooseMethod_cont", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "MiRKAT"),
-                          selected = "MiRKAT",
-                          width = '80%'),
-              actionButton("beta_runbtn_cross_cont", (strong("Run!")), class = "btn-info")
-            )
+                          c("Choose one" = "", "MiRKAT"), selected = "MiRKAT", width = '80%'),
+              
+              actionButton("beta_runbtn_cross_cont", (strong("Run!")), class = "btn-info"))
           })
           
           observeEvent(input$beta.covariates_cont,{
-            if(input$beta.covariates_cont == "Covariate(s)"){
-              shinyjs::show("beta_covariates_variables_cont")}
-            else if(input$beta.covariates_cont == "None"){shinyjs::hide("beta_covariates_variables_cont")}
+            if (input$beta.covariates_cont == "Covariate(s)") {
+              shinyjs::show("beta_covariates_variables_cont")
+            } else if (input$beta.covariates_cont == "None") {shinyjs::hide("beta_covariates_variables_cont")}
           })
         }
       }
@@ -1216,22 +986,21 @@ server = function(input, output, session){
     output$beta_primvars_long <- renderUI({
       tagList(
         selectInput("beta.primvar_long", label = h4(strong("Primary Variable?", style = "color:black")),
-                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1],
-                    width = '70%')
-      )
+                    c("Choose one" = "", chooseData$prim_vars), selected = chooseData$prim_vars[1], width = '70%'))
     })
+    
     output$beta_prim_vars_types_long <- renderUI({
       tagList(
-        uiOutput("beta_morePrimvar_optlong")
-      )
+        uiOutput("beta_morePrimvar_optlong"))
     })
+    
     observeEvent(input$beta.primvar_long,{
       
-      if(input$beta.primvar_long %in% chooseData$prim_vars){
+      if (input$beta.primvar_long %in% chooseData$prim_vars) {
         is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$beta.primvar_long)
         
         # if variable is binary, perform data analysis
-        if(is.results$result == "Binary"){
+        if (is.results$result == "Binary") {
           
           beta.categos.long$cat1 = beta.bin.cat.func(chooseData$sam.dat, input$beta.primvar_long)[1]
           beta.categos.long$cat2 = beta.bin.cat.func(chooseData$sam.dat, input$beta.primvar_long)[2]
@@ -1241,31 +1010,15 @@ server = function(input, output, session){
           output$beta_morePrimvar_optlong <- renderUI({
             tagList(
               h4(strong("Rename Categories?", style = "color:black")), 
-              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("betaCat1.long", label = (paste0("Reference: ",beta.categos.long$cat1)), value = beta.categos.long$cat1,
-                        width = '80%'),
-              textInput("betaCat2.long", label = (paste0("Comparison: ",beta.categos.long$cat2)), value = beta.categos.long$cat2,
-                        width = '80%'),
-              # box(title = strong("Which is the Reference?", style = "color:black"), 
-              #     width = NULL, status = "primary", solidHeader = TRUE,
-              #     p("While there is no directional inference in beta diversity analysis, you can select the reference and comparison groups to switch the colors on graphs.",
-              #       style = "font-size:11pt"),
-              #     prettyRadioButtons("beta_chooseRef_bin.long", label = "",
-              #                        icon = icon("check"), 
-              #                        c(beta.categos_bin$cat1(), beta.categos_bin$cat2()), selected = beta.categos_bin$cat1(),
-              #                        animation = "jelly",
-              #                        status = "primary",
-              #                        width = '70%')
-              # ),
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+              textInput("betaCat1.long", label = (paste0("Reference: ",beta.categos.long$cat1)), value = beta.categos.long$cat1, width = '80%'),
+              textInput("betaCat2.long", label = (paste0("Comparison: ",beta.categos.long$cat2)), value = beta.categos.long$cat2, width = '80%'),
+              
               h4(strong("Cluster Variable?", style = "color:black")), 
-              p("Please select the cluster (group) variable. Example cluster variables are subject IDs 
-                      for repeated measures designs and family IDs for family-based studies.",
-                style = "font-size:11pt"),
-              prettyRadioButtons("clustervar_bin.long",label = "", status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 ntselected.prim_varsbin, width = '70%')
-            )
+              p("Please select the cluster (group) variable. Example cluster variables are subject IDs for repeated measures designs 
+                and family IDs for family-based studies.", style = "font-size:11pt"),
+              prettyRadioButtons("clustervar_bin.long",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_varsbin, selected = ntselected.prim_varsbin[1], width = '70%'))
           })
           
           output$beta_covariates_long <- renderUI({
@@ -1273,76 +1026,64 @@ server = function(input, output, session){
             
             tagList(
               prettyRadioButtons("beta_covariates_bin.long",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "beta_covariates_variables_binLong",
-                           style = "margin-left: 2%",
+                shiny::div(id = "beta_covariates_variables_binLong", style = "margin-left: 2%",
                            prettyCheckboxGroup("beta_covariatesOptions_bin.long"," Please select covariate(s)", status = "primary",
-                                               ntselected.clustervar_long, width = '70%')
-                )
-              ),
+                                               ntselected.clustervar_long, width = '70%'))),
+              
               selectInput("beta_chooseMethod_bin.long", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "GLMM-MiRKAT"),
-                          selected = "GLMM-MiRKAT",
-                          width = '80%'),
-              actionButton("beta_runbtn_bin.long", (strong("Run!")), class = "btn-info")
-            )
+                          c("Choose one" = "", "GLMM-MiRKAT"), selected = "GLMM-MiRKAT", width = '80%'),
+              
+              actionButton("beta_runbtn_bin.long", (strong("Run!")), class = "btn-info"))
           })
           
           observeEvent(input$beta_covariates_bin.long,{
-            if(input$beta_covariates_bin.long == "Covariate(s)"){
-              shinyjs::show("beta_covariates_variables_binLong")}
-            else if(input$beta_covariates_bin.long == "None"){shinyjs::hide("beta_covariates_variables_binLong")}
+            if (input$beta_covariates_bin.long == "Covariate(s)") {
+              shinyjs::show("beta_covariates_variables_binLong")
+            } else if (input$beta_covariates_bin.long == "None") {shinyjs::hide("beta_covariates_variables_binLong")}
           })
-        }
-        else if(is.results$result == "Continuous"){
+        } else if (is.results$result == "Continuous") {
           #if variable is continous, perform data analysis
           ntselected.prim_vars_con =  cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$beta.primvar_long)
           
           output$beta_morePrimvar_optlong <- renderUI({
             tagList(
-              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.",
-                style = "font-size:11pt"),
-              textInput("beta.rename.con.long", label = h4(strong("Rename Primary Variable?", style = "color:black")), 
-                        value = input$beta.primvar_long,
-                        width = '80%'),
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("beta.rename.con.long", label = NULL, value = input$beta.primvar_long, width = '80%'),
+              
               h4(strong("Cluster Variable?", style = "color:black")),
               p("Please select the cluster (group) variable. Example cluster variables are subject IDs for 
-                      repeated measures designs and family IDs for family-based studies.",
-                style = "font-size:11pt"),
-              prettyRadioButtons("clustervar_con.long",label = "", status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 ntselected.prim_vars_con, width = '70%')
-            )
+                repeated measures designs and family IDs for family-based studies.", style = "font-size:11pt"),
+              prettyRadioButtons("clustervar_con.long",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_vars_con, selected = ntselected.prim_vars_con[1], width = '70%'))
           })
           
-          ntselected.clustervarLong = ntselected.prim_vars_con[which(ntselected.prim_vars_con != input$clustervar_con.long)]
-          
           output$beta_covariates_long <- renderUI({
+            
+            ntselected.clustervarLong = ntselected.prim_vars_con[which(ntselected.prim_vars_con != input$clustervar_con.long)]
+            
             tagList(
               prettyRadioButtons("beta.covariates_contLong",label = h4(strong("Covariate(s)?", style = "color:black")), status = "primary", icon = icon("check"),
-                                 animation = "jelly",
-                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                                 animation = "jelly", c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
               shinyjs::hidden(
-                shiny::div(id = "beta_covariates_variables_contLong",
-                           style = "margin-left: 2%",
+                shiny::div(id = "beta_covariates_variables_contLong", style = "margin-left: 2%",
                            prettyCheckboxGroup("beta.covariatesOptions_contLong"," Please select covariate(s)", status = "primary",
-                                               ntselected.clustervarLong, width = '70%')
-                )
-              ),
+                                               ntselected.clustervarLong, width = '70%'))),
+              
               selectInput("beta.chooseMethod_contLong", label = h4(strong("Method?", style = "color:black")),
-                          c("Choose one" = "", "GLMM-MiRKAT"),
-                          selected = "GLMM-MiRKAT",
-                          width = '80%'),
-              actionButton("beta.runbtn_contLong", (strong("Run!")), class = "btn-info")
-            )
+                          c("Choose one" = "", "GLMM-MiRKAT"), selected = "GLMM-MiRKAT", width = '80%'),
+              
+              actionButton("beta.runbtn_contLong", (strong("Run!")), class = "btn-info"))
           })
           
           observeEvent(input$beta.covariates_contLong,{
-            if(input$beta.covariates_contLong == "Covariate(s)"){
-              shinyjs::show("beta_covariates_variables_contLong")}
-            else if(input$beta.covariates_contLong == "None"){shinyjs::hide("beta_covariates_variables_contLong")}
+            if (input$beta.covariates_contLong == "Covariate(s)") {
+              shinyjs::show("beta_covariates_variables_contLong")
+            } else if (input$beta.covariates_contLong == "None") {shinyjs::hide("beta_covariates_variables_contLong")}
           })
         }
       }
@@ -1362,197 +1103,168 @@ server = function(input, output, session){
       output$primvars_taxa <- renderUI({
         tagList(
           prettyRadioButtons("dataType_taxa", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
-                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%')
-          ,
+                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
           selectInput("primvar_taxa", label = h4(strong("Primary Variable?", style = "color:black")),
-                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1],
-                      width = '70%')
-        )
+                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
       })
       
       output$primvars_taxa.long <- renderUI({
-        #chooseData$prim_vars[1]
         tagList(
           prettyRadioButtons("dataType_taxa.long", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
-                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%')
-          ,
+                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
           selectInput("primvar_taxa.long", label = h4(strong("Primary Variable?", style = "color:black")),
-                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1],
-                      width = '70%')
-        )
+                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
       })
       
       observeEvent(input$dataType_taxa,{
-        if(input$dataType_taxa == "Count"){
+        if (input$dataType_taxa == "Count") {
           taxa.types$dataType = "rare.count"
           taxa.types$regression = "Negative binomial regression"
-        } else if(input$dataType_taxa == "Proportion"){
+        } else if (input$dataType_taxa == "Proportion") {
           taxa.types$dataType = "imp.prop"
           taxa.types$regression = "Beta regression"
-        } else if(input$dataType_taxa == "CLR (Default)"){
+        } else if (input$dataType_taxa == "CLR (Default)") {
           taxa.types$dataType = "clr"
           taxa.types$regression = "Linear regression"
         }
       })
       
       observeEvent(input$dataType_taxa.long,{
-        if(input$dataType_taxa.long == "Count"){
+        if (input$dataType_taxa.long == "Count") {
           taxa.types$dataType = "rare.count"
           taxa.types$regression.long = "GLMM (Negative Binomial)"
-        } else if(input$dataType_taxa.long == "Proportion"){
+        } else if (input$dataType_taxa.long == "Proportion") {
           taxa.types$dataType = "imp.prop"
           taxa.types$regression.long = "GLMM (Beta)"
-        } else if(input$dataType_taxa.long == "CLR (Default)"){
+        } else if (input$dataType_taxa.long == "CLR (Default)") {
           taxa.types$dataType = "clr"
           taxa.types$regression.long = "LMM"
         }
       })
       
       observeEvent(input$primvar_taxa,{
-        if(input$primvar_taxa %in% chooseData$prim_vars){
+        if (input$primvar_taxa %in% chooseData$prim_vars) {
           is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
           
-          if(is.results$result == "Binary"){
+          if (is.results$result == "Binary") {
             taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[1]
             taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[2]
             
             output$morePrimvar_opt_taxa <- renderUI({
               tagList(
                 h4(strong("Rename Categories?", style = "color:black")), 
-                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                  style = "font-size:11pt"),
-                textInput("taxaCat1", label = (paste0("Reference: ",taxa.categos$cat1)), value = taxa.categos$cat1,
-                          width = '80%'),
-                textInput("taxaCat2", label = (paste0("Comparison: ",taxa.categos$cat2)), value = taxa.categos$cat2,
-                          width = '80%')
-              )
+                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+                textInput("taxaCat1", label = (paste0("Reference: ",taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
+                textInput("taxaCat2", label = (paste0("Comparison: ",taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'))
             }) 
             
             ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+            
             output$covariates_taxa <- renderUI({
               tagList(
                 prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%')
-                ,
+                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                
                 shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa",
-                             style = "margin-left: 2%",
+                  shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
                              prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa, width = '70%')
-                  )
-                ),
-                uiOutput("chooseTest_taxa")
-                ,
+                                                 ntselected.prim_vars_taxa, width = '70%'))),
+                
+                uiOutput("chooseTest_taxa"),
+                
                 prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
                                    c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"),
-                                   width = '80%')
-                ,
-                actionButton("runbtn_bin_taxa", (strong("Run!")), class = "btn-info")
+                                   icon = icon("check"), width = '80%'),
                 
-              )
+                actionButton("runbtn_bin_taxa", (strong("Run!")), class = "btn-info"))
             })
             
             observeEvent(input$covariates_taxa,{
-              if(input$covariates_taxa == "Covariate(s)"){
+              if (input$covariates_taxa == "Covariate(s)") {
                 
                 shinyjs::show("covariates_variables_taxa")
                 
                 observeEvent(input$covariatesOptions_taxa,{
-                  if(!is.null(input$covariatesOptions_taxa)){
+                  if (!is.null(input$covariatesOptions_taxa)) {
                     output$chooseTest_taxa <- renderUI({
                       tagList(
                         selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
-                                    c("Choose one" = "",
-                                      taxa.types$regression, "Logistic regression"), selected = taxa.types$regression,
-                                    width = '80%')
-                      )
+                                    c("Choose one" = "", taxa.types$regression, "Logistic regression"), selected = taxa.types$regression,
+                                    width = '80%'))
                     })
-                  }else{
+                  } else {
                     shinyjs::hide("covariates_variables_taxa")
                     output$chooseTest_taxa <- renderUI({
                       tagList(
-                        selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
-                                                                                                                 "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
-                                    selected = "Welch t-test",
-                                    width = '80%')
-                      )
+                        selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
+                                    c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                                    selected = "Welch t-test", width = '80%'))
                     })
                   }
                 })
-              }else if(input$covariates_taxa == "None"){
+                
+              } else if (input$covariates_taxa == "None") {
                 shinyjs::hide("covariates_variables_taxa")
                 output$chooseTest_taxa <- renderUI({
                   tagList(
-                    selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), c("Choose one" = "",
-                                                                                                             "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
-                                selected = "Welch t-test",
-                                width = '80%')
-                  )
+                    selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
+                                c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                                selected = "Welch t-test", width = '80%'))
                 })
               }
             })
-          }
-          else if(is.results$result == "Continuous"){
+            
+          } else if (is.results$result == "Continuous") {
             
             output$morePrimvar_opt_taxa <- renderUI({
               tagList(
-                textInput("rename.con.var_taxa", label = h4(strong("Rename Categories Reference?", style = "color:black")), value = input$primvar_taxa)
-                #, p("You can rename the categories of reference category", style = "font-family: 'Verdana'; font-size:10pt")),
-              )
+                h4(strong("Rename Primary Variable?", style = "color:black")),
+                p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+                textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa))
             })
             
             ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+            
             output$covariates_taxa <- renderUI({
               tagList(
                 prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%')
-                ,
+                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                
                 shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa",
-                             style = "margin-left: 2%",
+                  shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
                              prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa, width = '70%')
-                  )
-                ),
-                uiOutput("chooseTest_taxa.cont")
-                ,
+                                                 ntselected.prim_vars_taxa, width = '70%'))),
+                
+                uiOutput("chooseTest_taxa.cont"),
+                
                 prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
                                    c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"),
-                                   width = '80%')
-                ,
-                actionButton("runbtn_cont_taxa", (strong("Run!")), class = "btn-info")
-              )
+                                   icon = icon("check"), width = '80%'),
+                
+                actionButton("runbtn_cont_taxa", (strong("Run!")), class = "btn-info"))
             })
             
             observeEvent(input$covariates_taxa,{
-              if(input$covariates_taxa == "Covariate(s)"){
+              if (input$covariates_taxa == "Covariate(s)") {
                 shinyjs::show("covariates_variables_taxa")
-              }else if(input$covariates_taxa == "None"){
+              } else if (input$covariates_taxa == "None") {
                 shinyjs::hide("covariates_variables_taxa")
               }
               output$chooseTest_taxa.cont <- renderUI({
                 tagList(
                   selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
-                              c("Choose one" = "", taxa.types$regression),
-                              selected = taxa.types$regression,
-                              width = '80%')
-                )
+                              c("Choose one" = "", taxa.types$regression), selected = taxa.types$regression, width = '80%'))
               })
-            })
-            
+            }) 
           }
-          
-          
         }
       })
       
       observeEvent(input$primvar_taxa.long,{
-        if(input$primvar_taxa.long %in% chooseData$prim_vars){
+        if (input$primvar_taxa.long %in% chooseData$prim_vars) {
           is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
           
-          if(is.results$result == "Binary"){
+          if (is.results$result == "Binary") {
             
             taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[1]
             taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[2]
@@ -1562,18 +1274,15 @@ server = function(input, output, session){
             output$morePrimvar_opt_taxa.long <- renderUI({
               tagList(
                 h4(strong("Rename Categories?", style = "color:black")), 
-                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.",
-                  style = "font-size: 11pt"),
+                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size: 11pt"),
                 textInput("taxaCat1", label = (paste0("Reference: ", taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
-                textInput("taxaCat2", label = (paste0("Comparison: ", taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%')
-                ,
+                textInput("taxaCat2", label = (paste0("Comparison: ", taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'),
+                
                 h4(strong("Cluster Variable?", style = "color:black")), 
-                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures designs or family IDs for family-based studies.",
-                  style = "font-size:11pt"),
-                prettyRadioButtons("clustervar_taxa",label = "Choose:", status = "primary", icon = icon("check"),
-                                   animation = "jelly",
-                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%')
-              )
+                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
+                  designs or family IDs for family-based studies.", style = "font-size:11pt"),
+                prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
             })
             
             output$covariates_taxa.long <- renderUI({
@@ -1581,60 +1290,54 @@ server = function(input, output, session){
               
               tagList(
                 prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%')
-                ,
+                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                
                 shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa.long",
-                             style = "margin-left: 2%",
+                  shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
                              prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa2, width = '70%')
-                  )
-                ),
-                uiOutput("chooseTest_taxa.long")
-                ,
+                                                 ntselected.prim_vars_taxa2, width = '70%'))),
+                
+                uiOutput("chooseTest_taxa.long"),
+                
                 prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
                                    c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"),
-                                   width = '80%')
-                ,
-                actionButton("runbtn_bin_taxa.long", (strong("Run!")), class = "btn-info")
-              )
+                                   icon = icon("check"), width = '80%'),
+                
+                actionButton("runbtn_bin_taxa.long", (strong("Run!")), class = "btn-info"))
             })
             
             observeEvent(input$covariates_taxa.long,{
-              if(input$covariates_taxa.long == "Covariate(s)"){
+              if (input$covariates_taxa.long == "Covariate(s)") {
                 shinyjs::show("covariates_variables_taxa.long")
-              }else{
+              } else {
                 shinyjs::hide("covariates_variables_taxa.long")
               }
               output$chooseTest_taxa.long <- renderUI({
                 tagList(
                   selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
                               c("Choose one" = "",
-                                taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"), #, "Quantile Regression"),
+                                taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"),
                               selected = taxa.types$regression.long,
                               width = '80%')
                 )
               })
             })
             
-          }
-          else if(is.results$result == "Continuous"){
+          } else if (is.results$result == "Continuous") {
             
             ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
             
             output$morePrimvar_opt_taxa.long <- renderUI({
               tagList(
-                textInput("rename.con.var_taxa", label = h4(strong("Rename Categories Reference?", style = "color:black")), value = input$primvar_taxa.long)
-                #, p("You can rename the categories of reference category", style = "font-family: 'Verdana'; font-size:10pt")),
-                ,
+                h4(strong("Rename Primary Variable?", style = "color:black")),
+                p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+                textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa.long),
+                
                 h4(strong("Cluster Variable?", style = "color:black")), 
-                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures designs or family IDs for family-based studies.",
-                  style = "font-family: 'Verdana'; font-size:10pt"),
-                prettyRadioButtons("clustervar_taxa",label = "Choose:", status = "primary", icon = icon("check"),
-                                   animation = "jelly",
-                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%')
-              )
+                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
+                  designs or family IDs for family-based studies.", style = "font-family: 'Verdana'; font-size:10pt"),
+                prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
             })
             
             output$covariates_taxa.long <- renderUI({
@@ -1642,44 +1345,36 @@ server = function(input, output, session){
               
               tagList(
                 prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%')
-                ,
+                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
+                
                 shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa.long",
-                             style = "margin-left: 2%",
+                  shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
                              prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa2, width = '70%')
-                  )
-                ),
-                uiOutput("chooseTest_taxa.cont.long")
-                ,
+                                                 ntselected.prim_vars_taxa2, width = '70%'))),
+                
+                uiOutput("chooseTest_taxa.cont.long"),
+                
                 prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
                                    c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"),
-                                   width = '80%')
-                ,
-                actionButton("runbtn_cont_taxa.long", (strong("Run!")), class = "btn-info")
-              )
+                                   icon = icon("check"), width = '80%'),
+                
+                actionButton("runbtn_cont_taxa.long", (strong("Run!")), class = "btn-info"))
             })
             
             observeEvent(input$covariates_taxa.long,{
-              if(input$covariates_taxa.long == "Covariate(s)"){
+              if (input$covariates_taxa.long == "Covariate(s)") {
                 shinyjs::show("covariates_variables_taxa.long")
-              }else if(input$covariates_taxa.long == "None"){
+              } else if (input$covariates_taxa.long == "None") {
                 shinyjs::hide("covariates_variables_taxa.long")
               }
               output$chooseTest_taxa.cont.long <- renderUI({
                 tagList(
                   selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
                               c("Choose one" = "", taxa.types$regression.long),
-                              selected = taxa.types$regression.long,
-                              width = '80%')
-                )
+                              selected = taxa.types$regression.long, width = '80%'))
               })
             })
           }
-          
-          
         }
       })
     
@@ -1702,16 +1397,24 @@ server = function(input, output, session){
         
         incProgress(1/10, message = "Data Trimming in progress")
         
+        if (nchar(input$part.rem.str) == 0) {
+          rem.tax.complete <- rem.tax.d
+          rem.tax.partial <- rem.tax.str.d
+        } else {
+          rem.tax.complete <- unique(c(unlist(strsplit(input$rem.str, split = ",")), rem.tax.d))
+          rem.tax.partial <- unique(c(unlist(strsplit(input$part.rem.str, split = ",")), rem.tax.str.d))
+        }
+        
         tax.tab <- tax_table(infile$biom)
         
         if (input$kingdom != "all") {
           ind <- is.element(tax.tab[,1], input$kingdom)
           validate(
-            if(sum(ind) == 0){
+            if (sum(ind) == 0) {
               showNotification(h4(paste("Error: Please select valid Kingdom. Available kingdoms are:", 
                                   paste(c(na.omit(unique(tax.tab[,1])) ,"and all"), collapse = ", "))),
                                type = "error")
-            }else{
+            } else {
               NULL
             }
           )
@@ -1730,7 +1433,8 @@ server = function(input, output, session){
         infile$qc_biom = biom.clean(infile$biom, 
                                     input$kingdom, 
                                     lib.size.cut.off = input$slider1, 
-                                    mean.prop.cut.off = input$slider2/100)
+                                    mean.prop.cut.off = input$slider2/100,
+                                    rem.tax = rem.tax.complete, rem.tax.str = rem.tax.partial)
         
         incProgress(3/10, message = "Rarefying in progress")
         lib_size.sum = lib.size.func(infile$qc_biom)$lib.size.sum
@@ -1742,9 +1446,7 @@ server = function(input, output, session){
         
         chooseData$sam.dat = sample_data(infile$qc_biom)
         chooseData$mon.sin.rev.bin.con = is.mon.sin.rev.bin.con(chooseData$sam.dat)
-        #print(chooseData$mon.sin.rev.bin.con)
         chooseData$prim_vars = pri.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con)
-        print(chooseData$prim_vars)
         chooseData$tax.tab = tax_table(infile$rare_biom)
         
         output$moreControls <- renderUI({
@@ -1866,17 +1568,17 @@ server = function(input, output, session){
       message = 'Calculation in progress', 
       detail = 'This may take a while...', value = 0, {
         shinyjs::disable("divCalcRun")
-        incProgress(3/10, message = "Trasformation in progress")
+        incProgress(3/10, message = "Transformation in progress")
         
         rare.otu.tab <- otu_table(infile$rare_biom)
         rare.tax.tab <- tax_table(infile$rare_biom)
         no.rare.otu.tab <- otu_table(infile$qc_biom)
         no.rare.tax.tab <- tax_table(infile$qc_biom)
-        chooseData$taxa.out = tax.trans2(rare.otu.tab, rare.tax.tab, no.rare.otu.tab, no.rare.tax.tab)
+        chooseData$taxa.out = tax.trans(no.rare.otu.tab, no.rare.tax.tab, rare.otu.tab, rare.tax.tab)
         chooseData$taxa.names.out = taxa.names.rank(chooseData$taxa.out[[1]])
         chooseData$tax.tab = rare.tax.tab
         
-        incProgress(3/10, message = "Trasformation in progress")
+        incProgress(3/10, message = "Transformation in progress")
         
         output$datTransDownload <- renderUI({
           tagList(
@@ -1941,13 +1643,6 @@ server = function(input, output, session){
           }
         )
         output$taxadataProp <- downloadHandler(
-          # filename = function() {
-          #   paste("Proportion.Data", ".csv", sep="")
-          # },
-          # content = function(file) {
-          #   write.list(prop_biom, file, row.names = TRUE)
-          # }
-          
           filename = function() {
             paste("Proportion.Data.zip")
           },
@@ -1965,13 +1660,6 @@ server = function(input, output, session){
           }
         )
         output$taxadataCLR <- downloadHandler(
-          # filename = function() {
-          #   paste("CLR.Transformed.Data", ".csv", sep="")
-          # },
-          # content = function(file) {
-          #   write.list(clr_biom, file, row.names = TRUE)
-          # }
-          
           filename = function() {
             paste("CLR.Transformed.Data.zip")
           },
@@ -1999,10 +1687,10 @@ server = function(input, output, session){
   ##########################################
   observeEvent(input$runbtn_bin,{
     validate(
-      if(input$covariates == "Covariate(s)" & is.null(input$covariatesOptions)){
+      if (input$covariates == "Covariate(s)" & is.null(input$covariatesOptions)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -2022,13 +1710,6 @@ server = function(input, output, session){
       detail = 'This may take a while...', value = 0, {
         
         incProgress(1/10, message = "Renaming")
-        
-        # if(input$chooseData == "Yes (Default)"){
-        #   chooseData$alpha.div = chooseData$alpha.div.rare
-        # }
-        # else if(input$chooseData == "No"){
-        #   chooseData$alpha.div = chooseData$alpha.div.qc
-        # }
         chooseData$alpha.div = chooseData$alpha.div.rare
         
         alpha.categors = c(alpha.categos$cat1, alpha.categos$cat2)
@@ -2051,25 +1732,25 @@ server = function(input, output, session){
         alpha.results$alpha.bin.sum.out <- alpha.bin.sum.func(bin.var = alpha.div.bin.out$bin.var,
                                                               alpha.div = alpha.div.bin.out$alpha.div)
         
-        if(input$chooseMethod == "Welch t-test" | input$chooseMethod == "Wilcoxon rank-sum test"){
-          if(input$chooseMethod == "Welch t-test"){
+        if (input$chooseMethod == "Welch t-test" | input$chooseMethod == "Wilcoxon rank-sum test") {
+          if (input$chooseMethod == "Welch t-test") {
             incProgress(3/10, message = "T test")
             t.test.out <- alpha.bin.t.test(alpha.results$bin.var, alpha.results$alpha_div)
             alpha.data.results$table.p.out = t.test.out
             alpha.data.results$data.q.out = q.func(t.test.out, method = "BH")
           }
-          else if(input$chooseMethod == "Wilcoxon rank-sum test"){
+          else if (input$chooseMethod == "Wilcoxon rank-sum test") {
             incProgress(3/10, message = "Wilcoxon test")
             wilcox.test.out <- alpha.bin.wilcox.test(alpha.results$bin.var, alpha.results$alpha_div)
             alpha.data.results$table.p.out = wilcox.test.out
             alpha.data.results$data.q.out = q.func(wilcox.test.out, method = "BH")
           }
           
-          if(input$chooseAdjustment == "Yes"){
+          if (input$chooseAdjustment == "Yes") {
             multi.test$boolval = TRUE
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
-          else if(input$chooseAdjustment == "No (Default)"){
+          else if (input$chooseAdjustment == "No (Default)") {
             multi.test$boolval = FALSE
             alpha.data.results$table.out = alpha.data.results$table.p.out
           }
@@ -2088,7 +1769,7 @@ server = function(input, output, session){
             alpha.bin.hist(alpha.results$bin.var, alpha.results$alpha_div, alpha.data.results$data.q.out, multi.test$boolval)
           })
         }
-        else if(input$chooseMethod == "Linear regression" | input$chooseMethod == "Logistic regression"){
+        else if (input$chooseMethod == "Linear regression" | input$chooseMethod == "Logistic regression") {
           alpha.bin.cov.out <- alpha.bin.cov.cat.ref.func(input$primvar, rename.cats_ref,
                                                           rename.cats_com, input$covariatesOptions,
                                                           sam_dat, chooseData$alpha.div)
@@ -2096,7 +1777,7 @@ server = function(input, output, session){
           alpha.reg.results$cov.var <- alpha.bin.cov.out$cov.var
           alpha.reg.results$alpha.div <- alpha.bin.cov.out$alpha.div
           
-          if(input$chooseMethod == "Linear regression"){
+          if (input$chooseMethod == "Linear regression") {
             incProgress(3/10, message = "Linear regression with Covariate(s)")
             
             alpha.lm.bin.cov.out <- alpha.lm.bin.cov.func(bin.var = alpha.reg.results$bin.var,
@@ -2108,7 +1789,7 @@ server = function(input, output, session){
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
           
-          else if(input$chooseMethod == "Logistic regression"){
+          else if (input$chooseMethod == "Logistic regression") {
             incProgress(3/10, message = "Logistic regression with Covariate(s)")
             
             alpha.logit.bin.cov.out <- alpha.logit.bin.cov.func(bin.var = alpha.reg.results$bin.var,
@@ -2128,18 +1809,18 @@ server = function(input, output, session){
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
           
-          if(input$chooseAdjustment == "Yes"){
+          if (input$chooseAdjustment == "Yes") {
             multi.test$boolval = TRUE
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
-          else if(input$chooseAdjustment == "No (Default)"){
+          else if (input$chooseAdjustment == "No (Default)") {
             multi.test$boolval = FALSE
             alpha.data.results$table.out = alpha.data.results$table.p.out
           }
           
           incProgress(3/10, message = "Graph")
           
-          if(input$chooseMethod == "Logistic regression"){
+          if (input$chooseMethod == "Logistic regression") {
             
             output$alpha_display_results = renderUI({
               tagList(
@@ -2162,8 +1843,7 @@ server = function(input, output, session){
             output$forest_plots.or = renderPlot({
               alpha.logit.forest.plot(alpha.logit.bin.cov.q.out, multi.test$boolval)
             })
-          }
-          else{
+          } else {
             
             output$alpha_display_results = renderUI({
               tagList(
@@ -2209,15 +1889,10 @@ server = function(input, output, session){
           }
         )
         
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethod), FDR = isolate(input$chooseAdjustment))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("alpha_references")
-        }else{
+        } else {
           shinyjs::show("alpha_references")
           output$alpha_references = renderUI({
             tagList(
@@ -2227,8 +1902,7 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
-        
+
         shinyjs::enable("runbtn_bin")
         shinyjs::enable("primvar")
         shinyjs::enable("chooseAdjustment")
@@ -2242,10 +1916,10 @@ server = function(input, output, session){
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$runbtn_cont,{
     validate(
-      if(input$covariates_cont == "Covariate(s)" & is.null(input$covariatesOptions_cont)){
+      if (input$covariates_cont == "Covariate(s)" & is.null(input$covariatesOptions_cont)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -2265,45 +1939,37 @@ server = function(input, output, session){
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         incProgress(1/10, message = "Rename")
-        
-        # if(input$chooseData == "Yes (Default)"){
-        #   chooseData$alpha.div = chooseData$alpha.div.rare
-        # }
-        # else if(input$chooseData == "No"){
-        #   chooseData$alpha.div = chooseData$alpha.div.qc
-        # }
         chooseData$alpha.div = chooseData$alpha.div.rare
         
-        if(input$covariates_cont == "None"){
+        if (input$covariates_cont == "None") {
           alpha.results.cont$alpha.con.out = alpha.con.recode.func(chooseData$sam.dat, input$primvar, 
                                                                    input$rename.con.var, chooseData$alpha.div)
           alpha.results.cont$alpha.table.out = apply(alpha.results.cont$alpha.con.out$alpha.div, 2, alpha.ind.sum.func)
           
-          if(input$chooseMethod_cont =="Linear regression"){
+          if (input$chooseMethod_cont =="Linear regression") {
             incProgress(3/10, message = "Linear regression without Covariate(s)")
             alpha.data.results$table.p_out = alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
                                                                alpha.results.cont$alpha.con.out$alpha.div)
             alpha.data.results$data.q.out = q.func(alpha.data.results$table.p_out, method = "BH")
           }
         }
-        else if(input$covariates_cont == "Covariate(s)"){
-          if(is.null(input$covariatesOptions_cont)){
+        else if (input$covariates_cont == "Covariate(s)") {
+          if (is.null(input$covariatesOptions_cont)) {
             alpha.results.cont$alpha.con.out = alpha.con.recode.func(chooseData$sam.dat, input$primvar, 
                                                                      input$rename.con.var, chooseData$alpha.div)
             alpha.results.cont$alpha.table.out = apply(alpha.results.cont$alpha.con.out$alpha.div, 2, alpha.ind.sum.func)
             
-            if(input$chooseMethod_cont =="Linear regression"){
+            if (input$chooseMethod_cont =="Linear regression") {
               incProgress(3/10, message = "Linear regression without Covariate(s)")
               alpha.data.results$table.p_out = alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
                                                                  alpha.results.cont$alpha.con.out$alpha.div)
               alpha.data.results$data.q.out = q.func(alpha.data.results$table.p_out, method = "BH")
             }
-          }
-          else{
+          } else {
             alpha.con.cov.out <- alpha.con.cov.recode.func(chooseData$sam.dat, input$primvar, 
                                                            input$covariatesOptions_cont, input$rename.con.var, chooseData$alpha.div)
             alpha.results.cont$alpha.table.out =  apply(alpha.con.cov.out$alpha.div, 2, alpha.ind.sum.func)
-            if(input$chooseMethod_cont =="Linear regression"){
+            if (input$chooseMethod_cont =="Linear regression") {
               incProgress(3/10, message = "Linear regression with Covariate(s)")
               alpha.data.results$table.p_out = alpha.lm.con.cov.func(alpha.con.cov.out$con.var, alpha.con.cov.out$cov.var,
                                                                      alpha.con.cov.out$alpha.div, scale = TRUE)
@@ -2312,11 +1978,11 @@ server = function(input, output, session){
           }
         }
         
-        if(input$chooseAdjustment_cont == "Yes"){
+        if (input$chooseAdjustment_cont == "Yes") {
           multi.test$boolval = TRUE
           alpha.data.results$table.out = alpha.data.results$data.q.out
         }
-        else if(input$chooseAdjustment_cont == "No (Default)"){
+        else if (input$chooseAdjustment_cont == "No (Default)") {
           multi.test$boolval = FALSE
           alpha.data.results$table.out = alpha.data.results$table.p_out
         }
@@ -2332,22 +1998,21 @@ server = function(input, output, session){
           )
         })
         
-        if(input$covariates_cont == "None"){
+        if (input$covariates_cont == "None") {
           output$forest_plots.cont = renderPlot({
-            if(input$chooseMethod_cont == "Linear regression"){
+            if (input$chooseMethod_cont == "Linear regression") {
               alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval)
             }
           })
         }
-        else if(input$covariates_cont == "Covariate(s)"){
-          if(is.null(input$covariatesOptions_cont)){
+        else if (input$covariates_cont == "Covariate(s)") {
+          if (is.null(input$covariatesOptions_cont)) {
             output$forest_plots.cont = renderPlot({
-              if(input$chooseMethod_cont == "Linear regression"){
+              if (input$chooseMethod_cont == "Linear regression") {
                 alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval)
               }
             })
-          }
-          else{
+          } else {
             output$forest_plots.cont = renderPlot({
               alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval)
             })
@@ -2372,15 +2037,10 @@ server = function(input, output, session){
             write.table(alpha.data.results$table.out, file, sep="\t")
           }
         )
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = (input$chooseMethod_cont), FDR = isolate(input$chooseAdjustment_cont))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("alpha_references")
-        }else{
+        } else {
           shinyjs::show("alpha_references")
           output$alpha_references = renderUI({
             tagList(
@@ -2390,7 +2050,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
       })
     
     
@@ -2409,14 +2068,21 @@ server = function(input, output, session){
   ######################################
   observeEvent(input$runbtnlong_bin,{
     validate(
-      if(input$covariateslong == "Covariate(s)" & is.null(input$covariatesOptionslong)){
+      if (input$covariateslong == "Covariate(s)" & is.null(input$covariatesOptionslong)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
-    
+    validate(
+      if (is.null(input$clustervar) & is.null(input$clustervar.cont)) {
+        showNotification("Error: No cluster variable available.",
+                         type = "error")
+      } else {
+        NULL
+      }
+    )
     
     shinyjs::disable("runbtnlong_bin")
     shinyjs::disable("chooseAdjustmentlong")
@@ -2434,16 +2100,8 @@ server = function(input, output, session){
       detail = 'This may take a while...', value = 0, {
         
         incProgress(1/10, message = "Renaming")
-        
-        # if(input$chooseDatalong == "Yes (Default)"){
-        #   chooseData$alpha.div = chooseData$alpha.div.rare
-        # }
-        # else if(input$chooseDatalong == "No"){
-        #   chooseData$alpha.div = chooseData$alpha.div.qc
-        # }
         chooseData$alpha.div = chooseData$alpha.div.rare
         
-        # cluster_var = reactive({input$clustervar})
         alpha.categors.long = c(alpha.categos.long$cat1, alpha.categos.long$cat2)
         alpha.bin_categos.long = c(input$alphaCat1long, input$alphaCat2long)
         
@@ -2471,8 +2129,8 @@ server = function(input, output, session){
         
         
         
-        if(input$chooseMethodlong == "LMM"){
-          if(input$covariateslong == "None"){
+        if (input$chooseMethodlong == "LMM") {
+          if (input$covariateslong == "None") {
             incProgress(3/10, message = "LMM without Covariate(s)")
             
             data.alphaBin_res$table.p_outbin = alpha.lmer.bin.id.func(bin.var = alpha.resultslong$bin.var, 
@@ -2480,15 +2138,13 @@ server = function(input, output, session){
                                                                       alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
             data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
             
-          }else if(input$covariateslong == "Covariate(s)"){
+          } else if (input$covariateslong == "Covariate(s)") {
             incProgress(3/10, message = "LMM with Covariate(s)")
             
             alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
                                                                   sam_dat.long, chooseData$alpha.div)
-            
-            #req(length(alpha.bin.id.cov.out)!=1)
             
             data.alphaBin_res$table.p_outbin = alpha.lmer.bin.id.cov.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
                                                                           id.var =  alpha.bin.id.cov.out$id.var,
@@ -2497,32 +2153,29 @@ server = function(input, output, session){
             
             data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
           }
-        }
-        else if(input$chooseMethodlong == "GEE (Binomial)"){
+        } else if (input$chooseMethodlong == "GEE (Binomial)") {
           incProgress(3/10, message = "GEE (Binomial) with Covariate(s)")
-          if(input$covariateslong == "Covariate(s)"){
+          if (input$covariateslong == "Covariate(s)") {
             alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
                                                                   sam_dat.long, chooseData$alpha.div)
-            #req(length(alpha.bin.id.cov.out)!=1)
             data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.cov.gee.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
                                                                                      id.var =  alpha.bin.id.cov.out$id.var,
                                                                                      cov.var =  alpha.bin.id.cov.out$cov.var,
                                                                                      alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE)
             data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
             
-          }else if(input$covariateslong == "None"){
+          } else if (input$covariateslong == "None") {
             data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.gee.func(bin.var = alpha.resultslong$bin.var, 
                                                                                  id.var = alpha.resultslong$id.var, 
                                                                                  alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
             data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
           }
-        }
-        else if(input$chooseMethodlong == "GLMM (Binomial)"){
+        } else if (input$chooseMethodlong == "GLMM (Binomial)") {
           
           incProgress(3/10, message = "GLMM (Binomial) with Covariate(s)")
-          if(input$covariateslong == "Covariate(s)"){
+          if (input$covariateslong == "Covariate(s)") {
             alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
@@ -2534,7 +2187,7 @@ server = function(input, output, session){
                                                                                         alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE)
             data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
             
-          }else if(input$covariateslong == "None"){
+          } else if (input$covariateslong == "None") {
             data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.glmm.b.func(bin.var = alpha.resultslong$bin.var, 
                                                                                     id.var = alpha.resultslong$id.var, 
                                                                                     alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
@@ -2568,11 +2221,10 @@ server = function(input, output, session){
           )
         })
         
-        if(input$chooseAdjustmentlong == "Yes"){
+        if (input$chooseAdjustmentlong == "Yes") {
           multi.test.long$boolval = TRUE
           data.alphaBin_res$table.output = data.alphaBin_res$data.output
-        }
-        else if(input$chooseAdjustmentlong == "No (Default)"){
+        } else if (input$chooseAdjustmentlong == "No (Default)") {
           multi.test.long$boolval = FALSE
           data.alphaBin_res$table.output = data.alphaBin_res$table.p_outbin
         }
@@ -2600,15 +2252,10 @@ server = function(input, output, session){
           alpha.forest.lmer.plot(data.alphaBin_res$data.output, multi.test.long$boolval)
         })
         
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethodlong), FDR = isolate(input$chooseAdjustmentlong))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("alpha_references_long")
-        }else{
+        } else {
           shinyjs::show("alpha_references_long")
           output$alpha_references_long = renderUI({
             tagList(
@@ -2619,7 +2266,6 @@ server = function(input, output, session){
           })
         }
         
-        ###########################################################################
         shinyjs::enable("runbtnlong_bin")
         shinyjs::enable("chooseAdjustmentlong")
         shinyjs::enable("primvarlong")
@@ -2634,10 +2280,10 @@ server = function(input, output, session){
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$runbtnlong_cont,{
     validate(
-      if(input$covariates_contlong == "Covariate(s)" & is.null(input$covariatesOptions_contlong)){
+      if (input$covariates_contlong == "Covariate(s)" & is.null(input$covariatesOptions_contlong)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -2656,13 +2302,6 @@ server = function(input, output, session){
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         incProgress(1/10, message = "Renaming")
-        
-        # if(input$chooseDatalong == "Yes (Default)"){
-        #   chooseData$alpha.div = chooseData$alpha.div.rare
-        # }
-        # else if(input$chooseDatalong == "No"){
-        #   chooseData$alpha.div = chooseData$alpha.div.qc
-        # }
         chooseData$alpha.div = chooseData$alpha.div.rare
         
         alpha.con.id.out <- alpha.con.id.recode.func(chooseData$sam.dat, input$primvarlong, input$clustervar.cont,
@@ -2675,8 +2314,8 @@ server = function(input, output, session){
         alpha.noncovs_res$id.var = alpha.con.id.out$id.var
         alpha.noncovs_res$alpha.div = alpha.con.id.out$alpha.div
         
-        if(input$chooseMethodlong_cont == "LMM"){
-          if(input$covariates_contlong == "None"){
+        if (input$chooseMethodlong_cont == "LMM") {
+          if (input$covariates_contlong == "None") {
           incProgress(3/10, message = "LMM without Covariate(s)")
             
             data.results.cont_long$table_p.out = alpha.lmer.con.id.func(con.var = alpha.noncovs_res$con.var, 
@@ -2685,7 +2324,7 @@ server = function(input, output, session){
             
             data.results.cont_long$data.q.out = q.func(data.results.cont_long$table_p.out, method = "BH")
             
-          }else if(input$covariates_contlong == "Covariate(s)"){
+          } else if (input$covariates_contlong == "Covariate(s)") {
             incProgress(3/10, message = "LMM with Covariate(s)")
             alpha.cov_res = alpha.con.id.cov.recode.func(chooseData$sam.dat, input$primvarlong, input$clustervar.cont, 
                                                          input$covariatesOptions_contlong, input$rename.con.varlong,
@@ -2702,11 +2341,10 @@ server = function(input, output, session){
         
         
         incProgress(3/10, message = "Graph")
-        if(input$chooseAdjustment_contlong == "Yes"){
+        if (input$chooseAdjustment_contlong == "Yes") {
           multi.test.long$boolval = TRUE
           data.alphaBin_res$table.output = data.results.cont_long$data.q.out
-        }
-        else if(input$chooseAdjustment_contlong == "No (Default)"){
+        } else if (input$chooseAdjustment_contlong == "No (Default)") {
           multi.test.long$boolval = FALSE
           data.alphaBin_res$table.output = data.results.cont_long$table.p_outbin
         }
@@ -2757,15 +2395,11 @@ server = function(input, output, session){
         output$graph_plotslong = renderPlot({
           alpha.forest.lmer.plot(data.results.cont_long$data.q.out, multi.test.long$boolval)
         })
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
+        
         ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethodlong_cont), FDR = isolate(input$chooseAdjustment_contlong))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("alpha_references_long")
-        }else{
+        } else {
           shinyjs::show("alpha_references_long")
           output$alpha_references_long = renderUI({
             tagList(
@@ -2775,7 +2409,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
         shinyjs::enable("runbtnlong_cont")
         shinyjs::enable("chooseAdjustment_contlong")
         shinyjs::enable("primvarlong")
@@ -2793,10 +2426,10 @@ server = function(input, output, session){
   ##########################################
   observeEvent(input$beta_runbtn_cross_bin,{
     validate(
-      if(input$beta_covariates_bin == "Covariate(s)" & is.null(input$beta_covariatesOptions_bin)){
+      if (input$beta_covariates_bin == "Covariate(s)" & is.null(input$beta_covariatesOptions_bin)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -2826,30 +2459,30 @@ server = function(input, output, session){
         beta.sam_dat.bin <- beta.bin.cat.recode.func(chooseData$sam.dat, input$beta.primvar_cross,
                                                      beta.bin.cat.ref.ori.out,
                                                      rename.catsbin_ref, rename.catsbin_com)
-        if(input$beta_covariates_bin == "None"){
-          if(input$beta_chooseMethod_bin == "MiRKAT"){
+        if (input$beta_covariates_bin == "None") {
+          if (input$beta_chooseMethod_bin == "MiRKAT") {
             incProgress(3/10, message = "MiRKAT without Covariate(s)")
             beta.bin.out <- beta.bin.cat.ref.func(input$beta.primvar_cross,
                                                   rename.catsbin_ref, rename.catsbin_com,
                                                   beta.sam_dat.bin, Ds.Ks = ds.Ks$res)
             beta.data.results$data.q.out <- beta.bin.out
           }
-        }else if(input$beta_covariates_bin == "Covariate(s)"){
-          if(is.null(input$beta_covariatesOptions_bin)){
-            if(input$beta_chooseMethod_bin == "MiRKAT"){
+        } else if (input$beta_covariates_bin == "Covariate(s)") {
+          if (is.null(input$beta_covariatesOptions_bin)) {
+            if (input$beta_chooseMethod_bin == "MiRKAT") {
               incProgress(3/10, message = "MiRKAT without Covariate(s)")
               beta.bin.out <- beta.bin.cat.ref.func(input$beta.primvar_cross,
                                                     rename.catsbin_ref, rename.catsbin_com,
                                                     beta.sam_dat.bin, Ds.Ks = ds.Ks$res)
               beta.data.results$data.q.out <- beta.bin.out
             }
-          }else{
+          } else {
             beta.bin.cov.out <- beta.bin.cov.cat.ref.func(input$beta.primvar_cross,
                                                           rename.catsbin_ref, rename.catsbin_com,
                                                           input$beta_covariatesOptions_bin, beta.sam_dat.bin,
                                                           Ds.Ks = ds.Ks$res)
             
-            if(input$beta_chooseMethod_bin == "MiRKAT"){
+            if (input$beta_chooseMethod_bin == "MiRKAT") {
               incProgress(3/10, message = "MiRKAT with Covariate(s)")
               beta.data.results$data.q.out <- beta.bin.cov.out
             }
@@ -2867,13 +2500,18 @@ server = function(input, output, session){
           )
         })
         
-        output$beta_graph_plots.bin = renderPlot({
-          if(isolate(input$beta_covariates_bin) == "None"){
-            beta.down.results$CS = mirkat.bin(beta.data.results$data.q.out)
-          }else if(isolate(input$beta_covariates_bin) == "Covariate(s)"){
-            beta.down.results$CS = mirkat.bin.cov(beta.data.results$data.q.out)
-          }
-        })
+        if (isolate(input$beta_covariates_bin) == "None") {
+          beta.down.results$CS = mirkat.bin(beta.data.results$data.q.out)
+          output$beta_graph_plots.bin = renderPlot({
+            mirkat.bin.plot(beta.down.results$CS, beta.data.results$data.q.out)
+          })
+        } else if (isolate(input$beta_covariates_bin) == "Covariate(s)") {
+          beta.down.results$CS = mirkat.bin.cov(beta.data.results$data.q.out)
+          output$beta_graph_plots.bin = renderPlot({
+            mirkat.bin.cov.plot(beta.down.results$CS, beta.data.results$data.q.out)
+          })
+        }
+        
         output$beta_downloadTable = renderUI({
           tagList(
             box(title = strong("Download Output Table", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
@@ -2899,15 +2537,10 @@ server = function(input, output, session){
           }
         )
         
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = isolate(input$beta_chooseMethod_bin))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("beta_references")
-        }else{
+        } else {
           shinyjs::show("beta_references")
           output$beta_references = renderUI({
             tagList(
@@ -2917,8 +2550,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
-        
       }
     )
     
@@ -2933,10 +2564,10 @@ server = function(input, output, session){
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$beta_runbtn_cross_cont,{
     validate(
-      if(input$beta.covariates_cont == "Covariate(s)" & is.null(input$beta.covariatesOptions_cont)){
+      if (input$beta.covariates_cont == "Covariate(s)" & is.null(input$beta.covariatesOptions_cont)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -2952,25 +2583,25 @@ server = function(input, output, session){
                  detail = 'This may take a while...', value = 0, {
                    incProgress(1/10, message = "Rename")
                    
-                   if(input$beta.covariates_cont == "None"){
-                     if(input$beta.chooseMethod_cont == "MiRKAT"){
+                   if (input$beta.covariates_cont == "None") {
+                     if (input$beta.chooseMethod_cont == "MiRKAT") {
                        incProgress(3/10, message = "MiRKAT without Covariate(s)")
                        beta.con.out <- beta.con.recode.func(sam.dat = chooseData$sam.dat, input$beta.primvar_cross,
                                                             input$beta.rename.con.var, Ds.Ks = ds.Ks$res)
                        beta.resultscont$beta.cont.out = beta.con.out
                        
                      }
-                   }else if(input$beta.covariates_cont == "Covariate(s)"){
-                     if(is.null(input$beta.covariatesOptions_cont)){
-                       if(input$beta.chooseMethod_cont == "MiRKAT"){
+                   } else if (input$beta.covariates_cont == "Covariate(s)") {
+                     if (is.null(input$beta.covariatesOptions_cont)) {
+                       if (input$beta.chooseMethod_cont == "MiRKAT") {
                          incProgress(3/10, message = "MiRKAT without Covariate(s)")
                          beta.con.out <- beta.con.recode.func(sam.dat = chooseData$sam.dat, input$beta.primvar_cross,
                                                               input$beta.rename.con.var, Ds.Ks = ds.Ks$res)
                          beta.resultscont$beta.cont.out = beta.con.out
                        }
-                     }else{
+                     } else {
                        req(input$beta.covariatesOptions_cont)
-                       if(input$beta.chooseMethod_cont == "MiRKAT"){
+                       if (input$beta.chooseMethod_cont == "MiRKAT") {
                          incProgress(3/10, message = "MiRKAT with Covariate(s)")
                          beta.cont.cov.out <- beta.con.cov.recode.func(sam.dat = chooseData$sam.dat, input$beta.primvar_cross,
                                                                        input$beta.covariatesOptions_cont,
@@ -2989,14 +2620,17 @@ server = function(input, output, session){
                      )
                    })
                    
-                   output$beta_graph_plots.cont = renderPlot({
-                     if(isolate(input$beta.covariates_cont) == "None"){
-                       beta.down.results$CS = mirkat.con(beta.resultscont$beta.cont.out)
-                       
-                     }else if(isolate(input$beta.covariates_cont) == "Covariate(s)"){
-                       beta.down.results$CS = mirkat.con.cov(beta.resultscont$beta.cont.out)
-                     }
-                   })
+                   if (isolate(input$beta.covariates_cont) == "None") {
+                     beta.down.results$CS = mirkat.con(beta.resultscont$beta.cont.out)
+                     output$beta_graph_plots.cont = renderPlot({
+                       mirkat.con.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)
+                     })
+                   } else if (isolate(input$beta.covariates_cont) == "Covariate(s)") {
+                     beta.down.results$CS = mirkat.con.cov(beta.resultscont$beta.cont.out)
+                     output$beta_graph_plots.cont = renderPlot({
+                       mirkat.con.cov.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)
+                     })
+                   }
                    
                    output$beta_downloadTable = renderUI({
                      tagList(
@@ -3022,15 +2656,10 @@ server = function(input, output, session){
                      }
                    )
                    
-                   ###########################################################################
-                   # uiOutput("alpha_references")
-                   # uiOutput("alpha_references_long")
-                   # uiOutput("beta_references")
-                   # uiOutput("beta_references_long")
                    ref_string = REFERENCE_CHECK(method_name = isolate(input$beta.chooseMethod_cont))
-                   if(is.null(ref_string)){
+                   if (is.null(ref_string)) {
                      shinyjs::hide("beta_references")
-                   }else{
+                   } else {
                      shinyjs::show("beta_references")
                      output$beta_references = renderUI({
                        tagList(
@@ -3040,8 +2669,6 @@ server = function(input, output, session){
                        )
                      })
                    }
-                   ###########################################################################
-                   
                  })
     
     shinyjs::enable("beta_runbtn_cross_cont")
@@ -3057,10 +2684,18 @@ server = function(input, output, session){
   ######################################
   observeEvent(input$beta_runbtn_bin.long,{
     validate(
-      if(input$beta_covariates_bin.long == "Covariate(s)" & is.null(input$beta_covariatesOptions_bin.long)){
+      if (input$beta_covariates_bin.long == "Covariate(s)" & is.null(input$beta_covariatesOptions_bin.long)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
+        NULL
+      }
+    )
+    validate(
+      if (is.null(input$clustervar_bin.long) & is.null(input$clustervar_con.long)) {
+        showNotification("Error: No cluster variable available.",
+                         type = "error")
+      } else {
         NULL
       }
     )
@@ -3090,8 +2725,8 @@ server = function(input, output, session){
                                                      beta.bin.cat.ref.ori.out,
                                                      rename.catsbin_long.ref, rename.catsbin_long.com)
         
-        if(input$beta_covariates_bin.long == "None"){
-          if(input$beta_chooseMethod_bin.long == "GLMM-MiRKAT"){
+        if (input$beta_covariates_bin.long == "None") {
+          if (input$beta_chooseMethod_bin.long == "GLMM-MiRKAT") {
             incProgress(3/10, message = "GLMM-MiRKAT without Covariate(s)")
             beta.bin.out.res <-  beta.bin.id.cat.ref.func(input$beta.primvar_long,
                                                           rename.catsbin_long.ref, rename.catsbin_long.com,
@@ -3100,9 +2735,9 @@ server = function(input, output, session){
             
             beta.data.results_long$beta.bin.out <- beta.bin.out.res
           }
-        }else if(input$beta_covariates_bin.long == "Covariate(s)"){
-          if(is.null(input$beta_covariatesOptions_bin.long)){
-            if(input$beta_chooseMethod_bin.long == "GLMM-MiRKAT"){
+        } else if (input$beta_covariates_bin.long == "Covariate(s)") {
+          if (is.null(input$beta_covariatesOptions_bin.long)) {
+            if (input$beta_chooseMethod_bin.long == "GLMM-MiRKAT") {
               incProgress(3/10, message = "GLMM-MiRKAT without Covariate(s)")
               beta.bin.out.res <-  beta.bin.id.cat.ref.func(input$beta.primvar_long,
                                                             rename.catsbin_long.ref, rename.catsbin_long.com,
@@ -3111,8 +2746,8 @@ server = function(input, output, session){
               
               beta.data.results_long$beta.bin.out <- beta.bin.out.res
             }
-          }else{
-            if(input$beta_chooseMethod_bin.long == "GLMM-MiRKAT"){
+          } else {
+            if (input$beta_chooseMethod_bin.long == "GLMM-MiRKAT") {
               incProgress(3/10, message = "GLMM-MiRKAT with Covariate(s)")
               beta.bin.cov.out <- beta.bin.id.cov.cat.ref.func(input$beta.primvar_long,
                                                                rename.catsbin_long.ref, rename.catsbin_long.com,
@@ -3134,14 +2769,18 @@ server = function(input, output, session){
           )
         })
         
-        output$beta_graph_plots.bin_long = renderPlot({
-          if(isolate(input$beta_covariates_bin.long) == "None"){
-            beta.down.results$LONG = glmm.mirkat.bin(beta.data.results_long$beta.bin.out)
-          }else if(isolate(input$beta_covariates_bin.long) == "Covariate(s)"){
-            beta.down.results$LONG = glmm.mirkat.bin.cov(beta.data.results_long$beta.bin.out)
-          }
-        })
-        
+        if (isolate(input$beta_covariates_bin.long) == "None") {
+          beta.down.results$LONG = glmm.mirkat.bin(beta.data.results_long$beta.bin.out)
+          output$beta_graph_plots.bin_long = renderPlot({
+            glmm.mirkat.bin.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)
+          })
+        } else if (isolate(input$beta_covariates_bin.long) == "Covariate(s)") {
+          beta.down.results$LONG = glmm.mirkat.bin.cov(beta.data.results_long$beta.bin.out)
+          output$beta_graph_plots.bin_long = renderPlot({
+            glmm.mirkat.bin.cov.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)
+          })
+        }
+
         output$beta_downloadTablelong = renderUI({
           tagList(
             box(title = strong("Download Output Table", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
@@ -3165,15 +2804,10 @@ server = function(input, output, session){
             write.table(beta.down.results$LONG, file, sep="\t")
           }
         )
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = isolate(input$beta_chooseMethod_bin.long))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("beta_references_long")
-        }else{
+        } else {
           shinyjs::show("beta_references_long")
           output$beta_references_long = renderUI({
             tagList(
@@ -3183,7 +2817,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
       })
     
     shinyjs::enable("beta.primvar_long")
@@ -3199,10 +2832,10 @@ server = function(input, output, session){
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$beta.runbtn_contLong,{
     validate(
-      if(input$beta.covariates_contLong == "Covariate(s)" & is.null(input$beta.covariatesOptions_contlong)){
+      if (input$beta.covariates_contLong == "Covariate(s)" & is.null(input$beta.covariatesOptions_contLong)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -3212,15 +2845,15 @@ server = function(input, output, session){
     shinyjs::disable("beta.rename.con.long")
     shinyjs::disable("clustervar_con.long")
     shinyjs::disable("beta.covariates_contLong")
-    shinyjs::disable("beta.covariatesOptions_contlong")
+    shinyjs::disable("beta.covariatesOptions_contLong")
     shinyjs::disable("beta.chooseMethod_contLong")
     
     withProgress(
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         
-        if(input$beta.covariates_contLong == "None"){
-          if(input$beta.chooseMethod_contLong == "GLMM-MiRKAT"){
+        if (input$beta.covariates_contLong == "None") {
+          if (input$beta.chooseMethod_contLong == "GLMM-MiRKAT") {
             incProgress(3/10, message = "GLMM-MiRKAT without Covariate(s)")
             beta.con.id.out <-  beta.con.id.recode.func(sam.dat = chooseData$sam.dat, 
                                                         sel.con.var = input$beta.primvar_long, 
@@ -3228,9 +2861,9 @@ server = function(input, output, session){
                                                         rename.con.var = input$beta.rename.con.long, Ds.Ks = ds.Ks$res)
             beta.resultscon_long$beta.con.out = beta.con.id.out
           }
-        }else if(input$beta.covariates_contLong == "Covariate(s)"){
-          if(is.null(input$beta.covariatesOptions_contLong)){
-            if(input$beta.chooseMethod_contLong == "GLMM-MiRKAT"){
+        } else if (input$beta.covariates_contLong == "Covariate(s)") {
+          if (is.null(input$beta.covariatesOptions_contLong)) {
+            if (input$beta.chooseMethod_contLong == "GLMM-MiRKAT") {
               incProgress(3/10, message = "GLMM-MiRKAT without Covariate(s)")
               beta.con.id.out <-  beta.con.id.recode.func(sam.dat = chooseData$sam.dat, 
                                                           sel.con.var = input$beta.primvar_long, 
@@ -3238,8 +2871,8 @@ server = function(input, output, session){
                                                           rename.con.var = input$beta.rename.con.long, Ds.Ks = ds.Ks$res)
               beta.resultscon_long$beta.con.out = beta.con.id.out
             }
-          }else{
-            if(input$beta.chooseMethod_contLong == "GLMM-MiRKAT"){
+          } else {
+            if (input$beta.chooseMethod_contLong == "GLMM-MiRKAT") {
               incProgress(3/10, message = "GLMM-MiRKAT with Covariate(s)")
               beta.con.id.cov.out <-  beta.con.id.cov.recode.func(sam.dat = chooseData$sam.dat, 
                                                                   sel.con.var = input$beta.primvar_long, 
@@ -3262,13 +2895,17 @@ server = function(input, output, session){
           )
         })
         
-        output$beta_graph_plots.conLong = renderPlot({
-          if(isolate(input$beta.covariates_contLong) == "None"){
-            beta.down.results$LONG = glmm.mirkat.con(beta.con.id.out = beta.resultscon_long$beta.con.out) 
-          }else if(isolate(input$beta.covariates_contLong) == "Covariate(s)"){
-            beta.down.results$LONG = glmm.mirkat.con.cov(beta.con.id.cov.out = beta.resultscon_long$beta.con.out) 
-          }
-        })
+        if (isolate(input$beta.covariates_contLong) == "None") {
+          beta.down.results$LONG = glmm.mirkat.con(beta.con.id.out = beta.resultscon_long$beta.con.out)
+          output$beta_graph_plots.conLong = renderPlot({
+            glmm.mirkat.con.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)
+          })
+        } else if (isolate(input$beta.covariates_contLong) == "Covariate(s)") {
+          beta.down.results$LONG = glmm.mirkat.con.cov(beta.con.id.cov.out = beta.resultscon_long$beta.con.out) 
+          output$beta_graph_plots.conLong = renderPlot({
+            glmm.mirkat.con.cov.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)
+          })
+        }
         
         output$beta_downloadTablelong = renderUI({
           tagList(
@@ -3293,15 +2930,10 @@ server = function(input, output, session){
             write.table(beta.down.results$LONG, file, sep="\t")
           }
         )
-        ###########################################################################
-        # uiOutput("alpha_references")
-        # uiOutput("alpha_references_long")
-        # uiOutput("beta_references")
-        # uiOutput("beta_references_long")
         ref_string = REFERENCE_CHECK(method_name = isolate(input$beta.chooseMethod_contLong))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("beta_references_long")
-        }else{
+        } else {
           shinyjs::show("beta_references_long")
           output$beta_references_long = renderUI({
             tagList(
@@ -3311,7 +2943,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
       })
     
     shinyjs::enable("beta.runbtn_contLong")
@@ -3319,7 +2950,7 @@ server = function(input, output, session){
     shinyjs::enable("beta.rename.con.long")
     shinyjs::enable("clustervar_con.long")
     shinyjs::enable("beta.covariates_contLong")
-    shinyjs::enable("beta.covariatesOptions_contlong")
+    shinyjs::enable("beta.covariatesOptions_contLong")
     shinyjs::enable("beta.chooseMethod_contLong")
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   
@@ -3329,10 +2960,10 @@ server = function(input, output, session){
   observeEvent(input$runbtn_bin_taxa,{
     
     validate(
-      if(input$covariates_taxa == "Covariate(s)" & is.null(input$covariatesOptions_taxa)){
+      if (input$covariates_taxa == "Covariate(s)" & is.null(input$covariatesOptions_taxa)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -3356,7 +2987,7 @@ server = function(input, output, session){
         rename.cats_ref = taxa.bin_categos[which(taxa.categors == taxa.categos$cat1)]
         rename.cats_com = taxa.bin_categos[which(taxa.categors != taxa.categos$cat1)]
         
-        taxa.bin.cat.ref.ori.out <- taxa.bin.cat.ref.ori.func(chooseData$sam.dat, input$primvar_taxa)          # sel.bin.var = input$primvar_taxa = "ecig_status"
+        taxa.bin.cat.ref.ori.out <- taxa.bin.cat.ref.ori.func(chooseData$sam.dat, input$primvar_taxa)
         
         if (input$include_species.dend == "Phylum - Species") {
           include = TRUE
@@ -3368,31 +2999,37 @@ server = function(input, output, session){
         sam_dat <- taxa.bin.cat.recode.func(chooseData$sam.dat, input$primvar_taxa, taxa.bin.cat.ref.ori.out,
                                             rename.cats_ref, rename.cats_com)
         
-        if(input$covariates_taxa == "None"){
-          if(input$chooseMethod_taxa == "Logistic regression"){
+        if (input$covariates_taxa == "None") {
+          
+          if (input$chooseMethod_taxa == "Logistic regression") {
             
             taxa.bin.logit.out <- taxa.bin.cat.ref.logit.united.func(input$primvar_taxa, rename.cats_ref,
                                                                      rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
             taxa.results$bin.var <- taxa.bin.logit.out$bin.var
             taxa.results$taxa <- taxa.bin.logit.out$taxa
             
-          }else{
-            taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
-                                                         rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
-            
+          } else {
+            if (input$chooseMethod_taxa == "Negative binomial regression") {
+              taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
+                                                           rename.cats_com, sam_dat, taxa = chooseData$taxa.out[["count"]])
+            } else {
+              taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
+                                                           rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
+            }
             taxa.results$bin.var <- taxa.bin.out$bin.var
             taxa.results$taxa <- taxa.bin.out$taxa
-            
           }
           
-        } else if(input$covariates_taxa == "Covariate(s)"){
-          if(input$chooseMethod_taxa == "Negative binomial regression"){
-            taxa.types$dataType = "count"
+        } else if (input$covariates_taxa == "Covariate(s)") {
+          if (input$chooseMethod_taxa == "Negative binomial regression") {
+            taxa.bin.cov.out <- taxa.bin.cov.cat.ref.united.func(input$primvar_taxa, rename.cats_ref, 
+                                                                 rename.cats_com, input$covariatesOptions_taxa, 
+                                                                 sam_dat, chooseData$taxa.out[["count"]])
+          } else {
+            taxa.bin.cov.out <- taxa.bin.cov.cat.ref.united.func(input$primvar_taxa, rename.cats_ref, 
+                                                                 rename.cats_com, input$covariatesOptions_taxa, 
+                                                                 sam_dat, chooseData$taxa.out[[taxa.types$dataType]])
           }
-          taxa.bin.cov.out <- taxa.bin.cov.cat.ref.united.func(input$primvar_taxa, rename.cats_ref, 
-                                                               rename.cats_com, input$covariatesOptions_taxa, 
-                                                               sam_dat, chooseData$taxa.out[[taxa.types$dataType]])  
-          
           taxa.results$bin.var <- taxa.bin.cov.out$bin.var
           taxa.results$taxa <- taxa.bin.cov.out$taxa
           taxa.results$cov.var <- taxa.bin.cov.out$cov.var
@@ -3403,9 +3040,8 @@ server = function(input, output, session){
         taxa_dataBinvar <- taxa.results$bin.var
         taxa_dataTaxa <- taxa.results$taxa
         
-        #incProgress(5/10, message = "Fitting Regression Model")
-        if(input$chooseMethod_taxa == "Welch t-test" | input$chooseMethod_taxa == "Wilcoxon rank-sum test"){
-          if(input$chooseMethod_taxa == "Welch t-test"){
+        if (input$chooseMethod_taxa == "Welch t-test" | input$chooseMethod_taxa == "Wilcoxon rank-sum test") {
+          if (input$chooseMethod_taxa == "Welch t-test") {
             incProgress(5/10, message = "Welch t-test")
             taxa.t.test.out <- taxa.bin.t.test.united(taxa.results$bin.var, taxa.results$taxa)
             taxa.t.test.q.out <- bin.q.united.func(taxa.t.test.out, method = "BH")
@@ -3415,14 +3051,13 @@ server = function(input, output, session){
             nrow = numeric()
             for (r in 1:6) {
               row.num <- ceiling(sum(taxa.t.test.q.out[[r]]$Q.value < 0.05)/4)
-              if(row.num > 0){
+              if (row.num > 0) {
                 nrow[r] <- row.num
               } else {
                 nrow[r] <- 1
               } 
             }
-          }
-          else if(input$chooseMethod_taxa == "Wilcoxon rank-sum test"){
+          } else if (input$chooseMethod_taxa == "Wilcoxon rank-sum test") {
             incProgress(5/10, message = "Wilcoxon rank-sum test")
             taxa.wilcox.test.out <- taxa.bin.wilcox.test.united(taxa.results$bin.var, taxa.results$taxa)
             taxa.wilcox.test.q.out <- bin.q.united.func(taxa.wilcox.test.out, method = "BH")
@@ -3433,7 +3068,7 @@ server = function(input, output, session){
             nrow = numeric()
             for (r in 1:6) {
               row.num <- ceiling(sum(taxa.outputs$DAoutput[[r]]$Q.value < 0.05)/4)
-              if(row.num > 0){
+              if (row.num > 0) {
                 nrow[r] <- row.num
               } else {
                 nrow[r] <- 1
@@ -3501,27 +3136,20 @@ server = function(input, output, session){
             taxa.sig.dend(taxa.outputs$DAoutput, chooseData$tax.tab, "twopi", include)
             
           })
-          
-        }
-        else if(input$chooseMethod_taxa == "Linear regression" | input$chooseMethod_taxa == "Logistic regression" | input$chooseMethod_taxa == "Negative binomial regression" | input$chooseMethod_taxa == "Beta regression"){
-          if(input$covariates_taxa == "None"){
-            if(input$chooseMethod_taxa =="Linear regression"){
+        } else if (input$chooseMethod_taxa == "Linear regression" | input$chooseMethod_taxa == "Logistic regression" | input$chooseMethod_taxa == "Negative binomial regression" | input$chooseMethod_taxa == "Beta regression") {
+          if (input$covariates_taxa == "None") {
+            if (input$chooseMethod_taxa =="Linear regression") {
               incProgress(5/10, message = "Linear regression")
-              
               taxa.lm.bin.out <- taxa.bin.lm.united.func(bin.var = taxa.results$bin.var, taxa = taxa.results$taxa)
-              
               taxa.lm.bin.q.out <- bin.q.united.func(taxa.lm.bin.out, method = "BH")
               
-              #taxa.data.results$table.out = taxa.lm.bin.cov.q.out
               taxa.outputs$DAoutput = taxa.lm.bin.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.lm.bin.q.out, species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Logistic regression"){
+            } else if (input$chooseMethod_taxa == "Logistic regression") {
               incProgress(5/10, message = "Logistic regression")
               taxa.logit.reg.coef.out <- all.taxa.logit.reg.coef.bin.func(taxa.results$bin.var, taxa.results$taxa, scale = TRUE)
               taxa.logit.reg.coef.q.out <- bin.q.united.func(taxa.logit.reg.coef.out, method = "BH")
-              
               taxa.logit.out <- all.taxa.logit.bin.func(taxa.results$bin.var, taxa.results$taxa, scale = TRUE)
               taxa.logit.q.out <- bin.q.united.func(taxa.logit.out, method = "BH")
               
@@ -3533,27 +3161,23 @@ server = function(input, output, session){
               
               forestplot.or.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput_or, chooseData$taxa.names.out, report.type = "OR", species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Negative binomial regression"){
+            } else if (input$chooseMethod_taxa == "Negative binomial regression") {
               incProgress(5/10, message = "Negative binomial regression")
               taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa)
               
-              #taxa.data.results$table.out <- taxa.bin.glm.nb.q.out
               taxa.outputs$DAoutput <- taxa.bin.glm.nb.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Beta regression"){
+            } else if (input$chooseMethod_taxa == "Beta regression") {
               incProgress(5/10, message = "Beta regression")
               taxa.bin.beta.q.out <- all.taxa.bin.beta(taxa.results$bin.var, taxa.results$taxa)
               
-              #taxa.data.results$table.out <- taxa.bin.cov.beta.q.out
               taxa.outputs$DAoutput <- taxa.bin.beta.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             }
             
-          }else if(input$covariates_taxa == "Covariate(s)"){
-            if(input$chooseMethod_taxa =="Linear regression"){
+          } else if (input$covariates_taxa == "Covariate(s)") {
+            if (input$chooseMethod_taxa =="Linear regression") {
               incProgress(5/10, message = "Linear regression")
               
               taxa.lm.bin.cov.out <- taxa.bin.cov.lm.united.func(bin.var = taxa.results$bin.var, 
@@ -3562,12 +3186,10 @@ server = function(input, output, session){
               
               taxa.lm.bin.cov.q.out <- bin.q.united.func(taxa.lm.bin.cov.out, method = "BH")
               
-              #taxa.data.results$table.out = taxa.lm.bin.cov.q.out
               taxa.outputs$DAoutput = taxa.lm.bin.cov.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.lm.bin.cov.q.out, species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Logistic regression"){
+            } else if (input$chooseMethod_taxa == "Logistic regression") {
               incProgress(5/10, message = "Logistic regression")
               taxa.logit.reg.coef.cov.out <- all.taxa.logit.reg.coef.bin.cov.func(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, scale = TRUE)
               taxa.logit.reg.coef.cov.q.out <- bin.q.united.func(taxa.logit.reg.coef.cov.out, method = "BH")
@@ -3577,43 +3199,39 @@ server = function(input, output, session){
               
               taxa.outputs$DAoutput_or <- taxa.logit.cov.q.out
               taxa.outputs$DAoutput <- taxa.logit.reg.coef.cov.q.out
-              
+
               nrow1 <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
               nrow2 <- taxa.forest.plot.pages(taxa.outputs$DAoutput_or, species.include = include)
               
               forestplot.or.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput_or, chooseData$taxa.names.out, report.type = "OR", species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Negative binomial regression"){
+            } else if (input$chooseMethod_taxa == "Negative binomial regression") {
               incProgress(5/10, message = "Negative binomial regression")
               taxa.bin.cov.glm.nb.q.out <- all.taxa.bin.cov.glm.nb(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, rarefy = FALSE)
               
-              #taxa.data.results$table.out <- taxa.bin.cov.glm.nb.q.out
               taxa.outputs$DAoutput <- taxa.bin.cov.glm.nb.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
               
-            }else if(input$chooseMethod_taxa == "Beta regression"){
+            } else if (input$chooseMethod_taxa == "Beta regression") {
               incProgress(5/10, message = "Beta regression")
               taxa.bin.cov.beta.q.out <- all.taxa.bin.cov.beta(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa)
               
-              #taxa.data.results$table.out <- taxa.bin.cov.beta.q.out
               taxa.outputs$DAoutput <- taxa.bin.cov.beta.q.out
-              
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             }
           }
           
-          
-          #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
-          #taxa.outputs$DAoutput <- taxa.outputs$DAoutput
           forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput, chooseData$taxa.names.out, report.type = "Est", species.include = include)
-          duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
-          #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-          taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+          if (any(!is.na(unlist(chooseData$taxa.names.out$duplicates)))) {
+            duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+            taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+            duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+          } else {
+            duplicate.texts <- 0
+          }
           
-          if(input$chooseMethod_taxa == "Logistic regression"){
-            if(duplicate.texts >0){
+          if (input$chooseMethod_taxa == "Logistic regression") {
+            if (duplicate.texts >0) {
               output$taxa_display = renderUI({
                 tagList(
                   tabBox(title = strong("Forest plot", style = "color:black"), width = NULL,
@@ -3621,7 +3239,7 @@ server = function(input, output, session){
                                   do.call(tabsetPanel, lapply(1:nrow1, function(i) {
                                     tabPanel(title = paste0("Page ", i),
                                              plotOutput(paste0("forest", i), height = 800, width = 750),
-                                             plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+                                             plotOutput(paste0("duplicates", i), height = 11.5*duplicate.texts+10, width = 750))
                                   }))
                                   
                          )
@@ -3630,14 +3248,14 @@ server = function(input, output, session){
                                   do.call(tabsetPanel, lapply(1:nrow2, function(i) {
                                     tabPanel(title = paste0("Page ", i),
                                              plotOutput(paste0("forest_or", i), height = 800, width = 750),
-                                             plotOutput(paste0("duplicates_or", i), height = 35*duplicate.texts+10, width = 750))
+                                             plotOutput(paste0("duplicates_or", i), height = 11.5*duplicate.texts+10, width = 750))
                                   }))
                                   
                          )
                   )
                 )
               })
-            }else{
+            } else {
               output$taxa_display = renderUI({
                 tagList(
                   tabBox(title = strong("Forest plot", style = "color:black"), width = NULL,
@@ -3701,18 +3319,18 @@ server = function(input, output, session){
               taxa.sig.dend(taxa.outputs$DAoutput, chooseData$tax.tab, "twopi", include)
             })
             
-          }else {
-            if(duplicate.texts>0){
+          } else {
+            if (duplicate.texts>0) {
               output$taxa_display = renderUI({
                 tagList(
                   do.call(tabsetPanel, lapply(1:nrow, function(i) {
                     tabPanel(title = paste0("Page ", i), align = "center",
                              plotOutput(paste0("forest", i), height = 800, width = 750),
-                             plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+                             plotOutput(paste0("duplicates", i), height = 11.5*duplicate.texts+10, width = 750))
                   })) 
                 )
               })
-            }else{
+            } else {
               output$taxa_display = renderUI({
                 tagList(
                   do.call(tabsetPanel, lapply(1:nrow, function(i) {
@@ -3830,18 +3448,11 @@ server = function(input, output, session){
           }
         )
         
-        #HERE!
-        ###########################################################################
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_referenceslong")
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_referenceslong")
-        
         ref_string = REFERENCE_CHECK(data_transform = input$dataType_taxa, method_name = isolate(input$chooseMethod_taxa), FDR = "Yes")
         #ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethod), FDR = isolate(input$chooseAdjustment))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("taxa_references")
-        }else{
+        } else {
           shinyjs::show("taxa_references")
           output$taxa_references = renderUI({
             tagList(
@@ -3851,24 +3462,24 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
         
-        shinyjs::enable("runbtn_bin_taxa")
-        shinyjs::enable("dataType_taxa")
-        shinyjs::enable("primvar_taxa")
-        shinyjs::enable("chooseMethod_taxa")
-        shinyjs::enable("covariates_taxa")
-        shinyjs::enable("chooseRef_taxa")
-        shinyjs::enable("taxaCat1")
-        shinyjs::enable("taxaCat2")
+        delay(1000, shinyjs::enable("runbtn_bin_taxa"))
+        delay(1000, shinyjs::enable("dataType_taxa"))
+        delay(1000, shinyjs::enable("primvar_taxa"))
+        delay(1000, shinyjs::enable("chooseMethod_taxa"))
+        delay(1000, shinyjs::enable("covariates_taxa"))
+        delay(1000, shinyjs::enable("chooseRef_taxa"))
+        delay(1000, shinyjs::enable("taxaCat1"))
+        delay(1000, shinyjs::enable("taxaCat2"))
+        
       })
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$runbtn_cont_taxa,{
     validate(
-      if(input$covariates_taxa == "Covariate(s)" & is.null(input$covariatesOptions_taxa)){
+      if (input$covariates_taxa == "Covariate(s)" & is.null(input$covariatesOptions_taxa)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -3883,18 +3494,18 @@ server = function(input, output, session){
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         
-        if(input$chooseMethod_taxa == "Negative binomial regression"){
+        if (input$chooseMethod_taxa == "Negative binomial regression") {
           taxa.types$dataType = "count"
         }
         
         incProgress(1/10, message = "Examining Data in progress")
-        if(input$covariates_taxa == "None"){
+        if (input$covariates_taxa == "None") {
           taxa.con.out <- taxa.con.recode.func(chooseData$sam.dat, input$primvar_taxa, input$rename.con.var_taxa, 
                                                taxa = chooseData$taxa.out[[taxa.types$dataType]])
           taxa.results$con.var <- taxa.con.out$con.var
           taxa.results$taxa <- taxa.con.out$taxa
           taxa.results$taxa.con.sum.out <- taxa.sum.apply(taxa.con.out,2,taxa.ind.sum.func)
-        } else if(input$covariates_taxa == "Covariate(s)"){
+        } else if (input$covariates_taxa == "Covariate(s)") {
           taxa.con.cov.out <- taxa.con.cov.recode.func(chooseData$sam.dat, input$primvar_taxa, input$covariatesOptions_taxa, 
                                                        input$rename.con.var_taxa, chooseData$taxa.out[[taxa.types$dataType]])  
           
@@ -3914,9 +3525,9 @@ server = function(input, output, session){
         }
         
         #incProgress(5/10, message = "Fitting Regression Model in progress")
-        if(input$chooseMethod_taxa == "Linear regression") {
+        if (input$chooseMethod_taxa == "Linear regression") {
           incProgress(5/10, message = "Linear regression")
-          if(input$covariates_taxa == "Covariate(s)"){
+          if (input$covariates_taxa == "Covariate(s)") {
             
             taxa.lm.con.cov.out <- taxa.lm.con.cov.func(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa)
             taxa.lm.con.cov.q.out <- taxa.q.func(taxa.lm.con.cov.out, method = "BH")
@@ -3924,7 +3535,7 @@ server = function(input, output, session){
             taxa.outputs$DAoutput <- taxa.lm.con.cov.q.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
-          }else if(input$covariates_taxa == "None"){
+          } else if (input$covariates_taxa == "None") {
             
             taxa.lm.con.out <- taxa.lm.con.func(taxa.results$con.var, taxa.results$taxa)
             taxa.lm.con.q.out <- taxa.q.func(taxa.lm.con.out, method = "BH")
@@ -3933,16 +3544,16 @@ server = function(input, output, session){
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
           }
-        }else if(input$chooseMethod_taxa == "Negative binomial regression"){
+        } else if (input$chooseMethod_taxa == "Negative binomial regression") {
           incProgress(5/10, message = "Negative binomial regression")
-          if(input$covariates_taxa == "Covariate(s)"){
+          if (input$covariates_taxa == "Covariate(s)") {
             
             taxa.con.cov.glm.nb.out <- all.taxa.con.cov.glm.nb(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, "BH", rarefy = FALSE) 
             
             taxa.outputs$DAoutput <- taxa.con.cov.glm.nb.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
-          }else if(input$covariates_taxa == "None"){
+          } else if (input$covariates_taxa == "None") {
             
             taxa.con.glm.nb.out <- all.taxa.con.glm.nb(taxa.results$con.var, taxa.results$taxa, "BH", rarefy = FALSE) 
             
@@ -3950,16 +3561,16 @@ server = function(input, output, session){
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
           }
           
-        }else if(input$chooseMethod_taxa == "Beta regression") {
+        } else if (input$chooseMethod_taxa == "Beta regression") {
           incProgress(5/10, message = "Beta regression")
-          if(input$covariates_taxa == "Covariate(s)"){
+          if (input$covariates_taxa == "Covariate(s)") {
             taxa.con.cov.beta.q.out <- all.taxa.con.cov.beta(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, multi.method = "BH")
             
             taxa.outputs$DAoutput <- taxa.con.cov.beta.q.out
             
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
-          }else if(input$covariates_taxa == "None"){
+          } else if (input$covariates_taxa == "None") {
             taxa.con.beta.q.out <- all.taxa.con.beta(taxa.results$con.var, taxa.results$taxa, multi.method = "BH")
             
             taxa.outputs$DAoutput <- taxa.con.beta.q.out
@@ -3970,23 +3581,28 @@ server = function(input, output, session){
         
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutput, chooseData$taxa.names.out, species.include = include)
         #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
-        #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
         
+        if (any(!is.na(unlist(chooseData$taxa.names.out$duplicates)))) {
+          duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+          #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+          taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+        } else {
+          duplicate.texts <- 0
+        }
+
         incProgress(2/10, message = "Displaying Results in progress")
         
-        if(duplicate.texts>0){
+        if (duplicate.texts>0) {
           output$taxa_display = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
                        plotOutput(paste0("forest", i), height = 800, width = 750),
-                       plotOutput(paste0("duplicates", i), height = 35*duplicate.texts+10, width = 750))
+                       plotOutput(paste0("duplicates", i), height = 11.5*duplicate.texts+10, width = 750))
             }))
             
           })
-        }else{
+        } else {
           output$taxa_display = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
@@ -4100,17 +3716,11 @@ server = function(input, output, session){
           }
         )
         
-        ###########################################################################
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_referenceslong")
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_referenceslong")
-        
         ref_string = REFERENCE_CHECK(data_transform = input$dataType_taxa, method_name = isolate(input$chooseMethod_taxa), FDR = "Yes")
-        #ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethod), FDR = isolate(input$chooseAdjustment))
-        if(is.null(ref_string)){
+        
+        if (is.null(ref_string)) {
           shinyjs::hide("taxa_references")
-        }else{
+        } else {
           shinyjs::show("taxa_references")
           output$taxa_references = renderUI({
             tagList(
@@ -4120,14 +3730,13 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
-        
-        shinyjs::enable("runbtn_cont_taxa")
-        shinyjs::enable("dataType_taxa")
-        shinyjs::enable("primvar_taxa")
-        shinyjs::enable("chooseMethod_taxa")
-        shinyjs::enable("covariates_taxa")
-        shinyjs::enable("rename.con.var_taxa")
+
+        delay(1000, shinyjs::enable("runbtn_cont_taxa"))
+        delay(1000, shinyjs::enable("dataType_taxa"))
+        delay(1000, shinyjs::enable("primvar_taxa"))
+        delay(1000, shinyjs::enable("chooseMethod_taxa"))
+        delay(1000, shinyjs::enable("covariates_taxa"))
+        delay(1000, shinyjs::enable("rename.con.var_taxa"))
       }
     )
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
@@ -4137,13 +3746,23 @@ server = function(input, output, session){
   ######################################
   observeEvent(input$runbtn_bin_taxa.long,{
     validate(
-      if(input$covariates_taxa.long == "Covariate(s)" & is.null(input$covariatesOptions_taxa.long)){
+      if (input$covariates_taxa.long == "Covariate(s)" & is.null(input$covariatesOptions_taxa.long)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
+    
+    validate(
+      if (is.null(input$clustervar_taxa)) {
+        showNotification("Error: No cluster variable available.",
+                         type = "error")
+      } else {
+        NULL
+      }
+    )
+    
     shinyjs::disable("runbtn_bin_taxa.long")
     shinyjs::disable("dataType_taxa.long")
     shinyjs::disable("primvar_taxa.long")
@@ -4170,11 +3789,11 @@ server = function(input, output, session){
         sam_dat <- taxa.bin.cat.recode.func(chooseData$sam.dat, input$primvar_taxa.long, taxa.bin.cat.ref.ori.out,
                                             rename.ref = rename.cats_ref, rename.com = rename.cats_com)
         
-        if(input$chooseMethod_taxa.long == "GLMM (Negative Binomial)"){
+        if (input$chooseMethod_taxa.long == "GLMM (Negative Binomial)") {
           taxa.types$dataType = "count"
         }
         
-        if(input$covariates_taxa.long == "None"){
+        if (input$covariates_taxa.long == "None") {
           taxa.bin.id.out <- taxa.bin.id.cat.ref.united.func(input$primvar_taxa.long, input$clustervar_taxa, rename.cats_ref,
                                                              rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
           
@@ -4183,7 +3802,7 @@ server = function(input, output, session){
           taxa.results$id.var <- taxa.bin.id.out$id.var
           taxa.results$taxa <- taxa.bin.id.out$taxa
           
-        } else if(input$covariates_taxa.long == "Covariate(s)"){
+        } else if (input$covariates_taxa.long == "Covariate(s)") {
           taxa.bin.id.cov.out <- taxa.bin.id.cov.cat.ref.united.func(input$primvar_taxa.long, input$clustervar_taxa, input$covariatesOptions_taxa.long,
                                                                      rename.cats_ref, rename.cats_com, sam_dat, chooseData$taxa.out[[taxa.types$dataType]])
           taxa.results$bin.var <- taxa.bin.id.cov.out$bin.var
@@ -4206,51 +3825,51 @@ server = function(input, output, session){
         }
         
         #incProgress(5/10, message = "Fitting Regression Model")
-        if(input$chooseMethod_taxa.long =="LMM"){
+        if (input$chooseMethod_taxa.long =="LMM") {
           incProgress(5/10, message = "LMM")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             taxa.bin.lmer.q.out <- all.taxa.bin.lmer(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH") 
             taxa.outputs$DAoutputlong = taxa.bin.lmer.q.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             taxa.bin.cov.lmer.q.out <- all.taxa.bin.cov.lmer(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH")
             taxa.outputs$DAoutputlong = taxa.bin.cov.lmer.q.out
           }
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
           
-        }else if(input$chooseMethod_taxa.long == "GLMM (Beta)"){
+        } else if (input$chooseMethod_taxa.long == "GLMM (Beta)") {
           incProgress(5/10, message = "GLMM (Beta)")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             taxa.bin.beta.q.out <- all.taxa.bin.glmm.beta(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.beta.q.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.bin.cov.beta.q.out <- all.taxa.bin.glmm.cov.beta(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.cov.beta.q.out
           }
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
-        }else if(input$chooseMethod_taxa.long == "GLMM (Negative Binomial)"){
+        } else if (input$chooseMethod_taxa.long == "GLMM (Negative Binomial)") {
           incProgress(5/10, message = "GLMM (Negative Binomial)")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             taxa.bin.glmm.nb.q.out <- all.taxa.bin.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
             taxa.outputs$DAoutputlong <- taxa.bin.glmm.nb.q.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.bin.cov.glmm.nb.q.out <- all.taxa.bin.cov.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
             taxa.outputs$DAoutputlong <- taxa.bin.cov.glmm.nb.q.out
           }
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
           
-        }else if(input$chooseMethod_taxa.long == "GEE (Binomial)"){
+        } else if (input$chooseMethod_taxa.long == "GEE (Binomial)") {
           incProgress(5/10, message = "GEE (Binomial)")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             
             taxa.bin.logit.coef.gee.out <- all.taxa.bin.logit.gee.reg.coef(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, rare.count = ("rare.count"==taxa.types$dataType), multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.logit.coef.gee.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.bin.cov.logit.coef.gee.out <- all.taxa.bin.cov.logit.gee.reg.coef(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, rare.count = ("rare.count"==taxa.types$dataType), multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.cov.logit.coef.gee.out
@@ -4258,14 +3877,14 @@ server = function(input, output, session){
           
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
           
-        }else if(input$chooseMethod_taxa.long == "GLMM (Binomial)"){
+        } else if (input$chooseMethod_taxa.long == "GLMM (Binomial)") {
           incProgress(5/10, message = "GLMM (Binomial)")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             
             taxa.bin.logit.glmm.b.out <- all.taxa.bin.logit.glmm.b(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, rare.count = ("rare.count"==taxa.types$dataType), multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.logit.glmm.b.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.bin.cov.logit.glmm.b.out <- all.taxa.bin.cov.logit.glmm.b(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, rare.count = ("rare.count"==taxa.types$dataType), multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.cov.logit.glmm.b.out
@@ -4276,22 +3895,24 @@ server = function(input, output, session){
         
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutputlong, chooseData$taxa.names.out, species.include = include)
         
-        #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
-        #here
+        if (any(!is.na(unlist(chooseData$taxa.names.out$duplicates)))) {
+          duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+          #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+          taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+        } else {
+          duplicate.texts <- 0
+        }
         
-        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
-        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
-        
-        if(duplicate.texts >0){
+        if (duplicate.texts >0) {
           output$taxa_displaylong = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
                        plotOutput(paste0("forestlong", i), height = 800, width = 750),
-                       plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
+                       plotOutput(paste0("duplicateslong", i), height = 11.5*duplicate.texts+10, width = 750))
             }))
           })
-        }else{
+        } else {
           output$taxa_displaylong = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
@@ -4403,17 +4024,10 @@ server = function(input, output, session){
           }
         )
         
-        ###########################################################################
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_references_long")
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_references_long")
-        
         ref_string = REFERENCE_CHECK(data_transform = input$dataType_taxa.long, method_name = isolate(input$chooseMethod_taxa.long), FDR = "Yes")
-        #ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethod), FDR = isolate(input$chooseAdjustment))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("taxa_references_long")
-        }else{
+        } else {
           shinyjs::show("taxa_references_long")
           output$taxa_references_long = renderUI({
             tagList(
@@ -4423,8 +4037,7 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
-        
+
         shinyjs::enable("runbtn_bin_taxa.long")
         shinyjs::enable("dataType_taxa.long")
         shinyjs::enable("primvar_taxa.long")
@@ -4440,10 +4053,10 @@ server = function(input, output, session){
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
   observeEvent(input$runbtn_cont_taxa.long,{
     validate(
-      if(input$covariates_taxa.long == "Covariate(s)" & is.null(input$covariatesOptions_taxa.long)){
+      if (input$covariates_taxa.long == "Covariate(s)" & is.null(input$covariatesOptions_taxa.long)) {
         showNotification("Error: Please select covariate(s) before you click 'Run!' button.",
                          type = "error")
-      }else{
+      } else {
         NULL
       }
     )
@@ -4460,12 +4073,12 @@ server = function(input, output, session){
       message = 'Calculation in progress',
       detail = 'This may take a while...', value = 0, {
         
-        if(input$chooseMethod_taxa.long == "GLMM (Negative Binomial)"){
+        if (input$chooseMethod_taxa.long == "GLMM (Negative Binomial)") {
           taxa.types$dataType = "count"
         }
         
         incProgress(1/10, message = "Examining Data in progress")
-        if(input$covariates_taxa.long == "None"){
+        if (input$covariates_taxa.long == "None") {
           taxa.con.id.out <- taxa.con.id.recode.united.func(chooseData$sam.dat, input$primvar_taxa.long, input$clustervar_taxa, input$rename.con.var_taxa,
                                                             taxa = chooseData$taxa.out[[taxa.types$dataType]])
           
@@ -4473,7 +4086,7 @@ server = function(input, output, session){
           taxa.results$id.var <- taxa.con.id.out$id.var
           taxa.results$taxa <- taxa.con.id.out$taxa
           taxa.results$taxa.con.sum.out <- taxa.sum.apply(taxa.con.id.out,2,taxa.ind.sum.func)
-        } else if(input$covariates_taxa.long == "Covariate(s)"){
+        } else if (input$covariates_taxa.long == "Covariate(s)") {
           taxa.con.cov.id.out <- taxa.con.id.cov.recode.united.func(chooseData$sam.dat, input$primvar_taxa.long, input$rename.con.var_taxa, 
                                                                     input$clustervar_taxa, input$covariatesOptions_taxa.long, chooseData$taxa.out[[taxa.types$dataType]])
           
@@ -4494,31 +4107,31 @@ server = function(input, output, session){
         }
         
         #incProgress(5/10, message = "Fitting Regression Model in progress")
-        if(input$chooseMethod_taxa.long == "LMM") {
+        if (input$chooseMethod_taxa.long == "LMM") {
           incProgress(5/10, message = "LMM")
-          if(input$covariates_taxa.long == "Covariate(s)"){
+          if (input$covariates_taxa.long == "Covariate(s)") {
             taxa.con.cov.lmer.q.out <- all.taxa.con.cov.lmer(con.var = taxa.results$con.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH") 
             #taxa.data.results$table.out <- taxa.con.cov.lmer.q.out
             taxa.outputs$DAoutputlong <- taxa.con.cov.lmer.q.out
             
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
             
-          }else if(input$covariates_taxa.long == "None"){
+          } else if (input$covariates_taxa.long == "None") {
             taxa.con.lmer.q.out <- all.taxa.con.lmer(con.var = taxa.results$con.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH") 
             #taxa.data.results$table.out <- taxa.con.lmer.q.out
             taxa.outputs$DAoutputlong <- taxa.con.lmer.q.out
             
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
           }
-        }else if(input$chooseMethod_taxa.long == "GLMM (Beta)"){
+        } else if (input$chooseMethod_taxa.long == "GLMM (Beta)") {
           incProgress(5/10, message = "GLMM (Beta)")
-          if(input$covariates_taxa.long == "None"){
+          if (input$covariates_taxa.long == "None") {
             taxa.con.beta.q.out <- all.taxa.con.glmm.beta(con.var = taxa.results$con.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH")
             
             #taxa.data.results$table.out <- taxa.con.beta.q.out
             taxa.outputs$DAoutputlong <- taxa.con.beta.q.out
             
-          } else if(input$covariates_taxa.long == "Covariate(s)"){
+          } else if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.con.cov.beta.q.out <- all.taxa.con.glmm.cov.beta(con.var = taxa.results$con.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH")
             
@@ -4526,9 +4139,9 @@ server = function(input, output, session){
             taxa.outputs$DAoutputlong <- taxa.con.cov.beta.q.out
           }
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
-        }else if(input$chooseMethod_taxa.long == "GLMM (Negative Binomial)"){
+        } else if (input$chooseMethod_taxa.long == "GLMM (Negative Binomial)") {
           incProgress(5/10, message = "GLMM (Negative Binomial)")
-          if(input$covariates_taxa.long == "Covariate(s)"){
+          if (input$covariates_taxa.long == "Covariate(s)") {
             
             taxa.con.cov.glmm.nb.q.out <- all.taxa.con.cov.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
             
@@ -4537,7 +4150,7 @@ server = function(input, output, session){
             
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
             
-          }else if(input$covariates_taxa.long == "None"){
+          } else if (input$covariates_taxa.long == "None") {
             
             taxa.con.glmm.nb.q.out <- all.taxa.con.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
             
@@ -4548,23 +4161,27 @@ server = function(input, output, session){
           }
         }
         forestplot.data <- taxa.forest.plot.pages1(taxa.outputs$DAoutputlong, chooseData$taxa.names.out, species.include = include)
-        #duplicate.texts <- sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
         
-        duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
-        taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-        duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+        if (any(!is.na(unlist(chooseData$taxa.names.out$duplicates)))) {
+          duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
+          #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
+          taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
+          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+        } else {
+          duplicate.texts <- 0
+        }
         
         incProgress(2/10, message = "Displaying Results in progress")
         
-        if(duplicate.texts >0){
+        if (duplicate.texts >0) {
           output$taxa_displaylong = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
                        plotOutput(paste0("forestlong", i), height = 800, width = 750), 
-                       plotOutput(paste0("duplicateslong", i), height = 35*duplicate.texts+10, width = 750))
+                       plotOutput(paste0("duplicateslong", i), height = 11.5*duplicate.texts+10, width = 750))
             }))
           })
-        }else{
+        } else {
           output$taxa_displaylong = renderUI({
             do.call(tabsetPanel, lapply(1:nrow, function(i) {
               tabPanel(title = paste0("Page ", i), align = "center",
@@ -4649,24 +4266,6 @@ server = function(input, output, session){
           }
         )
         
-        # output$tdownloadTabl1long <- downloadHandler(
-        #   filename = function() {
-        #     paste("Taxa.Sum.Table", ".csv", sep="")
-        #   },
-        #   content = function(file) {
-        #     write.list(taxa.results$taxa.con.sum.out, file, row.names = TRUE)
-        #   }
-        # )
-        # 
-        # output$tdownloadTabl2long <- downloadHandler(
-        #   filename = function() {
-        #     paste("Taxa.Analysis.Output", ".csv", sep="")
-        #   },
-        #   content = function(file) {
-        #     write.list(taxa.outputs$DAoutput, file, row.names = TRUE)
-        #   }
-        # )
-        
         output$gdownloadlong <- downloadHandler(
           filename = function() {
             paste("Taxa.Analysis.Graphical.Output", ".html", sep="")
@@ -4676,17 +4275,10 @@ server = function(input, output, session){
           }
         )
         
-        ###########################################################################
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_references_long")
-        # uiOutput("taxa_references")
-        # uiOutput("taxa_references_long")
-        
         ref_string = REFERENCE_CHECK(data_transform = input$dataType_taxa.long, method_name = isolate(input$chooseMethod_taxa.long), FDR = "Yes")
-        #ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethod), FDR = isolate(input$chooseAdjustment))
-        if(is.null(ref_string)){
+        if (is.null(ref_string)) {
           shinyjs::hide("taxa_references_long")
-        }else{
+        } else {
           shinyjs::show("taxa_references_long")
           output$taxa_references_long = renderUI({
             tagList(
@@ -4696,8 +4288,6 @@ server = function(input, output, session){
             )
           })
         }
-        ###########################################################################
-        
         shinyjs::enable("runbtn_cont_taxa.long")
         shinyjs::enable("dataType_taxa.long")
         shinyjs::enable("primvar_taxa.long")
@@ -4706,7 +4296,6 @@ server = function(input, output, session){
         shinyjs::enable("rename.con.var_taxa")
         shinyjs::enable("include_species.dend.long")
         shinyjs::enable("clustervar_taxa")
-        
       }
     )
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
