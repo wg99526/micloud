@@ -25,214 +25,20 @@ library(MiRKAT)
 library(GLMMMiRKAT)
 library(proxy)
 
-
-rem.tax.d <- c("", "gut metagenome", "mouse gut metagenome")
-rem.tax.str.d <- c("uncultured", "Incertae", "unidentified")
-
-num.tax.rank <- function(tax.tab, na.code = "NANANA") {
-  tax.tab.cleaned <- tax.tab.clean(tax.tab, na.code = na.code)
-  num.taxa <- c()
-  for (i in 1:6) {
-    taxa <- unique(tax.tab.cleaned[,i+1])
-    uni.taxa <- sum(taxa == na.code)
-    num.taxa[i] <- nrow(taxa) - uni.taxa
-  }
-  return(num.taxa)
-}
-
-lib.size.func <- function(biom) {
-  otu.tab <- otu_table(biom)
-  lib.size <- colSums(otu.tab)
-  lib.size.sum <- c(mean(lib.size), quantile(lib.size))
-  names(lib.size.sum) <- c("Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
-  return(list(lib.size = lib.size, lib.size.sum = lib.size.sum, num.sams = ncol(otu.tab), num.otus = nrow(otu.tab)))
-}
-
-mean.prop.func <- function(biom) {
-  otu.tab <- otu_table(biom)
-  lib.size <- colSums(otu.tab)
-  prop.otu.tab <- otu.tab
-  for (i in 1:length(lib.size)) {
-    prop.otu.tab[,i] <- otu.tab[,i]/lib.size[i]
-  }
-  mean.prop <- rowMeans(prop.otu.tab)
-  mean.prop.sum <- c(mean(mean.prop), quantile(mean.prop))
-  names(mean.prop.sum) <- c("Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
-  return(list(mean.prop = mean.prop, mean.prop.sum = mean.prop.sum, num.sams = ncol(otu.tab), num.otus = nrow(otu.tab)))
-}
-
-rarefy.func <- function(biom, cut.off, multi.rarefy = FALSE) {
-  
-  if (!multi.rarefy | multi.rarefy == 1) {
-    biom <- rarefy_even_depth(biom, cut.off, rngseed = 487)
-  } else {
-    otu.tab <- otu_table(biom)
-    tax.tab <- tax_table(biom)
-    tree <- phy_tree(biom)
-    sam.dat <- sample_data(biom)
-    
-    otu.tab.list <- list()
-    for (i in 1:multi.rarefy) {
-      otu.tab.list[[i]] <- otu_table(rarefy_even_depth(biom, cut.off, rngseed = i), taxa_are_rows = TRUE)
-    }
-    
-    sum.otu.tab <- otu.tab.list[[1]]
-    for (i in 2:multi.rarefy) {
-      sum.otu.tab <- sum.otu.tab + otu.tab.list[[i]]
-    }
-    otu.tab <- otu_table(round(sum.otu.tab/multi.rarefy), taxa_are_rows = TRUE)
-    biom <- merge_phyloseq(otu.tab, tax.tab, tree, sam.dat) 
-  }
-  
-  return(biom)
-}
-
-tax.trans <- function(otu.tab, tax.tab, rare.otu.tab, rare.tax.tab, sub.com = TRUE, na.code = "NANANA") {
-  
-  n <- ncol(otu.tab)
-  lib.size <- colSums(otu.tab)
-  rare.n <- ncol(rare.otu.tab)
-  
-  tax.count.out <- list()
-  tax.rare.count.out <- list()
-  tax.prop.out <- list()
-  tax.imp.prop.out <- list()
-  tax.clr.out <- list()
-  tax.sub.clr.out <- list()
-  
-  for (j in 1:6) {
-    tax <- as.vector(unique(tax.tab[,j+1]))
-    tax.count <- matrix(NA, n, length(tax))
-    for (i in 1:length(tax)) {
-      ind.tax <- which(tax.tab[,j+1] == tax[i])
-      tax.count[,i] <- colSums(otu.tab[ind.tax,])
-    }
-    rownames(tax.count) <- colnames(otu.tab)
-    colnames(tax.count) <- tax
-    
-    tax.prop <- matrix(NA, n, length(tax))
-    for (i in 1:length(lib.size)) {
-      tax.prop[i,] <- tax.count[i,]/lib.size[i]
-    }
-    rownames(tax.prop) <- colnames(otu.tab)
-    colnames(tax.prop) <- tax
-    
-    tax.imp.prop <- zCompositions::cmultRepl(tax.count)
-    tax.clr <- compositions::clr(tax.imp.prop)
-    
-    rare.tax <- as.vector(unique(rare.tax.tab[,j+1]))
-    tax.rare.count <- matrix(NA, rare.n, length(rare.tax))
-    for (i in 1:length(rare.tax)) {
-      ind.tax <- which(rare.tax.tab[,j+1] == rare.tax[i])
-      tax.rare.count[,i] <- colSums(rare.otu.tab[ind.tax,])
-    }
-    rownames(tax.rare.count) <- colnames(rare.otu.tab)
-    colnames(tax.rare.count) <- rare.tax
-    
-    ind <- which(tax == na.code)
-    tax.count.out[[j]] <- as.data.frame(tax.count[,-ind])
-    tax.rare.count.out[[j]] <- as.data.frame(tax.rare.count[,-ind])
-    tax.prop.out[[j]] <- as.data.frame(tax.prop[,-ind])
-    tax.imp.prop.out[[j]] <- tax.sub.imp.prop <- as.data.frame(tax.imp.prop[,-ind])
-    tax.clr.out[[j]] <- as.data.frame(tax.clr[,-ind])
-    tax.sub.clr.out[[j]] <- as.data.frame(compositions::clr(tax.sub.imp.prop))
-  }
-  
-  names(tax.count.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  names(tax.rare.count.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  names(tax.prop.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  names(tax.imp.prop.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  names(tax.clr.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  names(tax.sub.clr.out) <- c("Phylum", "Class", "Order", "Family", "Genus", "Species")
-  
-  if (sub.com) {
-    return(list(count = tax.count.out, rare.count = tax.rare.count.out, prop = tax.prop.out, clr = tax.sub.clr.out))
-  }
-  if (!sub.com) {
-    return(list(count = tax.count.out, rare.count = tax.rare.count.out, prop = tax.prop.out, clr = tax.clr.out))
-  }
-  
-}
-
 #####################
 # Data manipulation #
 #####################
-
-# is.mon.rev.bin.con <- function(sam.dat) {
-#   
-#   n.var <- ncol(sam.dat)
-#   n.sam <- nrow(sam.dat)
-#   is.mon <- logical()
-#   is.rev <- logical()
-#   is.bin <- logical()
-#   is.con <- logical()
-#   
-#   for (i in 1:n.var) {
-#     sam.var <- as.matrix(sam.dat[,i])
-#     if (length(table(sam.var)) == 1) {
-#       is.mon[i] <- TRUE
-#     }
-#     if (length(table(sam.var)) != 1) {
-#       is.mon[i] <- FALSE
-#     }
-#     if (length(table(sam.var)) == n.sam & sum(is.na(as.numeric(sam.var))) == n.sam) {
-#       is.rev[i] <- TRUE
-#     }
-#     if (length(table(sam.var)) != n.sam | sum(is.na(as.numeric(sam.var))) != n.sam) {
-#       is.rev[i] <- FALSE
-#     }
-#     if (length(table(sam.var)) == 2) {
-#       is.bin[i] <- TRUE
-#     }
-#     if (length(table(sam.var)) != 2) {
-#       is.bin[i] <- FALSE
-#     }
-#     if (length(table(sam.var)) != 2 & sum(is.na(as.numeric(sam.var))) != n.sam) {
-#       is.con[i] <- TRUE
-#     }
-#     if (length(table(sam.var)) == 2 & sum(is.na(as.numeric(sam.var))) != n.sam) {
-#       is.con[i] <- FALSE
-#     }
-#     if (sum(is.na(as.numeric(sam.var))) == n.sam) {
-#       is.con[i] <- FALSE
-#     }
-#     
-#   }
-#   return(list(is.mon = is.mon, is.rev = is.rev, is.bin = is.bin, is.con = is.con))
-# }
-# 
-# pri.func <- function(sam.dat, mon.rev.bin.con) {
-#   colnames(sam.dat)[(mon.rev.bin.con$is.bin | mon.rev.bin.con$is.con) & !mon.rev.bin.con$is.mon]
-# }
-# 
-# is.bin.con.pri <- function(sam.dat, mon.rev.bin.con, sel.pri.var) {
-#   ind <- which(colnames(sam.dat) == sel.pri.var)
-#   if(length(ind) != 0){
-#     if (mon.rev.bin.con$is.bin[ind]) {
-#       out <- "Binary"
-#     } else {
-#       out <- "Continuous"
-#     }
-#   }else {
-#     out = "Neither"
-#   }
-#   return(out)
-# }
-# 
-# cov.func <- function(sam.dat, mon.rev.bin.con, sel.pri.var) {
-#   ind.pri <- colnames(sam.dat) == sel.pri.var
-#   ind.mon.rev <- mon.rev.bin.con$is.mon | mon.rev.bin.con$is.rev
-#   return(colnames(sam.dat)[!(ind.pri | ind.mon.rev)])
-# }
 
 beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
   bin.var <- unlist(sam.dat[,sel.bin.var])
   bin.var.no.na <- bin.var[!is.na(bin.var)]
   bin.cat <- unique(bin.var.no.na)
+  
   return(bin.cat)
 }
 
 beta.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
+  
   return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))
 }
 
@@ -249,6 +55,7 @@ beta.bin.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, Ds.Ks)
   for (i in 1:length(Ks)) {
     Ks[[i]] <- Ks[[i]][c(ind.ref, ind.com), c(ind.ref, ind.com)]
   }
+  
   return(list(bin.var = bin.var, Ds = Ds, Ks = Ks))
 }
 
@@ -257,6 +64,7 @@ beta.bin.cat.recode.func <- function(sam.dat, sel.bin.var = "ecig_status", ori.c
   ind.com <- which(sam.dat[,sel.bin.var] == ori.cat[2])
   sam.dat[ind.ref,sel.bin.var] <- rename.ref
   sam.dat[ind.com,sel.bin.var] <- rename.com
+  
   return(sam.dat)
 }
 
@@ -264,6 +72,7 @@ beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
   bin.var <- unlist(sam.dat[,sel.bin.var])
   bin.var.no.na <- bin.var[!is.na(bin.var)]
   bin.cat <- unique(bin.var.no.na)
+  
   return(bin.cat)
 }
 
@@ -309,10 +118,12 @@ beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
   bin.var <- unlist(sam.dat[,sel.bin.var])
   bin.var.no.na <- bin.var[!is.na(bin.var)]
   bin.cat <- unique(bin.var.no.na)
+  
   return(bin.cat)
 }
 
 beta.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
+  
   return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))
 }
 
@@ -321,6 +132,7 @@ beta.bin.cat.recode.func <- function(sam.dat, sel.bin.var = "ecig_status", ori.c
   ind.com <- which(sam.dat[,sel.bin.var] == ori.cat[2])
   sam.dat[ind.ref,sel.bin.var] <- rename.ref
   sam.dat[ind.com,sel.bin.var] <- rename.com
+  
   return(sam.dat)
 }
 
@@ -379,6 +191,7 @@ beta.con.id.recode.func <- function(sam.dat, sel.con.var, sel.id.var, rename.con
   for (i in 1:length(Ks)) {
     Ks[[i]] <- Ks[[i]][ind.nona, ind.nona]
   }
+  
   return(list(con.var = con.var, id.var = id.var, Ds = Ds, Ks = Ks))
 }
 
@@ -398,6 +211,7 @@ beta.con.id.cov.recode.func <- function(sam.dat, sel.con.var, sel.id.var, sel.co
   for (i in 1:length(Ks)) {
     Ks[[i]] <- Ks[[i]][ind.nona, ind.nona]
   }
+  
   return(list(con.var = con.var, id.var = id.var, cov.var = cov.var, Ds = Ds, Ks = Ks))
 }
 
@@ -411,6 +225,10 @@ glmm.mirkat.bin <- function(beta.bin.id.out) {
   set.seed(487)
   out <- GLMMMiRKAT(y = as.numeric(beta.bin.id.out$bin.var)-1, cov = NULL, id = unlist(beta.bin.id.out$id.var), Ks = beta.bin.id.out$Ks, model = "binomial", n.perm = 1000)
   
+  return(out)
+}
+
+glmm.mirkat.bin.plot <- function(out, beta.bin.id.out) {
   par(mfrow = c(3, 2))
   for (i in 1:length(beta.bin.id.out$Ds)) {
     if (out$ItembyItem[i] < 0.05) {
@@ -427,13 +245,16 @@ glmm.mirkat.bin <- function(beta.bin.id.out) {
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
   legend("center", title = NULL, legend = levels(beta.bin.id.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
   legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
-  return(out)
 }
 
 glmm.mirkat.bin.cov <- function(beta.bin.id.cov.out) {
   set.seed(487)
   out <- GLMMMiRKAT(y = as.numeric(beta.bin.id.cov.out$bin.var)-1, cov = beta.bin.id.cov.out$cov.var, id = unlist(beta.bin.id.cov.out$id.var), Ks = beta.bin.id.cov.out$Ks, model = "binomial", n.perm = 1000)
   
+  return(out)
+}
+
+glmm.mirkat.bin.cov.plot <- function(out, beta.bin.id.cov.out) {
   par(mfrow = c(3, 2))
   for (i in 1:length(beta.bin.id.cov.out$Ds)) {
     if (out$ItembyItem[i] < 0.05) {
@@ -450,13 +271,16 @@ glmm.mirkat.bin.cov <- function(beta.bin.id.cov.out) {
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
   legend("center", title = NULL, legend = levels(beta.bin.id.cov.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
   legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
-  return(out)
 }
 
 glmm.mirkat.con <- function(beta.con.id.out) {
   set.seed(487)
   out <- GLMMMiRKAT(y = unlist(beta.con.id.out$con.var), cov = NULL, id = unlist(beta.con.id.out$id.var), Ks = beta.con.id.out$Ks, model = "gaussian", n.perm = 1000)
   
+  return(out)
+}
+
+glmm.mirkat.con.plot <- function(out, beta.con.id.out) {
   par(mfrow = c(3, 2))
   for (i in 1:length(beta.con.id.out$Ds)) {
     if (out$ItembyItem[i] < 0.05) {
@@ -470,8 +294,8 @@ glmm.mirkat.con <- function(beta.con.id.out) {
     bin.var <- rep(NA, length(con.var))
     ind.gr <- which(con.var >= con.var.med)
     ind.sm <- which(con.var < con.var.med)
-    bin.var[ind.gr] <- paste(names(beta.con.id.out$con.var), ">=", con.var.med)
-    bin.var[ind.sm] <- paste(names(beta.con.id.out$con.var), "<", con.var.med)
+    bin.var[ind.gr] <- paste(names(beta.con.id.out$con.var), ">=", round(con.var.med,2))
+    bin.var[ind.sm] <- paste(names(beta.con.id.out$con.var), "<", round(con.var.med,2))
     bin.var <- factor(bin.var)
     
     mod <- betadisper(as.dist(beta.con.id.out$Ds[[i]]), bin.var)
@@ -482,13 +306,16 @@ glmm.mirkat.con <- function(beta.con.id.out) {
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
   legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
   legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
-  return(out)
 }
 
 glmm.mirkat.con.cov <- function(beta.con.id.cov.out) {
   set.seed(487)
   out <- GLMMMiRKAT(y = unlist(beta.con.id.cov.out$con.var), cov = as.matrix(beta.con.id.cov.out$cov.var), id = unlist(beta.con.id.cov.out$id.var), Ks = beta.con.id.cov.out$Ks, model = "gaussian", n.perm = 1000)
   
+  return(out)
+}
+
+glmm.mirkat.con.cov.plot <- function(out, beta.con.id.cov.out) {
   par(mfrow = c(3, 2))
   for (i in 1:length(beta.con.id.cov.out$Ds)) {
     if (out$ItembyItem[i] < 0.05) {
@@ -502,8 +329,8 @@ glmm.mirkat.con.cov <- function(beta.con.id.cov.out) {
     bin.var <- rep(NA, length(con.var))
     ind.gr <- which(con.var >= con.var.med)
     ind.sm <- which(con.var < con.var.med)
-    bin.var[ind.gr] <- paste(names(beta.con.id.cov.out$con.var), ">=", con.var.med)
-    bin.var[ind.sm] <- paste(names(beta.con.id.cov.out$con.var), "<", con.var.med)
+    bin.var[ind.gr] <- paste(names(beta.con.id.cov.out$con.var), ">=", round(con.var.med,2))
+    bin.var[ind.sm] <- paste(names(beta.con.id.cov.out$con.var), "<", round(con.var.med,2))
     bin.var <- factor(bin.var)
     
     mod <- betadisper(as.dist(beta.con.id.cov.out$Ds[[i]]), bin.var)
@@ -514,7 +341,6 @@ glmm.mirkat.con.cov <- function(beta.con.id.cov.out) {
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
   legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
   legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
-  return(out)
 }
 
 ###################
@@ -523,6 +349,7 @@ glmm.mirkat.con.cov <- function(beta.con.id.cov.out) {
 
 q.func <- function(out, method = c("BH", "BY")) {
   Q.value <- p.adjust(out$P.value, method = method)
+  
   return(cbind(out, Q.value))
 }
 
@@ -532,9 +359,6 @@ p.value.0.1 <- function(x, round.x = 3) {
   x[ind.0] <- "<.001"
   ind.1 <- which(x == "1.000" | x == 1)
   x[ind.1] <- ">.999"
+  
   return(x)
 }
-
-
-
-
