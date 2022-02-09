@@ -4,19 +4,19 @@
                               "). The phyloseq object should contain all the four necessary data, feature (OTU or ASV) table, taxonomic table, 
                               metadata/sample information, and phylogenetic tree.", 
                               br(), br(), "Details:", br(), br(), 
-                              "1) The feature (OTU or ASV) table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
-                              (row names are feature (OTU or ASV) IDs and column names are subject IDs).", br(),
-                              "2) The taxonomic table should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
-                              (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                              "1) The feature table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                              (row names are feature IDs and column names are subject IDs).", br(),
+                              "2) The taxonomic table should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                              (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
                               'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
                               "3) The metadata/sample information should contain variables for the subjects about host phenotypes, medical interventions, 
                               disease status or environmental/behavioral factors, where rows are subjects and columns are variables 
                               (row names are subject IDs, and column names are variable names).", br(), 
                               "4) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
-                              The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
-                              "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
-                              The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
-                              MiCloud will analyze only the matched features (OTUs or ASVs) and subjects."
+                              The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                              "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                              The subjects should be matched and identical between feature table and metadata/sample information. 
+                              MiCloud will analyze only the matched features and subjects."
                               , style = "font-size:11pt")
   INPUT_PHYLOSEQ_COMMENT2 = p("You can download example microbiome data 'biom.Rdata' in 'phyloseq' format. The name of the 
                               phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
@@ -28,38 +28,39 @@
                               " > tax.tab <- tax_table(biom)", br(), 
                               " > tree <- phy_tree(biom)", br(), 
                               " > sam.dat <- sample_data(biom)", br(), br(), 
-                              "You can check if the features (OTUs or ASVs) are matched and identical across feature (OTU or ASV) table, taxonomic table and 
-                              phylogenetic tree, and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information 
+                              "You can check if the features are matched and identical across feature table, taxonomic table and 
+                              phylogenetic tree, and the subjects are matched and identical between feature table and metadata/sample information 
                               using following code.", br(), br(), 
                               " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
                               " > identical(rownames(otu.tab), tree$tip.label)", br(), 
                               " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
   INPUT_INDIVIDUAL_DATA_COMMENT = p("Description:", br(), br(), 
-                                    "1) The feature (OTU or ASV) table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
-                                    (row names are feature (OTU or ASV) IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
-                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
-                                    (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                                    "1) The feature table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                                    (row names are feature IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
+                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                                    (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
                                     'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME.", br(), 
                                     "3) The metadata/sample information (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, 
                                     disease status or environmental/behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and 
                                     column names are variable names).", br(), 
                                     "4) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint 
-                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
-                                    "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
-                                    The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
-                                    MiCloud will analyze only the matched features (OTUs or ASVs) and subjects.", style = "font-size:11pt")
-  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature (OTU or ASV) table (otu.tab.txt), 
+                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                                    "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                                    The subjects should be matched and identical between feature table and metadata/sample information. 
+                                    MiCloud will analyze only the matched features and subjects.", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature table (otu.tab.txt), 
                                      taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre).", br(), br(),
                                      "> setwd('/yourdatadirectory/')", br(), br(), 
                                      "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
                                      "> tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)", br(), 
                                      " > sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE) ", br(),
                                      "> tree <- read.tree(file = 'tree.tre')", br(), br(), 
-                                     "You can check if the OTUs are matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree, 
-                                     and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information using following code.", br(), br(), 
+                                     "You can check if the features are matched and identical across feature table, taxonomic table and phylogenetic tree, 
+                                     and the subjects are matched and identical between feature table and metadata/sample information using following code.", br(), br(), 
                                      " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
                                      " > identical(rownames(otu.tab), tree$tip.label)", br(), 
                                      " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
+  
 }
 
 server = function(input, output, session) {
@@ -166,7 +167,7 @@ server = function(input, output, session) {
   
   taxa.categos <- reactiveValues(cat1 = NULL, cat2 = NULL)
   taxa.data.results = reactiveValues(data.q.out = NULL)
-  taxa.results = reactiveValues(bin.var = NULL, cov.var = NULL, id.var = NULL, taxa = NULL, taxa.bin.sum.out = NULL, con.var = NULL, taxa.con.sum.out = NULL)
+  taxa.results = reactiveValues(bin.var = NULL, cov.var = NULL, id.var = NULL, taxa = NULL, taxa.bin.sum.out = NULL, con.var = NULL, taxa.con.sum.out = NULL, lib.size = NULL)
   taxa.types = reactiveValues(dataType = NULL, regression = NULL)
   taxa.outputs = reactiveValues(DAoutput = NULL, DAoutput_or = NULL, DAoutputlong = NULL)
 
@@ -486,6 +487,8 @@ server = function(input, output, session) {
   ######################################
   # This reactive expression stores the input data from either the individual data or phyloseq data
   QC = observe(suspended = T,{
+    taxa.results$lib.size <- lib.size.func(infile$biom)$lib.size
+    
     # Plots graphs using example infile data
     output$hist <- renderPlotly({
       lib_size = lib.size.func(infile$qc_biom)$lib.size
@@ -543,7 +546,7 @@ server = function(input, output, session) {
     output$OTUs_Size <- renderValueBox({
       valueBox(
         value = tags$p(paste0(lib.size.func(infile$qc_biom)$num.otus), style = "font-size: 75%;"),
-        "Number of Features (OTUs or ASVs)", icon = icon("dna"), color = "aqua")
+        "Number of Features", icon = icon("dna"), color = "aqua")
     })
     
     output$phyla <- renderValueBox({
@@ -769,6 +772,9 @@ server = function(input, output, session) {
               textInput("alphaCat1long", label = (paste0("Reference: ",alpha.categos.long$cat1)), value = alpha.categos.long$cat1, width = '80%'),
               textInput("alphaCat2long", label = (paste0("Comparison: ",alpha.categos.long$cat2)), value = alpha.categos.long$cat2, width = '80%'),
               
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
+              
               h4(strong("Cluster Variable?", style = "color:black")), 
               p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures
               designs or family IDs for family-based studies.", style = "font-size:11pt"),
@@ -833,6 +839,9 @@ server = function(input, output, session) {
               h4(strong("Rename Primary Variable?", style = "color:black")),
               p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
               textInput("rename.con.varlong", label = NULL, value = input$primvarlong, width = '80%'),
+              
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
               
               h4(strong("Cluster Variable?", style = "color:black")),
               p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures
@@ -1014,6 +1023,9 @@ server = function(input, output, session) {
               textInput("betaCat1.long", label = (paste0("Reference: ",beta.categos.long$cat1)), value = beta.categos.long$cat1, width = '80%'),
               textInput("betaCat2.long", label = (paste0("Comparison: ",beta.categos.long$cat2)), value = beta.categos.long$cat2, width = '80%'),
               
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
+              
               h4(strong("Cluster Variable?", style = "color:black")), 
               p("Please select the cluster (group) variable. Example cluster variables are subject IDs for repeated measures designs 
                 and family IDs for family-based studies.", style = "font-size:11pt"),
@@ -1053,6 +1065,9 @@ server = function(input, output, session) {
               h4(strong("Rename Primary Variable?", style = "color:black")),
               p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
               textInput("beta.rename.con.long", label = NULL, value = input$beta.primvar_long, width = '80%'),
+              
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
               
               h4(strong("Cluster Variable?", style = "color:black")),
               p("Please select the cluster (group) variable. Example cluster variables are subject IDs for 
@@ -1278,6 +1293,9 @@ server = function(input, output, session) {
                 textInput("taxaCat1", label = (paste0("Reference: ", taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
                 textInput("taxaCat2", label = (paste0("Comparison: ", taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'),
                 
+                br(),
+                p(" ", style = "margin-bottom: -20px;"),
+                
                 h4(strong("Cluster Variable?", style = "color:black")), 
                 p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
                   designs or family IDs for family-based studies.", style = "font-size:11pt"),
@@ -1332,6 +1350,9 @@ server = function(input, output, session) {
                 h4(strong("Rename Primary Variable?", style = "color:black")),
                 p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
                 textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa.long),
+                
+                br(),
+                p(" ", style = "margin-bottom: -20px;"),
                 
                 h4(strong("Cluster Variable?", style = "color:black")), 
                 p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
@@ -3163,7 +3184,7 @@ server = function(input, output, session) {
               
             } else if (input$chooseMethod_taxa == "Negative binomial regression") {
               incProgress(5/10, message = "Negative binomial regression")
-              taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa)
+              taxa.bin.glm.nb.q.out <- all.taxa.bin.glm.nb(taxa.results$bin.var, taxa.results$taxa, taxa.results$lib.size)
               
               taxa.outputs$DAoutput <- taxa.bin.glm.nb.q.out
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
@@ -3207,7 +3228,7 @@ server = function(input, output, session) {
               
             } else if (input$chooseMethod_taxa == "Negative binomial regression") {
               incProgress(5/10, message = "Negative binomial regression")
-              taxa.bin.cov.glm.nb.q.out <- all.taxa.bin.cov.glm.nb(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, rarefy = FALSE)
+              taxa.bin.cov.glm.nb.q.out <- all.taxa.bin.cov.glm.nb(taxa.results$bin.var, taxa.results$cov.var, taxa.results$taxa, taxa.results$lib.size)
               
               taxa.outputs$DAoutput <- taxa.bin.cov.glm.nb.q.out
               nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
@@ -3547,15 +3568,13 @@ server = function(input, output, session) {
         } else if (input$chooseMethod_taxa == "Negative binomial regression") {
           incProgress(5/10, message = "Negative binomial regression")
           if (input$covariates_taxa == "Covariate(s)") {
-            
-            taxa.con.cov.glm.nb.out <- all.taxa.con.cov.glm.nb(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, "BH", rarefy = FALSE) 
+            taxa.con.cov.glm.nb.out <- all.taxa.con.cov.glm.nb(taxa.results$con.var, taxa.results$cov.var, taxa.results$taxa, taxa.results$lib.size, "BH") 
             
             taxa.outputs$DAoutput <- taxa.con.cov.glm.nb.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
             
           } else if (input$covariates_taxa == "None") {
-            
-            taxa.con.glm.nb.out <- all.taxa.con.glm.nb(taxa.results$con.var, taxa.results$taxa, "BH", rarefy = FALSE) 
+            taxa.con.glm.nb.out <- all.taxa.con.glm.nb(taxa.results$con.var, taxa.results$taxa, taxa.results$lib.size, "BH") 
             
             taxa.outputs$DAoutput <- taxa.con.glm.nb.out
             nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
@@ -3852,12 +3871,12 @@ server = function(input, output, session) {
         } else if (input$chooseMethod_taxa.long == "GLMM (Negative Binomial)") {
           incProgress(5/10, message = "GLMM (Negative Binomial)")
           if (input$covariates_taxa.long == "None") {
-            taxa.bin.glmm.nb.q.out <- all.taxa.bin.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
+            taxa.bin.glmm.nb.q.out <- all.taxa.bin.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, taxa.results$lib.size, multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.glmm.nb.q.out
             
           } else if (input$covariates_taxa.long == "Covariate(s)") {
             
-            taxa.bin.cov.glmm.nb.q.out <- all.taxa.bin.cov.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
+            taxa.bin.cov.glmm.nb.q.out <- all.taxa.bin.cov.glmm.nb(bin.var = taxa.results$bin.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, taxa.results$lib.size, multi.method = "BH")
             taxa.outputs$DAoutputlong <- taxa.bin.cov.glmm.nb.q.out
           }
           nrow <- taxa.forest.plot.pages(taxa.outputs$DAoutputlong, species.include = include)
@@ -4143,7 +4162,7 @@ server = function(input, output, session) {
           incProgress(5/10, message = "GLMM (Negative Binomial)")
           if (input$covariates_taxa.long == "Covariate(s)") {
             
-            taxa.con.cov.glmm.nb.q.out <- all.taxa.con.cov.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
+            taxa.con.cov.glmm.nb.q.out <- all.taxa.con.cov.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, cov.var = taxa.results$cov.var, taxa = taxa.results$taxa, taxa.results$lib.size, multi.method = "BH")
             
             #taxa.data.results$table.out <- taxa.con.cov.glmm.nb.q.out
             taxa.outputs$DAoutputlong <- taxa.con.cov.glmm.nb.q.out
@@ -4152,7 +4171,7 @@ server = function(input, output, session) {
             
           } else if (input$covariates_taxa.long == "None") {
             
-            taxa.con.glmm.nb.q.out <- all.taxa.con.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, multi.method = "BH", rarefy = FALSE)
+            taxa.con.glmm.nb.q.out <- all.taxa.con.glmm.nb(con.var = taxa.results$con.var, id.var = taxa.results$id.var, taxa = taxa.results$taxa, taxa.results$lib.size, multi.method = "BH")
             
             #taxa.data.results$table.out <- taxa.con.glmm.nb.q.out
             taxa.outputs$DAoutputlong <- taxa.con.glmm.nb.q.out
