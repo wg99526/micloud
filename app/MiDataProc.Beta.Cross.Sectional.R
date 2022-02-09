@@ -30,10 +30,7 @@ library(proxy)
 #####################
 
 beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  
+  bin.cat <- levels(as.factor(unlist(sam.dat[,sel.bin.var])))
   return(bin.cat)
 }
 
@@ -66,14 +63,6 @@ beta.bin.cat.recode.func <- function(sam.dat, sel.bin.var = "ecig_status", ori.c
   sam.dat[ind.com,sel.bin.var] <- rename.com
   
   return(sam.dat)
-}
-
-beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  
-  return(bin.cat)
 }
 
 ##################

@@ -76,16 +76,6 @@ taxa.bin.var.func <- function(sam.dat) {
   return(var.names)
 }
 
-taxa.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  if (length(bin.cat) != 2) {
-    stop(paste(sel.bin.var, " is not binary", sep = ""))
-  }
-  return(bin.cat)
-}
-
 taxa.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
   return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))
 }
