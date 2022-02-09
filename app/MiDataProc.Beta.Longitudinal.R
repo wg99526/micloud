@@ -98,14 +98,6 @@ Ds.Ks.func <- function(rare.biom, biom.after.qc) {
 # Data manipulation #
 #####################
 
-beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  
-  return(bin.cat)
-}
-
 beta.bin.cat.ref.ori.func <- function(sam.dat, sel.bin.var = "ecig_status") {
   
   return(levels(as.factor(as.data.frame(as.matrix(sam.dat))[,sel.bin.var])))

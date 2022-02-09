@@ -99,14 +99,6 @@ Ds.Ks.func <- function(rare.biom, biom.after.qc) {
   )
 }
 
-beta.bin.cat.func <- function(sam.dat, sel.bin.var) {
-  bin.var <- unlist(sam.dat[,sel.bin.var])
-  bin.var.no.na <- bin.var[!is.na(bin.var)]
-  bin.cat <- unique(bin.var.no.na)
-  
-  return(bin.cat)
-}
-
 beta.bin.cov.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sel.cov.var, sam.dat, Ds.Ks) {  
   bin.var <- unlist(sam.dat[,sel.bin.var])
   ind.ref <- which(bin.var == sel.ref)
