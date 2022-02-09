@@ -82,19 +82,19 @@ library(glmm)
                               "). The phyloseq object should contain all the four necessary data, feature (OTU or ASV) table, taxonomic table, 
                               metadata/sample information, and phylogenetic tree.", 
                               br(), br(), "Details:", br(), br(), 
-                              "1) The feature (OTU or ASV) table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
-                              (row names are feature (OTU or ASV) IDs and column names are subject IDs).", br(),
-                              "2) The taxonomic table should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
-                              (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                              "1) The feature table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                              (row names are feature IDs and column names are subject IDs).", br(),
+                              "2) The taxonomic table should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                              (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
                               'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
                               "3) The metadata/sample information should contain variables for the subjects about host phenotypes, medical interventions, 
                               disease status or environmental/behavioral factors, where rows are subjects and columns are variables 
                               (row names are subject IDs, and column names are variable names).", br(), 
                               "4) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
-                              The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
-                              "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
-                              The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
-                              MiCloud will analyze only the matched features (OTUs or ASVs) and subjects."
+                              The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                              "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                              The subjects should be matched and identical between feature table and metadata/sample information. 
+                              MiCloud will analyze only the matched features and subjects."
                               , style = "font-size:11pt")
   INPUT_PHYLOSEQ_COMMENT2 = p("You can download example microbiome data 'biom.Rdata' in 'phyloseq' format. The name of the 
                               phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
@@ -106,35 +106,35 @@ library(glmm)
                               " > tax.tab <- tax_table(biom)", br(), 
                               " > tree <- phy_tree(biom)", br(), 
                               " > sam.dat <- sample_data(biom)", br(), br(), 
-                              "You can check if the features (OTUs or ASVs) are matched and identical across feature (OTU or ASV) table, taxonomic table and 
-                              phylogenetic tree, and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information 
+                              "You can check if the features are matched and identical across feature table, taxonomic table and 
+                              phylogenetic tree, and the subjects are matched and identical between feature table and metadata/sample information 
                               using following code.", br(), br(), 
                               " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
                               " > identical(rownames(otu.tab), tree$tip.label)", br(), 
                               " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
   INPUT_INDIVIDUAL_DATA_COMMENT = p("Description:", br(), br(), 
-                                    "1) The feature (OTU or ASV) table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
-                                    (row names are feature (OTU or ASV) IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
-                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features (OTUs or ASVs) and columns are seven taxonomic ranks 
-                                    (row names are feature (OTU or ASV) IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                                    "1) The feature table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                                    (row names are feature IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
+                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                                    (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
                                     'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME.", br(), 
                                     "3) The metadata/sample information (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, 
                                     disease status or environmental/behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and 
                                     column names are variable names).", br(), 
                                     "4) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint 
-                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature (OTU or ASV) IDs.", br(), br(), 
-                                    "* The features (OTUs or ASVs) should be matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree. 
-                                    The subjects should be matched and identical between feature (OTU or ASV) table and metadata/sample information. 
-                                    MiCloud will analyze only the matched features (OTUs or ASVs) and subjects.", style = "font-size:11pt")
-  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature (OTU or ASV) table (otu.tab.txt), 
+                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                                    "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                                    The subjects should be matched and identical between feature table and metadata/sample information. 
+                                    MiCloud will analyze only the matched features and subjects.", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature table (otu.tab.txt), 
                                      taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre).", br(), br(),
                                      "> setwd('/yourdatadirectory/')", br(), br(), 
                                      "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
                                      "> tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)", br(), 
                                      " > sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE) ", br(),
                                      "> tree <- read.tree(file = 'tree.tre')", br(), br(), 
-                                     "You can check if the OTUs are matched and identical across feature (OTU or ASV) table, taxonomic table and phylogenetic tree, 
-                                     and the subjects are matched and identical between feature (OTU or ASV) table and metadata/sample information using following code.", br(), br(), 
+                                     "You can check if the features are matched and identical across feature table, taxonomic table and phylogenetic tree, 
+                                     and the subjects are matched and identical between feature table and metadata/sample information using following code.", br(), br(), 
                                      " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
                                      " > identical(rownames(otu.tab), tree$tip.label)", br(), 
                                      " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
@@ -144,11 +144,12 @@ library(glmm)
   QC_LIBRARY_SIZE_COMMENT1 = p("Remove subjects that have low library sizes (total read counts). Default is 3,000.", style = "font-size:11pt")
   QC_LIBRARY_SIZE_COMMENT2 = p("Library size: The total read count per subject.", style = "font-size:11pt")
   QC_MEAN_PROP_COMMENT1 = p("Remove features (OTUs or ASVs) that have low mean relative abundances (Unit: %). Default is 0.002%.",style = "font-size:11pt")
-  QC_MEAN_PROP_COMMENT2 = p("Mean proportion: The average of relative abundances (i.e., proportions) per feature (OTU or ASV).", style = "font-size:11pt")
+  QC_MEAN_PROP_COMMENT2 = p("Mean proportion: The average of relative abundances (i.e., proportions) per feature.", style = "font-size:11pt")
   QC_TAXA_NAME_COMMENT1 = p('Remove taxonomic names in the taxonomic table that are completely matched with the specified character strings. 
-                            Multiple character strings should be separated by a comma. Default is "", "gut metagenome", "mouse gut metagenome".',style = "font-size:11pt")
+                            Multiple character strings should be separated by a comma. Default is "", "metagenome", "gut metagenome", "mouse gut metagenome".',
+                            style = "font-size:11pt")
   QC_TAXA_NAME_COMMENT2 = p('Remove taxonomic names in the taxonomic table that are partially matched with the specified character strings (i.e., taxonomic names that contain 
-                            the specified character strings). Multiple character strings should be separated by a comma. Default is "uncultured", "incertae", "Incertae", 
+                            the specified character strings). Multiple character strings should be separated by a comma. Default is "uncultured", "incertae", "Incertae",
                             "unidentified", "unclassified", "unknown".',style = "font-size:11pt")
   
   ALPHA_COMMENT = p("Calculate alpha-diversity indices: Richness (Observed), Shannon (Shannon, 1948), Simpson (Simpson, 1949), Inverse Simpson (Simpson, 1949), 
@@ -242,7 +243,10 @@ library(glmm)
                                 sliderInput("slider2", h4(strong("Mean Proportion?")), min = 0, max = 0.1, value = 0.002, step = 0.001,  post  = " %"),
                                 QC_MEAN_PROP_COMMENT1,
                                 QC_MEAN_PROP_COMMENT2,
-                                 
+                                
+                                br(),
+                                p(" ", style = "margin-bottom: -20px;"),
+                                
                                 h4(strong("Erroneous Taxonomic Names?")),
                                 textInput("rem.str", label = "Complete Match", value = ""),
                                 QC_TAXA_NAME_COMMENT1,
