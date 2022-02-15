@@ -1470,6 +1470,8 @@ server = function(input, output, session) {
         chooseData$prim_vars = pri.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con)
         chooseData$tax.tab = tax_table(infile$rare_biom)
         
+        #library.size <- library.size[names(library.size) %in% rownames(rare.sam.dat)]
+        
         output$moreControls <- renderUI({
           tagList(
             box(title = strong("Download Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
@@ -3009,6 +3011,7 @@ server = function(input, output, session) {
         rename.cats_com = taxa.bin_categos[which(taxa.categors != taxa.categos$cat1)]
         
         taxa.bin.cat.ref.ori.out <- taxa.bin.cat.ref.ori.func(chooseData$sam.dat, input$primvar_taxa)
+        taxa.results$lib.size <- taxa.results$lib.size[names(taxa.results$lib.size) %in% rownames(chooseData$sam.dat)]
         
         if (input$include_species.dend == "Phylum - Species") {
           include = TRUE
@@ -3033,6 +3036,7 @@ server = function(input, output, session) {
             if (input$chooseMethod_taxa == "Negative binomial regression") {
               taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
                                                            rename.cats_com, sam_dat, taxa = chooseData$taxa.out[["count"]])
+              
             } else {
               taxa.bin.out <- taxa.bin.cat.ref.united.func(input$primvar_taxa, rename.cats_ref,
                                                            rename.cats_com, sam_dat, taxa = chooseData$taxa.out[[taxa.types$dataType]])
@@ -3246,7 +3250,7 @@ server = function(input, output, session) {
           if (any(!is.na(unlist(chooseData$taxa.names.out$duplicates)))) {
             duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
             taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-            duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+            duplicate.texts <- sum(duplicate.taxa %in% taxon.inplot)
           } else {
             duplicate.texts <- 0
           }
@@ -3313,22 +3317,22 @@ server = function(input, output, session) {
             
             lapply(1:nrow1, function(j) {
               output[[paste0("duplicates", j)]] <- renderPlot({
-                duplicate.list(chooseData$taxa.names.out, include)
+                duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
               })
             })
             
             lapply(1:nrow2, function(j) {
               output[[paste0("duplicates_or", j)]] <- renderPlot({
-                duplicate.list(chooseData$taxa.names.out, include)
+                duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
               })
             })
             
             output$duplicates = renderPlot({
-              duplicate.list(chooseData$taxa.names.out, include)
+              duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
             })
             
             output$duplicates_or = renderPlot({
-              duplicate.list(chooseData$taxa.names.out, include)
+              duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
             })
             
             output$taxa_display_dend = renderUI({
@@ -3371,7 +3375,7 @@ server = function(input, output, session) {
             
             lapply(1:nrow, function(j) {
               output[[paste0("duplicates", j)]] <- renderPlot({
-                duplicate.list(chooseData$taxa.names.out, include)
+                duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
               })
             })
             
@@ -3385,7 +3389,7 @@ server = function(input, output, session) {
             })
             
             output$duplicates = renderPlot({
-              duplicate.list(chooseData$taxa.names.out, include)
+              duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
             })
           } 
         }
@@ -3538,6 +3542,7 @@ server = function(input, output, session) {
         
         taxa_dataConvar <- taxa.results$con.var
         taxa_dataTaxa <- taxa.results$taxa
+        taxa.results$lib.size <- taxa.results$lib.size[names(taxa.results$lib.size) %in% rownames(chooseData$sam.dat)]
         
         if (input$include_species.dend == "Phylum - Species") {
           include = TRUE
@@ -3640,7 +3645,7 @@ server = function(input, output, session) {
         
         lapply(1:nrow, function(j) {
           output[[paste0("duplicates", j)]] <- renderPlot({
-            duplicate.list(chooseData$taxa.names.out, include)
+            duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
           })
         })
         
@@ -3949,7 +3954,7 @@ server = function(input, output, session) {
         
         lapply(1:nrow, function(j) {
           output[[paste0("duplicateslong", j)]] <- renderPlot({
-            duplicate.list(chooseData$taxa.names.out, include)
+            duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
           })
         })
         
@@ -4185,7 +4190,7 @@ server = function(input, output, session) {
           duplicate.taxa <- sapply(strsplit(unlist(chooseData$taxa.names.out$duplicates), " :"),  "[", 1)
           #sum(!is.na(unlist(chooseData$taxa.names.out$duplicates)))
           taxon.inplot <- unlist(lapply(forestplot.data$all.text.tab, `[`, i =, j = 3))
-          duplicate.texts <- sum(taxon.inplot %in% duplicate.taxa)
+          duplicate.texts <- sum(duplicate.taxa %in% taxon.inplot)
         } else {
           duplicate.texts <- 0
         }
@@ -4218,7 +4223,7 @@ server = function(input, output, session) {
         
         lapply(1:nrow, function(j) {
           output[[paste0("duplicateslong", j)]] <- renderPlot({
-            duplicate.list(chooseData$taxa.names.out, include)
+            duplicate.list(duplicate.taxa, taxon.inplot, chooseData$taxa.names.out$duplicates)
           })
         })
         
