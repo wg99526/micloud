@@ -215,12 +215,13 @@ glmm.mirkat.bin.plot <- function(out, beta.bin.id.out) {
     }
     mod <- betadisper(as.dist(beta.bin.id.out$Ds[[i]]), beta.bin.id.out$bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.bin.id.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(beta.bin.id.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(beta.bin.id.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.6)
 }
 
 glmm.mirkat.bin.cov <- function(beta.bin.id.cov.out) {
@@ -241,12 +242,13 @@ glmm.mirkat.bin.cov.plot <- function(out, beta.bin.id.cov.out) {
     }
     mod <- betadisper(as.dist(beta.bin.id.cov.out$Ds[[i]]), beta.bin.id.cov.out$bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.bin.id.cov.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(beta.bin.id.cov.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(beta.bin.id.cov.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.6)
 }
 
 glmm.mirkat.con <- function(beta.con.id.out) {
@@ -276,12 +278,13 @@ glmm.mirkat.con.plot <- function(out, beta.con.id.out) {
     
     mod <- betadisper(as.dist(beta.con.id.out$Ds[[i]]), bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.con.id.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.6)
 }
 
 glmm.mirkat.con.cov <- function(beta.con.id.cov.out) {
@@ -311,12 +314,13 @@ glmm.mirkat.con.cov.plot <- function(out, beta.con.id.cov.out) {
     
     mod <- betadisper(as.dist(beta.con.id.cov.out$Ds[[i]]), bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.con.id.cov.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("aGLMM-MiRKAT: ", p.value.0.1(out$aGLMMMiRKAT), sep=""), bty = "n", cex=1.6)
 }
 
 ###################

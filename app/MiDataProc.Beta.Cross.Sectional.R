@@ -177,12 +177,13 @@ mirkat.bin.plot <- function(out, beta.bin.out) {
     }
     mod <- betadisper(as.dist(beta.bin.out$Ds[[i]]), beta.bin.out$bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.bin.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(beta.bin.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(beta.bin.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.6)
 }
 
 mirkat.bin.cov <- function(beta.bin.cov.out) {
@@ -203,12 +204,13 @@ mirkat.bin.cov.plot <- function(out, beta.bin.cov.out) {
     }
     mod <- betadisper(as.dist(beta.bin.cov.out$Ds[[i]]), beta.bin.cov.out$bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.bin.cov.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(beta.bin.cov.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(beta.bin.cov.out$bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.6)
 }
 
 mirkat.con <- function(beta.con.out) {
@@ -238,12 +240,13 @@ mirkat.con.plot <- function(out, beta.con.out) {
     
     mod <- betadisper(as.dist(beta.con.out$Ds[[i]]), bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.con.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.6)
 }
 
 mirkat.con.cov <- function(beta.con.cov.out) {
@@ -273,12 +276,13 @@ mirkat.con.cov.plot <- function(out, beta.con.cov.out) {
     
     mod <- betadisper(as.dist(beta.con.cov.out$Ds[[i]]), bin.var)
     plot(mod, ellipse = TRUE, hull = FALSE, main = names(beta.con.cov.out$Ds)[i], xlab="PC 1", ylab="PC 2",
-         sub = sub.tit, col = c("blue2", "red2"), cex=1.5)
+         sub=NA, col = c("blue2", "red2"), mgp=c(2.5,1,0), cex=1.7, label.cex=1.3, cex.lab=1.2, cex.main=1.7)
+    mtext(sub.tit, side=1, line=3.8, cex=1.0)
   }
   
   plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.5)
-  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.5)
+  legend("center", title = NULL, legend = levels(bin.var), fil = c("blue2", "red2", cex=2.5, box.lty=0), bty = "n", cex=1.6)
+  legend("bottom", paste("Omnibus MiRKAT: ", p.value.0.1(out$omnibus_p), sep=""), bty = "n", cex=1.6)
 }
 
 ###################
