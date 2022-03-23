@@ -1607,16 +1607,14 @@ server = function(input, output, session) {
           tagList(
             box(title = strong("Download Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
                 span(textOutput("text"), style="font-size:15pt"),
-                p("You can download taxonomic abundance data.",
-                  style = "font-size:11pt"), 
-                h5("Count"),
-                downloadButton("taxadataCount", "Download", width = '50%', style = "color:black; background-color: red3"), br(), 
-                h5("Count (Rarefied)"),
-                downloadButton("taxadataRareCount", "Download", width = '50%', style = "color:black; background-color: red3"), br(), 
-                h5("Proportion"),
-                downloadButton("taxadataProp", "Download", width = '50%', style = "color:black; background-color: red3"), br(), 
-                h5("CLR"),
-                downloadButton("taxadataCLR", "Download", width = '50%', style = "color:black; background-color: red3"), br(), br(),
+                 p("You can download taxonomic abundance data.",
+                  style = "font-size:11pt"),
+                h5("Count", HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), "Count (Rarefied)"),
+                downloadButton("taxadataCount", "Download", width = '50%', style = " background-color: red3"), HTML('&emsp;'),
+                downloadButton("taxadataRareCount", "Download", width = '50%', style = " background-color: red3"), br(), 
+                h5("Proportion", HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), HTML('&nbsp;'), "CLR"),
+                downloadButton("taxadataProp", "Download", width = '50%', style = " background-color: red3"), HTML('&emsp;'),
+                downloadButton("taxadataCLR", "Download", width = '50%', style = " background-color: red3"), br(), br(),
             )
           )
         })
