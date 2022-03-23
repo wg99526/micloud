@@ -440,7 +440,7 @@ alpha.bin.cat.ref.func <- function(sel.bin.var, sel.ref, sel.com, sam.dat, alpha
 }
 
 alpha.ind.sum.func <- function(x) {
-  sum.out <- c(length(x), mean(x), quantile(x))
+  sum.out <- c(length(x), mean(x, na.rm = TRUE), quantile(x, na.rm = TRUE))
   names(sum.out) <-  c("N", "Mean", "Minimum", "1st quartile", "Median", "3rd quartile", "Maximum")
   return(sum.out)
 }
