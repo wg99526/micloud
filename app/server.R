@@ -170,7 +170,7 @@ server = function(input, output, session) {
   taxa.results = reactiveValues(bin.var = NULL, cov.var = NULL, id.var = NULL, taxa = NULL, taxa.bin.sum.out = NULL, con.var = NULL, taxa.con.sum.out = NULL, lib.size = NULL)
   taxa.types = reactiveValues(dataType = NULL, regression = NULL)
   taxa.outputs = reactiveValues(DAoutput = NULL, DAoutput_or = NULL, DAoutputlong = NULL)
-
+  
   rcol = reactiveValues(selected = "lightblue") 
   
   ## options to change theme ####
@@ -385,7 +385,7 @@ server = function(input, output, session) {
             
             req(otu.table, tax.table, sam.data, tree.data)
             if ((ext1 == "txt"| ext1 == "csv" | ext1 == "biom") & (ext2 == "txt" | ext2 == "tsv") &
-               (ext3 == "txt" | ext3 == "csv") & (ext4 == "tre" | ext4 == "nwk")) {
+                (ext3 == "txt" | ext3 == "csv") & (ext4 == "tre" | ext4 == "nwk")) {
               otu.table.path = otu.table$datapath
               tax.table.path = tax.table$datapath
               sam.data.path = sam.data$datapath
@@ -666,8 +666,8 @@ server = function(input, output, session) {
                                  icon = icon("check"), animation = "jelly", status = "primary", width = '80%'),
               
               actionButton("runbtn_bin", (strong("Run!")), class = "btn-info")
-              )
-            })
+            )
+          })
           
           observeEvent(input$covariates,{
             if (input$covariates == "Covariate(s)") {
@@ -1106,7 +1106,7 @@ server = function(input, output, session) {
     })
   })
   observeEvent(chooseData$taxa.out,{
-  
+    
     ################################################################################################
     
     ######################################
@@ -1115,289 +1115,289 @@ server = function(input, output, session) {
     ######################################
     ######################################
     
-      output$primvars_taxa <- renderUI({
-        tagList(
-          prettyRadioButtons("dataType_taxa", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
-                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
-          selectInput("primvar_taxa", label = h4(strong("Primary Variable?", style = "color:black")),
-                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
-      })
-      
-      output$primvars_taxa.long <- renderUI({
-        tagList(
-          prettyRadioButtons("dataType_taxa.long", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
-                             c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
-          selectInput("primvar_taxa.long", label = h4(strong("Primary Variable?", style = "color:black")),
-                      choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
-      })
-      
-      observeEvent(input$dataType_taxa,{
-        if (input$dataType_taxa == "Count") {
-          taxa.types$dataType = "rare.count"
-          taxa.types$regression = "Negative binomial regression"
-        } else if (input$dataType_taxa == "Proportion") {
-          taxa.types$dataType = "imp.prop"
-          taxa.types$regression = "Beta regression"
-        } else if (input$dataType_taxa == "CLR (Default)") {
-          taxa.types$dataType = "clr"
-          taxa.types$regression = "Linear regression"
-        }
-      })
-      
-      observeEvent(input$dataType_taxa.long,{
-        if (input$dataType_taxa.long == "Count") {
-          taxa.types$dataType = "rare.count"
-          taxa.types$regression.long = "GLMM (Negative Binomial)"
-        } else if (input$dataType_taxa.long == "Proportion") {
-          taxa.types$dataType = "imp.prop"
-          taxa.types$regression.long = "GLMM (Beta)"
-        } else if (input$dataType_taxa.long == "CLR (Default)") {
-          taxa.types$dataType = "clr"
-          taxa.types$regression.long = "LMM"
-        }
-      })
-      
-      observeEvent(input$primvar_taxa,{
-        if (input$primvar_taxa %in% chooseData$prim_vars) {
-          is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+    output$primvars_taxa <- renderUI({
+      tagList(
+        prettyRadioButtons("dataType_taxa", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
+                           c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
+        selectInput("primvar_taxa", label = h4(strong("Primary Variable?", style = "color:black")),
+                    choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
+    })
+    
+    output$primvars_taxa.long <- renderUI({
+      tagList(
+        prettyRadioButtons("dataType_taxa.long", label = h4(strong("Data Format?", style = "color:black")), animation = "jelly",
+                           c("CLR (Default)", "Count", "Proportion"), selected = "CLR (Default)",width = '70%'),
+        selectInput("primvar_taxa.long", label = h4(strong("Primary Variable?", style = "color:black")),
+                    choices = chooseData$prim_vars, selected = chooseData$prim_vars[1], width = '70%'))
+    })
+    
+    observeEvent(input$dataType_taxa,{
+      if (input$dataType_taxa == "Count") {
+        taxa.types$dataType = "rare.count"
+        taxa.types$regression = "Negative binomial regression"
+      } else if (input$dataType_taxa == "Proportion") {
+        taxa.types$dataType = "imp.prop"
+        taxa.types$regression = "Beta regression"
+      } else if (input$dataType_taxa == "CLR (Default)") {
+        taxa.types$dataType = "clr"
+        taxa.types$regression = "Linear regression"
+      }
+    })
+    
+    observeEvent(input$dataType_taxa.long,{
+      if (input$dataType_taxa.long == "Count") {
+        taxa.types$dataType = "rare.count"
+        taxa.types$regression.long = "GLMM (Negative Binomial)"
+      } else if (input$dataType_taxa.long == "Proportion") {
+        taxa.types$dataType = "imp.prop"
+        taxa.types$regression.long = "GLMM (Beta)"
+      } else if (input$dataType_taxa.long == "CLR (Default)") {
+        taxa.types$dataType = "clr"
+        taxa.types$regression.long = "LMM"
+      }
+    })
+    
+    observeEvent(input$primvar_taxa,{
+      if (input$primvar_taxa %in% chooseData$prim_vars) {
+        is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+        
+        if (is.results$result == "Binary") {
+          taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[1]
+          taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[2]
           
-          if (is.results$result == "Binary") {
-            taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[1]
-            taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa)[2]
-            
-            output$morePrimvar_opt_taxa <- renderUI({
-              tagList(
-                h4(strong("Rename Categories?", style = "color:black")), 
-                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
-                textInput("taxaCat1", label = (paste0("Reference: ",taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
-                textInput("taxaCat2", label = (paste0("Comparison: ",taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'))
-            }) 
-            
-            ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
-            
-            output$covariates_taxa <- renderUI({
-              tagList(
-                prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
-                
-                shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
-                             prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa, width = '70%'))),
-                
-                uiOutput("chooseTest_taxa"),
-                
-                prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
-                                   c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"), width = '80%'),
-                
-                actionButton("runbtn_bin_taxa", (strong("Run!")), class = "btn-info"))
-            })
-            
-            observeEvent(input$covariates_taxa,{
-              if (input$covariates_taxa == "Covariate(s)") {
-                
-                shinyjs::show("covariates_variables_taxa")
-                
-                observeEvent(input$covariatesOptions_taxa,{
-                  if (!is.null(input$covariatesOptions_taxa)) {
-                    output$chooseTest_taxa <- renderUI({
-                      tagList(
-                        selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
-                                    c("Choose one" = "", taxa.types$regression, "Logistic regression"), selected = taxa.types$regression,
-                                    width = '80%'))
-                    })
-                  } else {
-                    shinyjs::hide("covariates_variables_taxa")
-                    output$chooseTest_taxa <- renderUI({
-                      tagList(
-                        selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
-                                    c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
-                                    selected = "Welch t-test", width = '80%'))
-                    })
-                  }
-                })
-                
-              } else if (input$covariates_taxa == "None") {
-                shinyjs::hide("covariates_variables_taxa")
-                output$chooseTest_taxa <- renderUI({
-                  tagList(
-                    selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
-                                c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
-                                selected = "Welch t-test", width = '80%'))
-                })
-              }
-            })
-            
-          } else if (is.results$result == "Continuous") {
-            
-            output$morePrimvar_opt_taxa <- renderUI({
-              tagList(
-                h4(strong("Rename Primary Variable?", style = "color:black")),
-                p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
-                textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa))
-            })
-            
-            ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
-            
-            output$covariates_taxa <- renderUI({
-              tagList(
-                prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
-                
-                shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
-                             prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa, width = '70%'))),
-                
-                uiOutput("chooseTest_taxa.cont"),
-                
-                prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
-                                   c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"), width = '80%'),
-                
-                actionButton("runbtn_cont_taxa", (strong("Run!")), class = "btn-info"))
-            })
-            
-            observeEvent(input$covariates_taxa,{
-              if (input$covariates_taxa == "Covariate(s)") {
-                shinyjs::show("covariates_variables_taxa")
-              } else if (input$covariates_taxa == "None") {
-                shinyjs::hide("covariates_variables_taxa")
-              }
-              output$chooseTest_taxa.cont <- renderUI({
-                tagList(
-                  selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
-                              c("Choose one" = "", taxa.types$regression), selected = taxa.types$regression, width = '80%'))
+          output$morePrimvar_opt_taxa <- renderUI({
+            tagList(
+              h4(strong("Rename Categories?", style = "color:black")), 
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"),
+              textInput("taxaCat1", label = (paste0("Reference: ",taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
+              textInput("taxaCat2", label = (paste0("Comparison: ",taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'))
+          }) 
+          
+          ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+          
+          output$covariates_taxa <- renderUI({
+            tagList(
+              prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
+                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
+              shinyjs::hidden(
+                shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
+                           prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
+                                               ntselected.prim_vars_taxa, width = '70%'))),
+              
+              uiOutput("chooseTest_taxa"),
+              
+              prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
+                                 c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
+                                 icon = icon("check"), width = '80%'),
+              
+              actionButton("runbtn_bin_taxa", (strong("Run!")), class = "btn-info"))
+          })
+          
+          observeEvent(input$covariates_taxa,{
+            if (input$covariates_taxa == "Covariate(s)") {
+              
+              shinyjs::show("covariates_variables_taxa")
+              
+              observeEvent(input$covariatesOptions_taxa,{
+                if (!is.null(input$covariatesOptions_taxa)) {
+                  output$chooseTest_taxa <- renderUI({
+                    tagList(
+                      selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
+                                  c("Choose one" = "", taxa.types$regression, "Logistic regression"), selected = taxa.types$regression,
+                                  width = '80%'))
+                  })
+                } else {
+                  shinyjs::hide("covariates_variables_taxa")
+                  output$chooseTest_taxa <- renderUI({
+                    tagList(
+                      selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
+                                  c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                                  selected = "Welch t-test", width = '80%'))
+                  })
+                }
               })
-            }) 
-          }
-        }
-      })
-      
-      observeEvent(input$primvar_taxa.long,{
-        if (input$primvar_taxa.long %in% chooseData$prim_vars) {
-          is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
+              
+            } else if (input$covariates_taxa == "None") {
+              shinyjs::hide("covariates_variables_taxa")
+              output$chooseTest_taxa <- renderUI({
+                tagList(
+                  selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")), 
+                              c("Choose one" = "", "Welch t-test", "Wilcoxon rank-sum test",taxa.types$regression, "Logistic regression"),
+                              selected = "Welch t-test", width = '80%'))
+              })
+            }
+          })
           
-          if (is.results$result == "Binary") {
-            
-            taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[1]
-            taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[2]
-            
-            ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
-            
-            output$morePrimvar_opt_taxa.long <- renderUI({
+        } else if (is.results$result == "Continuous") {
+          
+          output$morePrimvar_opt_taxa <- renderUI({
+            tagList(
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa))
+          })
+          
+          ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa)
+          
+          output$covariates_taxa <- renderUI({
+            tagList(
+              prettyRadioButtons("covariates_taxa", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
+                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
+              
+              shinyjs::hidden(
+                shiny::div(id = "covariates_variables_taxa", style = "margin-left: 2%",
+                           prettyCheckboxGroup("covariatesOptions_taxa"," Please select covariate(s)", status = "primary",
+                                               ntselected.prim_vars_taxa, width = '70%'))),
+              
+              uiOutput("chooseTest_taxa.cont"),
+              
+              prettyRadioButtons("include_species.dend", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
+                                 c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
+                                 icon = icon("check"), width = '80%'),
+              
+              actionButton("runbtn_cont_taxa", (strong("Run!")), class = "btn-info"))
+          })
+          
+          observeEvent(input$covariates_taxa,{
+            if (input$covariates_taxa == "Covariate(s)") {
+              shinyjs::show("covariates_variables_taxa")
+            } else if (input$covariates_taxa == "None") {
+              shinyjs::hide("covariates_variables_taxa")
+            }
+            output$chooseTest_taxa.cont <- renderUI({
               tagList(
-                h4(strong("Rename Categories?", style = "color:black")), 
-                p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size: 11pt"),
-                textInput("taxaCat1", label = (paste0("Reference: ", taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
-                textInput("taxaCat2", label = (paste0("Comparison: ", taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'),
-                
-                br(),
-                p(" ", style = "margin-bottom: -20px;"),
-                
-                h4(strong("Cluster Variable?", style = "color:black")), 
-                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
+                selectInput("chooseMethod_taxa", label = h4(strong("Method?", style = "color:black")),
+                            c("Choose one" = "", taxa.types$regression), selected = taxa.types$regression, width = '80%'))
+            })
+          }) 
+        }
+      }
+    })
+    
+    observeEvent(input$primvar_taxa.long,{
+      if (input$primvar_taxa.long %in% chooseData$prim_vars) {
+        is.results$result = is.bin.con.pri(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
+        
+        if (is.results$result == "Binary") {
+          
+          taxa.categos$cat1 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[1]
+          taxa.categos$cat2 = taxa.bin.cat.func(chooseData$sam.dat, input$primvar_taxa.long)[2]
+          
+          ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
+          
+          output$morePrimvar_opt_taxa.long <- renderUI({
+            tagList(
+              h4(strong("Rename Categories?", style = "color:black")), 
+              p("You can rename the categories of primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size: 11pt"),
+              textInput("taxaCat1", label = (paste0("Reference: ", taxa.categos$cat1)), value = taxa.categos$cat1, width = '80%'),
+              textInput("taxaCat2", label = (paste0("Comparison: ", taxa.categos$cat2)), value = taxa.categos$cat2, width = '80%'),
+              
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
+              
+              h4(strong("Cluster Variable?", style = "color:black")), 
+              p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
                   designs or family IDs for family-based studies.", style = "font-size:11pt"),
-                prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
-                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
-            })
+              prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
+          })
+          
+          output$covariates_taxa.long <- renderUI({
+            ntselected.prim_vars_taxa2 <- ntselected.prim_vars_taxa[which(ntselected.prim_vars_taxa != input$clustervar_taxa)]
             
-            output$covariates_taxa.long <- renderUI({
-              ntselected.prim_vars_taxa2 <- ntselected.prim_vars_taxa[which(ntselected.prim_vars_taxa != input$clustervar_taxa)]
+            tagList(
+              prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
+                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
               
+              shinyjs::hidden(
+                shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
+                           prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
+                                               ntselected.prim_vars_taxa2, width = '70%'))),
+              
+              uiOutput("chooseTest_taxa.long"),
+              
+              prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
+                                 c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
+                                 icon = icon("check"), width = '80%'),
+              
+              actionButton("runbtn_bin_taxa.long", (strong("Run!")), class = "btn-info"))
+          })
+          
+          observeEvent(input$covariates_taxa.long,{
+            if (input$covariates_taxa.long == "Covariate(s)") {
+              shinyjs::show("covariates_variables_taxa.long")
+            } else {
+              shinyjs::hide("covariates_variables_taxa.long")
+            }
+            output$chooseTest_taxa.long <- renderUI({
               tagList(
-                prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
-                
-                shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
-                             prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa2, width = '70%'))),
-                
-                uiOutput("chooseTest_taxa.long"),
-                
-                prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
-                                   c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"), width = '80%'),
-                
-                actionButton("runbtn_bin_taxa.long", (strong("Run!")), class = "btn-info"))
+                selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
+                            c("Choose one" = "",
+                              taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"),
+                            selected = taxa.types$regression.long,
+                            width = '80%')
+              )
             })
-            
-            observeEvent(input$covariates_taxa.long,{
-              if (input$covariates_taxa.long == "Covariate(s)") {
-                shinyjs::show("covariates_variables_taxa.long")
-              } else {
-                shinyjs::hide("covariates_variables_taxa.long")
-              }
-              output$chooseTest_taxa.long <- renderUI({
-                tagList(
-                  selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
-                              c("Choose one" = "",
-                                taxa.types$regression.long, "GLMM (Binomial)", "GEE (Binomial)"),
-                              selected = taxa.types$regression.long,
-                              width = '80%')
-                )
-              })
-            })
-            
-          } else if (is.results$result == "Continuous") {
-            
-            ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
-            
-            output$morePrimvar_opt_taxa.long <- renderUI({
-              tagList(
-                h4(strong("Rename Primary Variable?", style = "color:black")),
-                p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
-                textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa.long),
-                
-                br(),
-                p(" ", style = "margin-bottom: -20px;"),
-                
-                h4(strong("Cluster Variable?", style = "color:black")), 
-                p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
+          })
+          
+        } else if (is.results$result == "Continuous") {
+          
+          ntselected.prim_vars_taxa = cov.func(chooseData$sam.dat, chooseData$mon.sin.rev.bin.con, input$primvar_taxa.long)
+          
+          output$morePrimvar_opt_taxa.long <- renderUI({
+            tagList(
+              h4(strong("Rename Primary Variable?", style = "color:black")),
+              p("You can rename the primary variable. MiCloud keeps up to 8 characters on graphs.", style = "font-size:11pt"), 
+              textInput("rename.con.var_taxa", label = NULL, value = input$primvar_taxa.long),
+              
+              br(),
+              p(" ", style = "margin-bottom: -20px;"),
+              
+              h4(strong("Cluster Variable?", style = "color:black")), 
+              p("Please select the cluster (group) variable. An example cluster variable contains subject IDs for repeated measures 
                   designs or family IDs for family-based studies.", style = "font-family: 'Verdana'; font-size:10pt"),
-                prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
-                                   ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
-            })
+              prettyRadioButtons("clustervar_taxa",label = NULL, status = "primary", icon = icon("check"), animation = "jelly",
+                                 ntselected.prim_vars_taxa, selected = ntselected.prim_vars_taxa[1], width = '70%'))
+          })
+          
+          output$covariates_taxa.long <- renderUI({
+            ntselected.prim_vars_taxa2 <- ntselected.prim_vars_taxa[which(ntselected.prim_vars_taxa != input$clustervar_taxa)]
             
-            output$covariates_taxa.long <- renderUI({
-              ntselected.prim_vars_taxa2 <- ntselected.prim_vars_taxa[which(ntselected.prim_vars_taxa != input$clustervar_taxa)]
+            tagList(
+              prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
+                                 c("None", "Covariate(s)"), selected = "None",width = '70%'),
               
+              shinyjs::hidden(
+                shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
+                           prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
+                                               ntselected.prim_vars_taxa2, width = '70%'))),
+              
+              uiOutput("chooseTest_taxa.cont.long"),
+              
+              prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
+                                 c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
+                                 icon = icon("check"), width = '80%'),
+              
+              actionButton("runbtn_cont_taxa.long", (strong("Run!")), class = "btn-info"))
+          })
+          
+          observeEvent(input$covariates_taxa.long,{
+            if (input$covariates_taxa.long == "Covariate(s)") {
+              shinyjs::show("covariates_variables_taxa.long")
+            } else if (input$covariates_taxa.long == "None") {
+              shinyjs::hide("covariates_variables_taxa.long")
+            }
+            output$chooseTest_taxa.cont.long <- renderUI({
               tagList(
-                prettyRadioButtons("covariates_taxa.long", label = h4(strong("Covariate(s)?", style = "color:black")), animation = "jelly",
-                                   c("None", "Covariate(s)"), selected = "None",width = '70%'),
-                
-                shinyjs::hidden(
-                  shiny::div(id = "covariates_variables_taxa.long", style = "margin-left: 2%",
-                             prettyCheckboxGroup("covariatesOptions_taxa.long"," Please select covariate(s)", status = "primary",
-                                                 ntselected.prim_vars_taxa2, width = '70%'))),
-                
-                uiOutput("chooseTest_taxa.cont.long"),
-                
-                prettyRadioButtons("include_species.dend.long", label = h4(strong("Taxonomic Ranks?", style = "color:black")), animation = "jelly",
-                                   c("Phylum - Genus (Default)", "Phylum - Species"), selected = "Phylum - Genus (Default)",
-                                   icon = icon("check"), width = '80%'),
-                
-                actionButton("runbtn_cont_taxa.long", (strong("Run!")), class = "btn-info"))
+                selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
+                            c("Choose one" = "", taxa.types$regression.long),
+                            selected = taxa.types$regression.long, width = '80%'))
             })
-            
-            observeEvent(input$covariates_taxa.long,{
-              if (input$covariates_taxa.long == "Covariate(s)") {
-                shinyjs::show("covariates_variables_taxa.long")
-              } else if (input$covariates_taxa.long == "None") {
-                shinyjs::hide("covariates_variables_taxa.long")
-              }
-              output$chooseTest_taxa.cont.long <- renderUI({
-                tagList(
-                  selectInput("chooseMethod_taxa.long", label = h4(strong("Method?", style = "color:black")),
-                              c("Choose one" = "", taxa.types$regression.long),
-                              selected = taxa.types$regression.long, width = '80%'))
-              })
-            })
-          }
+          })
         }
-      })
+      }
+    })
     
   })
   #########################################################################################################
@@ -1433,7 +1433,7 @@ server = function(input, output, session) {
           validate(
             if (sum(ind) == 0) {
               showNotification(h4(paste("Error: Please select valid Kingdom. Available kingdoms are:", 
-                                  paste(c(na.omit(unique(tax.tab[,1])) ,"and all"), collapse = ", "))),
+                                        paste(c(na.omit(unique(tax.tab[,1])) ,"and all"), collapse = ", "))),
                                type = "error")
             } else {
               NULL
@@ -1607,7 +1607,7 @@ server = function(input, output, session) {
           tagList(
             box(title = strong("Download Data", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
                 span(textOutput("text"), style="font-size:15pt"),
-                 p("You can download taxonomic abundance data.",
+                p("You can download taxonomic abundance data.",
                   style = "font-size:11pt"),
                 h5("Count", HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), HTML('&emsp;'), "Count (Rarefied)"),
                 downloadButton("taxadataCount", "Download", width = '50%', style = " background-color: red3"), HTML('&emsp;'),
@@ -1923,7 +1923,7 @@ server = function(input, output, session) {
             )
           })
         }
-
+        
         shinyjs::enable("runbtn_bin")
         shinyjs::enable("primvar")
         shinyjs::enable("chooseAdjustment")
@@ -2268,7 +2268,7 @@ server = function(input, output, session) {
           }
         )
         
-              
+        
         output$graph_plotslong = renderPlot({
           alpha.forest.lmer.plot(data.alphaBin_res$data.output, multi.test.long$boolval)
         })
@@ -2337,7 +2337,7 @@ server = function(input, output, session) {
         
         if (input$chooseMethodlong_cont == "LMM") {
           if (input$covariates_contlong == "None") {
-          incProgress(3/10, message = "LMM without Covariate(s)")
+            incProgress(3/10, message = "LMM without Covariate(s)")
             
             data.results.cont_long$table_p.out = alpha.lmer.con.id.func(con.var = alpha.noncovs_res$con.var, 
                                                                         id.var = alpha.noncovs_res$id.var,
@@ -2521,15 +2521,15 @@ server = function(input, output, session) {
           )
         })
         
-        if (isolate(input$beta_covariates_bin) == "None") {
+        if (input$beta_covariates_bin == "None") {
           beta.down.results$CS = mirkat.bin(beta.data.results$data.q.out)
           output$beta_graph_plots.bin = renderPlot({
-            mirkat.bin.plot(beta.down.results$CS, beta.data.results$data.q.out)
+            isolate(mirkat.bin.plot(beta.down.results$CS, beta.data.results$data.q.out))
           })
-        } else if (isolate(input$beta_covariates_bin) == "Covariate(s)") {
+        } else if (input$beta_covariates_bin == "Covariate(s)") {
           beta.down.results$CS = mirkat.bin.cov(beta.data.results$data.q.out)
           output$beta_graph_plots.bin = renderPlot({
-            mirkat.bin.cov.plot(beta.down.results$CS, beta.data.results$data.q.out)
+            isolate(mirkat.bin.cov.plot(beta.down.results$CS, beta.data.results$data.q.out))
           })
         }
         
@@ -2641,15 +2641,15 @@ server = function(input, output, session) {
                      )
                    })
                    
-                   if (isolate(input$beta.covariates_cont) == "None") {
+                   if (input$beta.covariates_cont == "None") {
                      beta.down.results$CS = mirkat.con(beta.resultscont$beta.cont.out)
                      output$beta_graph_plots.cont = renderPlot({
-                       mirkat.con.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)
+                       isolate(mirkat.con.plot(beta.down.results$CS, beta.resultscont$beta.cont.out))
                      })
-                   } else if (isolate(input$beta.covariates_cont) == "Covariate(s)") {
+                   } else if (input$beta.covariates_cont == "Covariate(s)") {
                      beta.down.results$CS = mirkat.con.cov(beta.resultscont$beta.cont.out)
                      output$beta_graph_plots.cont = renderPlot({
-                       mirkat.con.cov.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)
+                       isolate(mirkat.con.cov.plot(beta.down.results$CS, beta.resultscont$beta.cont.out))
                      })
                    }
                    
@@ -2790,18 +2790,18 @@ server = function(input, output, session) {
           )
         })
         
-        if (isolate(input$beta_covariates_bin.long) == "None") {
+        if (input$beta_covariates_bin.long == "None") {
           beta.down.results$LONG = glmm.mirkat.bin(beta.data.results_long$beta.bin.out)
           output$beta_graph_plots.bin_long = renderPlot({
-            glmm.mirkat.bin.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)
+            isolate(glmm.mirkat.bin.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out))
           })
-        } else if (isolate(input$beta_covariates_bin.long) == "Covariate(s)") {
+        } else if (input$beta_covariates_bin.long == "Covariate(s)") {
           beta.down.results$LONG = glmm.mirkat.bin.cov(beta.data.results_long$beta.bin.out)
           output$beta_graph_plots.bin_long = renderPlot({
-            glmm.mirkat.bin.cov.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)
+            isolate(glmm.mirkat.bin.cov.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out))
           })
         }
-
+        
         output$beta_downloadTablelong = renderUI({
           tagList(
             box(title = strong("Download Output Table", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
@@ -2916,15 +2916,15 @@ server = function(input, output, session) {
           )
         })
         
-        if (isolate(input$beta.covariates_contLong) == "None") {
+        if (input$beta.covariates_contLong == "None") {
           beta.down.results$LONG = glmm.mirkat.con(beta.con.id.out = beta.resultscon_long$beta.con.out)
           output$beta_graph_plots.conLong = renderPlot({
-            glmm.mirkat.con.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)
+            isolate(glmm.mirkat.con.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out))
           })
-        } else if (isolate(input$beta.covariates_contLong) == "Covariate(s)") {
+        } else if (input$beta.covariates_contLong == "Covariate(s)") {
           beta.down.results$LONG = glmm.mirkat.con.cov(beta.con.id.cov.out = beta.resultscon_long$beta.con.out) 
           output$beta_graph_plots.conLong = renderPlot({
-            glmm.mirkat.con.cov.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)
+            isolate(glmm.mirkat.con.cov.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out))
           })
         }
         
@@ -3222,7 +3222,7 @@ server = function(input, output, session) {
               
               taxa.outputs$DAoutput_or <- taxa.logit.cov.q.out
               taxa.outputs$DAoutput <- taxa.logit.reg.coef.cov.q.out
-
+              
               nrow1 <- taxa.forest.plot.pages(taxa.outputs$DAoutput, species.include = include)
               nrow2 <- taxa.forest.plot.pages(taxa.outputs$DAoutput_or, species.include = include)
               
@@ -3612,7 +3612,7 @@ server = function(input, output, session) {
         } else {
           duplicate.texts <- 0
         }
-
+        
         incProgress(2/10, message = "Displaying Results in progress")
         
         if (duplicate.texts>0) {
@@ -3752,7 +3752,7 @@ server = function(input, output, session) {
             )
           })
         }
-
+        
         delay(1000, shinyjs::enable("runbtn_cont_taxa"))
         delay(1000, shinyjs::enable("dataType_taxa"))
         delay(1000, shinyjs::enable("primvar_taxa"))
@@ -4059,7 +4059,7 @@ server = function(input, output, session) {
             )
           })
         }
-
+        
         shinyjs::enable("runbtn_bin_taxa.long")
         shinyjs::enable("dataType_taxa.long")
         shinyjs::enable("primvar_taxa.long")
@@ -4321,5 +4321,4 @@ server = function(input, output, session) {
       }
     )
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
-  
 }
