@@ -235,7 +235,9 @@ server = function(input, output, session) {
                 downloadButton("downloadData", "Shotgun", width = '30%', style = "color:black; background-color: red2"),
                 br(),br(),
                 INPUT_PHYLOSEQ_COMMENT2
-            )
+            ),
+            box(title = strong("External Resource", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                EXTERNAL_RESOURCE_COMMENT)
           )
         })
       } else if (input$inputOption == "Individual Data") {
@@ -273,7 +275,9 @@ server = function(input, output, session) {
                 downloadButton("downloadZip", "Shotgun", width = '30%', style = "color:black; background-color: red2"),
                 br(),br(),
                 INPUT_INDIVIDUAL_DATA_COMMENT2
-            )
+            ),
+            box(title = strong("External Resource", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                EXTERNAL_RESOURCE_COMMENT)
           )
         })
       }
