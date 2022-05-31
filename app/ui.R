@@ -115,7 +115,6 @@ library(glmm)
   DATA_TRANSFORM_REFERENCE = p("1. Aitchison J. The statistical analysis of compositional data. J R Statist Soc B. 1982;44:2:139-77")
 }
 
-# UI
 {
   ui = dashboardPage(
     title = "MiCloud",
@@ -164,188 +163,188 @@ library(glmm)
                          selectInput("inputOption", h4(strong("Data Type?")), c("Choose one" = "", "Phyloseq", "Individual Data"), width = '30%'),
                          div(id = "optionsInfo", tags$p("You can choose phyloseq or individual data.", style = "font-size:11pt"), style = "margin-top: -15px"),
                          uiOutput("moreOptions"))),
-                 column(width = 6, style='padding-left:0px', uiOutput("addDownloadinfo"))),
-         
-         ##### QC ####
-         tabItem(tabName = "step2", br(), 
-                 sidebarLayout(
-                   position = "left",
-                   sidebarPanel(width = 3,
-                                textInput("kingdom", h4(strong("Bacteria?")), value = "Bacteria"),
-                                QC_KINGDOM_COMMENT,
-                                tags$style(type = 'text/css', '#slider1 .irs-grid-text {font-size: 1px}'),
-                                tags$style(type = 'text/css', '#slider2 .irs-grid-text {font-size: 1px}'), 
-                                 
-                                sliderInput("slider1", h4(strong("Library Size?")), min=0, max=10000, value = 3000, step = 1000),
-                                QC_LIBRARY_SIZE_COMMENT1,
-                                QC_LIBRARY_SIZE_COMMENT2,
-                                 
-                                sliderInput("slider2", h4(strong("Mean Proportion?")), min = 0, max = 0.1, value = 0.002, step = 0.001,  post  = " %"),
-                                QC_MEAN_PROP_COMMENT1,
-                                QC_MEAN_PROP_COMMENT2,
-                                
-                                br(),
-                                p(" ", style = "margin-bottom: -20px;"),
-                                
-                                h4(strong("Erroneous Taxonomic Names?")),
-                                textInput("rem.str", label = "Complete Match", value = ""),
-                                QC_TAXA_NAME_COMMENT1,
-                                 
-                                textInput("part.rem.str", label = "Partial Match", value = ""),
-                                QC_TAXA_NAME_COMMENT2,
-                                 
-                                actionButton("run", (strong("Run!")), class = "btn-info"), br(), br(),
-                                uiOutput("moreControls")),
-                   mainPanel(width = 9,
-                             fluidRow(width = 12,
-                                      status = "primary", solidHeader = TRUE, 
-                                      valueBoxOutput("sample_Size", width = 3),
-                                      valueBoxOutput("OTUs_Size", width = 3),
-                                      valueBoxOutput("phyla", width = 3),
-                                      valueBoxOutput("classes", width = 3)),
-                             fluidRow(width = 12, 
-                                      status = "primary", solidHeader = TRUE,
-                                      valueBoxOutput("orders", width = 3),
-                                      valueBoxOutput("families", width = 3),
-                                      valueBoxOutput("genera", width = 3),
-                                      valueBoxOutput("species", width = 3)),
-                             fluidRow(style = "position:relative",
-                                      tabBox(width = 6, title = strong("Library Size", style = "color:black"), 
-                                             tabPanel("Histogram",
-                                                      plotlyOutput("hist"),
-                                                      sliderInput("binwidth", "# of Bins:",min = 0, max = 100, value = 50, width = "100%"),
-                                                      chooseSliderSkin("Round", color = "#112446")),
-                                             tabPanel("Box Plot", 
-                                                      plotlyOutput("boxplot"))),
-                                      tabBox(width = 6, title = strong("Mean Proportion", style = "color:black"), 
-                                             tabPanel("Histogram",
-                                                      plotlyOutput("hist2"),
-                                                      sliderInput("binwidth2", "# of Bins:",min = 0, max = 100, value = 50, width = "100%"),
-                                                      chooseSliderSkin("Round", color = "#112446")),
-                                             tabPanel("Box Plot",
-                                                      plotlyOutput("boxplot2"))))))),
-         
-         ##### DIVERSITY Calculation ####
-         tabItem(tabName = "divCalculation", br(),
-                 column(width = 6, style = 'padding-left:0px',
-                        box(title = strong("Diversity Calculation", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                            ALPHA_COMMENT, 
-                            BETA_COMMENT, 
-                            actionButton("divCalcRun", (strong("Run!")), class = "btn-info")),
-                        uiOutput("divCalcDownload")),
-                 column(width = 6, style='padding-left:0px',
-                        box(title = strong("References", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                            p("Alpha Diversity", style = "font-size:12pt"),
-                            ALPHA_REFERENCES,
-                            p("Beta Diversity", style = "font-size:12pt"),
-                            BETA_REFERENCES))),
-         
-         ##### ALPHA DIVERSITY ####
-         tabItem(tabName = "alphaDivanalysis", br(),
-                 fluidRow(
-                   tabBox(width = 12,
-                          tabPanel(
-                            title ="Cross-Sectional",
-                            sidebarLayout(
-                              position = "left",
-                              sidebarPanel(width = 3,
-                                           uiOutput("primvars"),
-                                           uiOutput("prim_vars_types"),
-                                           uiOutput("covariates"), br(), 
-                                           uiOutput("alpha_downloadTable"),
-                                           uiOutput("alpha_references")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12, 
-                                                 uiOutput("alpha_display_results"))))),
-                          tabPanel(
-                            title ="Longitudinal", 
-                            sidebarLayout(
-                              position = "left",
-                              sidebarPanel(width = 3, 
-                                           uiOutput("primvars_long"),
-                                           uiOutput("prim_vars_types_long"),
-                                           uiOutput("covariates_long"), br(), 
-                                           uiOutput("alpha_downloadTablelong"),
-                                           uiOutput("alpha_references_long")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12, 
-                                                 uiOutput("alpha_display_resultslong")))))))),
-         
-         ##### BETA DIVERSITY ####
-         tabItem(tabName = "betaDivanalysis", br(),
-                 fluidRow(
-                   tabBox(width = 12,
-                          tabPanel(
-                            title ="Cross-Sectional",
-                            sidebarLayout(
-                              position = "left",
-                              sidebarPanel(width = 3,
-                                           uiOutput("beta_primvar_cross"),
-                                           uiOutput("beta_prim_vars_types_cross"),
-                                           uiOutput("beta_covariates_cross"), br(), 
-                                           uiOutput("beta_downloadTable"),
-                                           uiOutput("beta_references")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12, 
-                                                 uiOutput("beta_display_results_cross"))))),
-                          tabPanel(
-                            title ="Longitudinal",
-                            sidebarLayout(
-                              position = "left",
-                              sidebarPanel(width = 3,
-                                           uiOutput("beta_primvars_long"),
-                                           uiOutput("beta_prim_vars_types_long"),
-                                           uiOutput("beta_covariates_long"), br(), 
-                                           uiOutput("beta_downloadTablelong"),
-                                           uiOutput("beta_references_long")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12, 
-                                                 uiOutput("beta_display_resultslong")))))))),
-         
-         ##### Data Transformation ####
-         tabItem(tabName = "dataTransform", br(),
-                 column(width = 6, style='padding-left:0px',
-                        box(title = strong("Data Transformation", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                            DATA_TRANSFORM_COMMENT,
-                            actionButton("datTransRun", (strong("Run!")), class = "btn-info") ),
-                        uiOutput("datTransDownload")),
-                 column(width = 6, style='padding-left:0px', 
-                        box(title = strong("References", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
-                            DATA_TRANSFORM_REFERENCE))),
-         
-         ##### Taxa Analysis ####
-         tabItem(tabName = "taxaAnalysis", br(),
-                 fluidRow(
-                   tabBox(width = 12,
-                          tabPanel(
-                            title = "Cross-Sectional",
-                            sidebarLayout( 
-                              position = "left",
-                              sidebarPanel(width = 3,
-                                           uiOutput("primvars_taxa"),
-                                           uiOutput("morePrimvar_opt_taxa"),
-                                           uiOutput("covariates_taxa"), br(),
-                                           uiOutput("downloadTable_taxa"),
-                                           uiOutput("taxa_references")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12, 
-                                                 div(style='height:800px;overflow-y: scroll;', uiOutput("taxa_display")), br(),br(),
-                                                 uiOutput("taxa_display_dend"))))),
-                          tabPanel(
-                            title = "Longitudinal",
-                            sidebarLayout( 
-                              position = "left",
-                              sidebarPanel(width = 3,
-                                           uiOutput("primvars_taxa.long"),
-                                           uiOutput("morePrimvar_opt_taxa.long"),
-                                           uiOutput("covariates_taxa.long"), br(),
-                                           uiOutput("downloadTable_taxalong"),
-                                           uiOutput("taxa_references_long")),
-                              mainPanel(width = 9,
-                                        fluidRow(width = 12,
-                                                 div(style='height:800px;overflow-y: scroll;', uiOutput("taxa_displaylong")), br(),br(),
-                                                 uiOutput("taxa_displaylongd"))))))))
-        )
+                column(width = 6, style='padding-left:0px', uiOutput("addDownloadinfo"))),
+        
+        ##### QC ####
+        tabItem(tabName = "step2", br(), 
+                sidebarLayout(
+                  position = "left",
+                  sidebarPanel(width = 3,
+                               textInput("kingdom", h4(strong("Bacteria?")), value = "Bacteria"),
+                               QC_KINGDOM_COMMENT,
+                               tags$style(type = 'text/css', '#slider1 .irs-grid-text {font-size: 1px}'),
+                               tags$style(type = 'text/css', '#slider2 .irs-grid-text {font-size: 1px}'), 
+                               
+                               sliderInput("slider1", h4(strong("Library Size?")), min=0, max=10000, value = 3000, step = 1000),
+                               QC_LIBRARY_SIZE_COMMENT1,
+                               QC_LIBRARY_SIZE_COMMENT2,
+                               
+                               sliderInput("slider2", h4(strong("Mean Proportion?")), min = 0, max = 0.1, value = 0.002, step = 0.001,  post  = " %"),
+                               QC_MEAN_PROP_COMMENT1,
+                               QC_MEAN_PROP_COMMENT2,
+                               
+                               br(),
+                               p(" ", style = "margin-bottom: -20px;"),
+                               
+                               h4(strong("Erroneous Taxonomic Names?")),
+                               textInput("rem.str", label = "Complete Match", value = ""),
+                               QC_TAXA_NAME_COMMENT1,
+                               
+                               textInput("part.rem.str", label = "Partial Match", value = ""),
+                               QC_TAXA_NAME_COMMENT2,
+                               
+                               actionButton("run", (strong("Run!")), class = "btn-info"), br(), br(),
+                               uiOutput("moreControls")),
+                  mainPanel(width = 9,
+                            fluidRow(width = 12,
+                                     status = "primary", solidHeader = TRUE, 
+                                     valueBoxOutput("sample_Size", width = 3),
+                                     valueBoxOutput("OTUs_Size", width = 3),
+                                     valueBoxOutput("phyla", width = 3),
+                                     valueBoxOutput("classes", width = 3)),
+                            fluidRow(width = 12, 
+                                     status = "primary", solidHeader = TRUE,
+                                     valueBoxOutput("orders", width = 3),
+                                     valueBoxOutput("families", width = 3),
+                                     valueBoxOutput("genera", width = 3),
+                                     valueBoxOutput("species", width = 3)),
+                            fluidRow(style = "position:relative",
+                                     tabBox(width = 6, title = strong("Library Size", style = "color:black"), 
+                                            tabPanel("Histogram",
+                                                     plotlyOutput("hist"),
+                                                     sliderInput("binwidth", "# of Bins:",min = 0, max = 100, value = 50, width = "100%"),
+                                                     chooseSliderSkin("Round", color = "#112446")),
+                                            tabPanel("Box Plot", 
+                                                     plotlyOutput("boxplot"))),
+                                     tabBox(width = 6, title = strong("Mean Proportion", style = "color:black"), 
+                                            tabPanel("Histogram",
+                                                     plotlyOutput("hist2"),
+                                                     sliderInput("binwidth2", "# of Bins:",min = 0, max = 100, value = 50, width = "100%"),
+                                                     chooseSliderSkin("Round", color = "#112446")),
+                                            tabPanel("Box Plot",
+                                                     plotlyOutput("boxplot2"))))))),
+        
+        ##### DIVERSITY Calculation ####
+        tabItem(tabName = "divCalculation", br(),
+                column(width = 6, style = 'padding-left:0px',
+                       box(title = strong("Diversity Calculation", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                           ALPHA_COMMENT, 
+                           BETA_COMMENT, 
+                           actionButton("divCalcRun", (strong("Run!")), class = "btn-info")),
+                       uiOutput("divCalcDownload")),
+                column(width = 6, style='padding-left:0px',
+                       box(title = strong("References", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                           p("Alpha Diversity", style = "font-size:12pt"),
+                           ALPHA_REFERENCES,
+                           p("Beta Diversity", style = "font-size:12pt"),
+                           BETA_REFERENCES))),
+        
+        ##### ALPHA DIVERSITY ####
+        tabItem(tabName = "alphaDivanalysis", br(),
+                fluidRow(
+                  tabBox(width = 12,
+                         tabPanel(
+                           title ="Cross-Sectional",
+                           sidebarLayout(
+                             position = "left",
+                             sidebarPanel(width = 3,
+                                          uiOutput("primvars"),
+                                          uiOutput("prim_vars_types"),
+                                          uiOutput("covariates"), br(), 
+                                          uiOutput("alpha_downloadTable"),
+                                          uiOutput("alpha_references")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12, 
+                                                uiOutput("alpha_display_results"))))),
+                         tabPanel(
+                           title ="Longitudinal", 
+                           sidebarLayout(
+                             position = "left",
+                             sidebarPanel(width = 3, 
+                                          uiOutput("primvars_long"),
+                                          uiOutput("prim_vars_types_long"),
+                                          uiOutput("covariates_long"), br(), 
+                                          uiOutput("alpha_downloadTablelong"),
+                                          uiOutput("alpha_references_long")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12, 
+                                                uiOutput("alpha_display_resultslong")))))))),
+        
+        ##### BETA DIVERSITY ####
+        tabItem(tabName = "betaDivanalysis", br(),
+                fluidRow(
+                  tabBox(width = 12,
+                         tabPanel(
+                           title ="Cross-Sectional",
+                           sidebarLayout(
+                             position = "left",
+                             sidebarPanel(width = 3,
+                                          uiOutput("beta_primvar_cross"),
+                                          uiOutput("beta_prim_vars_types_cross"),
+                                          uiOutput("beta_covariates_cross"), br(), 
+                                          uiOutput("beta_downloadTable"),
+                                          uiOutput("beta_references")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12, 
+                                                uiOutput("beta_display_results_cross"))))),
+                         tabPanel(
+                           title ="Longitudinal",
+                           sidebarLayout(
+                             position = "left",
+                             sidebarPanel(width = 3,
+                                          uiOutput("beta_primvars_long"),
+                                          uiOutput("beta_prim_vars_types_long"),
+                                          uiOutput("beta_covariates_long"), br(), 
+                                          uiOutput("beta_downloadTablelong"),
+                                          uiOutput("beta_references_long")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12, 
+                                                uiOutput("beta_display_resultslong")))))))),
+        
+        ##### Data Transformation ####
+        tabItem(tabName = "dataTransform", br(),
+                column(width = 6, style='padding-left:0px',
+                       box(title = strong("Data Transformation", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                           DATA_TRANSFORM_COMMENT,
+                           actionButton("datTransRun", (strong("Run!")), class = "btn-info") ),
+                       uiOutput("datTransDownload")),
+                column(width = 6, style='padding-left:0px', 
+                       box(title = strong("References", style = "color:black"), width = NULL, status = "primary", solidHeader = TRUE,
+                           DATA_TRANSFORM_REFERENCE))),
+        
+        ##### Taxa Analysis ####
+        tabItem(tabName = "taxaAnalysis", br(),
+                fluidRow(
+                  tabBox(width = 12,
+                         tabPanel(
+                           title = "Cross-Sectional",
+                           sidebarLayout( 
+                             position = "left",
+                             sidebarPanel(width = 3,
+                                          uiOutput("primvars_taxa"),
+                                          uiOutput("morePrimvar_opt_taxa"),
+                                          uiOutput("covariates_taxa"), br(),
+                                          uiOutput("downloadTable_taxa"),
+                                          uiOutput("taxa_references")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12, 
+                                                div(style='height:800px;overflow-y: scroll;', uiOutput("taxa_display")), br(),br(),
+                                                uiOutput("taxa_display_dend"))))),
+                         tabPanel(
+                           title = "Longitudinal",
+                           sidebarLayout( 
+                             position = "left",
+                             sidebarPanel(width = 3,
+                                          uiOutput("primvars_taxa.long"),
+                                          uiOutput("morePrimvar_opt_taxa.long"),
+                                          uiOutput("covariates_taxa.long"), br(),
+                                          uiOutput("downloadTable_taxalong"),
+                                          uiOutput("taxa_references_long")),
+                             mainPanel(width = 9,
+                                       fluidRow(width = 12,
+                                                div(style='height:800px;overflow-y: scroll;', uiOutput("taxa_displaylong")), br(),br(),
+                                                uiOutput("taxa_displaylongd"))))))))
       )
+    )
   )
 }
