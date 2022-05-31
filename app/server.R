@@ -1756,15 +1756,15 @@ server = function(input, output, session) {
         if (input$chooseMethod == "Welch t-test" | input$chooseMethod == "Wilcoxon rank-sum test") {
           if (input$chooseMethod == "Welch t-test") {
             incProgress(3/10, message = "T test")
-            t.test.out <- alpha.bin.t.test(alpha.results$bin.var, alpha.results$alpha_div)
+            t.test.out <- try(alpha.bin.t.test(alpha.results$bin.var, alpha.results$alpha_div), silent = TRUE)
             alpha.data.results$table.p.out = t.test.out
-            alpha.data.results$data.q.out = q.func(t.test.out, method = "BH")
+            alpha.data.results$data.q.out = try(q.func(t.test.out, method = "BH"), silent = TRUE)
           }
           else if (input$chooseMethod == "Wilcoxon rank-sum test") {
             incProgress(3/10, message = "Wilcoxon test")
-            wilcox.test.out <- alpha.bin.wilcox.test(alpha.results$bin.var, alpha.results$alpha_div)
+            wilcox.test.out <- try(alpha.bin.wilcox.test(alpha.results$bin.var, alpha.results$alpha_div), silent = TRUE)
             alpha.data.results$table.p.out = wilcox.test.out
-            alpha.data.results$data.q.out = q.func(wilcox.test.out, method = "BH")
+            alpha.data.results$data.q.out = try(q.func(wilcox.test.out, method = "BH"), silent = TRUE)
           }
           
           if (input$chooseAdjustment == "Yes") {
@@ -1787,13 +1787,13 @@ server = function(input, output, session) {
             )
           })
           output$box_plots = renderPlot({
-            alpha.bin.hist(alpha.results$bin.var, alpha.results$alpha_div, alpha.data.results$data.q.out, multi.test$boolval)
+            try(alpha.bin.hist(alpha.results$bin.var, alpha.results$alpha_div, alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
           })
         }
         else if (input$chooseMethod == "Linear regression" | input$chooseMethod == "Logistic regression") {
-          alpha.bin.cov.out <- alpha.bin.cov.cat.ref.func(input$primvar, rename.cats_ref,
+          alpha.bin.cov.out <- try(alpha.bin.cov.cat.ref.func(input$primvar, rename.cats_ref,
                                                           rename.cats_com, input$covariatesOptions,
-                                                          sam_dat, chooseData$alpha.div)
+                                                          sam_dat, chooseData$alpha.div), silent = TRUE)
           alpha.reg.results$bin.var <- alpha.bin.cov.out$bin.var
           alpha.reg.results$cov.var <- alpha.bin.cov.out$cov.var
           alpha.reg.results$alpha.div <- alpha.bin.cov.out$alpha.div
@@ -1801,32 +1801,32 @@ server = function(input, output, session) {
           if (input$chooseMethod == "Linear regression") {
             incProgress(3/10, message = "Linear regression with Covariate(s)")
             
-            alpha.lm.bin.cov.out <- alpha.lm.bin.cov.func(bin.var = alpha.reg.results$bin.var,
+            alpha.lm.bin.cov.out <- try(alpha.lm.bin.cov.func(bin.var = alpha.reg.results$bin.var,
                                                           cov.var = alpha.reg.results$cov.var,
                                                           alpha.div = alpha.reg.results$alpha.div,
-                                                          scale = TRUE)
+                                                          scale = TRUE), silent = TRUE)
             alpha.data.results$table.p.out = alpha.lm.bin.cov.out
-            alpha.data.results$data.q.out = q.func(alpha.lm.bin.cov.out, method = "BH")
+            alpha.data.results$data.q.out = try(q.func(alpha.lm.bin.cov.out, method = "BH"), silent = TRUE)
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
           
           else if (input$chooseMethod == "Logistic regression") {
             incProgress(3/10, message = "Logistic regression with Covariate(s)")
             
-            alpha.logit.bin.cov.out <- alpha.logit.bin.cov.func(bin.var = alpha.reg.results$bin.var,
+            alpha.logit.bin.cov.out <- try(alpha.logit.bin.cov.func(bin.var = alpha.reg.results$bin.var,
                                                                 cov.var = alpha.reg.results$cov.var,
                                                                 alpha.div = alpha.reg.results$alpha.div, 
-                                                                scale = TRUE)
-            alpha.logit.bin.cov.q.out = q.func(alpha.logit.bin.cov.out, method = "BH")
+                                                                scale = TRUE), silent = TRUE)
+            alpha.logit.bin.cov.q.out = try(q.func(alpha.logit.bin.cov.out, method = "BH"), silent = TRUE)
             
-            alpha.logit.reg.coef.bin.cov.out <- alpha.logit.reg.coef.bin.cov.func(bin.var = alpha.reg.results$bin.var,
+            alpha.logit.reg.coef.bin.cov.out <- try(alpha.logit.reg.coef.bin.cov.func(bin.var = alpha.reg.results$bin.var,
                                                                                   cov.var = alpha.reg.results$cov.var,
                                                                                   alpha.div = alpha.reg.results$alpha.div, 
-                                                                                  scale = TRUE)
-            alpha.logit.reg.coef.bin.cov.q.out <- q.func(alpha.logit.reg.coef.bin.cov.out, method = "BH")
+                                                                                  scale = TRUE), silent = TRUE)
+            alpha.logit.reg.coef.bin.cov.q.out <- try(q.func(alpha.logit.reg.coef.bin.cov.out, method = "BH"), silent = TRUE)
             
             alpha.data.results$table.p.out = alpha.logit.reg.coef.bin.cov.out
-            alpha.data.results$data.q.out = q.func(alpha.logit.reg.coef.bin.cov.out, method = "BH")
+            alpha.data.results$data.q.out = try(q.func(alpha.logit.reg.coef.bin.cov.out, method = "BH"), silent = TRUE)
             alpha.data.results$table.out = alpha.data.results$data.q.out
           }
           
@@ -1858,11 +1858,11 @@ server = function(input, output, session) {
             })
             
             output$forest_plots = renderPlot({
-              alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval)
+              try(alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
             })
             
             output$forest_plots.or = renderPlot({
-              alpha.logit.forest.plot(alpha.logit.bin.cov.q.out, multi.test$boolval)
+              try(alpha.logit.forest.plot(alpha.logit.bin.cov.q.out, multi.test$boolval), silent = TRUE)
             })
           } else {
             
@@ -1876,7 +1876,7 @@ server = function(input, output, session) {
             })
             
             output$forest_plots = renderPlot({
-              alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval)
+              try(alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
             })
           }
         }
@@ -1969,9 +1969,9 @@ server = function(input, output, session) {
           
           if (input$chooseMethod_cont =="Linear regression") {
             incProgress(3/10, message = "Linear regression without Covariate(s)")
-            alpha.data.results$table.p_out = alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
-                                                               alpha.results.cont$alpha.con.out$alpha.div)
-            alpha.data.results$data.q.out = q.func(alpha.data.results$table.p_out, method = "BH")
+            alpha.data.results$table.p_out = try(alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
+                                                               alpha.results.cont$alpha.con.out$alpha.div), silent = TRUE)
+            alpha.data.results$data.q.out = try(q.func(alpha.data.results$table.p_out, method = "BH"), silent = TRUE)
           }
         }
         else if (input$covariates_cont == "Covariate(s)") {
@@ -1982,9 +1982,9 @@ server = function(input, output, session) {
             
             if (input$chooseMethod_cont =="Linear regression") {
               incProgress(3/10, message = "Linear regression without Covariate(s)")
-              alpha.data.results$table.p_out = alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
-                                                                 alpha.results.cont$alpha.con.out$alpha.div)
-              alpha.data.results$data.q.out = q.func(alpha.data.results$table.p_out, method = "BH")
+              alpha.data.results$table.p_out = try(alpha.lm.con.func(alpha.results.cont$alpha.con.out$con.var, 
+                                                                 alpha.results.cont$alpha.con.out$alpha.div), silent = TRUE)
+              alpha.data.results$data.q.out = try(q.func(alpha.data.results$table.p_out, method = "BH"), silent = TRUE)
             }
           } else {
             alpha.con.cov.out <- alpha.con.cov.recode.func(chooseData$sam.dat, input$primvar, 
@@ -1992,9 +1992,9 @@ server = function(input, output, session) {
             alpha.results.cont$alpha.table.out =  apply(alpha.con.cov.out$alpha.div, 2, alpha.ind.sum.func)
             if (input$chooseMethod_cont =="Linear regression") {
               incProgress(3/10, message = "Linear regression with Covariate(s)")
-              alpha.data.results$table.p_out = alpha.lm.con.cov.func(alpha.con.cov.out$con.var, alpha.con.cov.out$cov.var,
-                                                                     alpha.con.cov.out$alpha.div, scale = TRUE)
-              alpha.data.results$data.q.out = q.func(alpha.data.results$table.p_out, method = "BH")
+              alpha.data.results$table.p_out = try(alpha.lm.con.cov.func(alpha.con.cov.out$con.var, alpha.con.cov.out$cov.var,
+                                                                     alpha.con.cov.out$alpha.div, scale = TRUE), silent = TRUE)
+              alpha.data.results$data.q.out = try(q.func(alpha.data.results$table.p_out, method = "BH"), silent = TRUE)
             }
           }
         }
@@ -2022,7 +2022,7 @@ server = function(input, output, session) {
         if (input$covariates_cont == "None") {
           output$forest_plots.cont = renderPlot({
             if (input$chooseMethod_cont == "Linear regression") {
-              alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval)
+              try(alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
             }
           })
         }
@@ -2030,12 +2030,12 @@ server = function(input, output, session) {
           if (is.null(input$covariatesOptions_cont)) {
             output$forest_plots.cont = renderPlot({
               if (input$chooseMethod_cont == "Linear regression") {
-                alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval)
+                try(alpha.con.plot(alpha.results.cont$alpha.con.out, alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
               }
             })
           } else {
             output$forest_plots.cont = renderPlot({
-              alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval)
+              try(alpha.forest.plot(alpha.data.results$data.q.out, multi.test$boolval), silent = TRUE)
             })
           }
         }
@@ -2154,65 +2154,65 @@ server = function(input, output, session) {
           if (input$covariateslong == "None") {
             incProgress(3/10, message = "LMM without Covariate(s)")
             
-            data.alphaBin_res$table.p_outbin = alpha.lmer.bin.id.func(bin.var = alpha.resultslong$bin.var, 
+            data.alphaBin_res$table.p_outbin = try(alpha.lmer.bin.id.func(bin.var = alpha.resultslong$bin.var, 
                                                                       id.var = alpha.resultslong$id.var, 
-                                                                      alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+                                                                      alpha.div = alpha.resultslong$alpha.div, scale = TRUE), silent = TRUE)
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
             
           } else if (input$covariateslong == "Covariate(s)") {
             incProgress(3/10, message = "LMM with Covariate(s)")
             
-            alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
+            alpha.bin.id.cov.out <- try(alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
-                                                                  sam_dat.long, chooseData$alpha.div)
+                                                                  sam_dat.long, chooseData$alpha.div), silent = TRUE)
             
-            data.alphaBin_res$table.p_outbin = alpha.lmer.bin.id.cov.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
+            data.alphaBin_res$table.p_outbin = try(alpha.lmer.bin.id.cov.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
                                                                           id.var =  alpha.bin.id.cov.out$id.var,
                                                                           cov.var =  alpha.bin.id.cov.out$cov.var,
-                                                                          alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE)
+                                                                          alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE), silent = TRUE)
             
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
           }
         } else if (input$chooseMethodlong == "GEE (Binomial)") {
           incProgress(3/10, message = "GEE (Binomial) with Covariate(s)")
           if (input$covariateslong == "Covariate(s)") {
-            alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
+            alpha.bin.id.cov.out <- try(alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
-                                                                  sam_dat.long, chooseData$alpha.div)
-            data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.cov.gee.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
+                                                                  sam_dat.long, chooseData$alpha.div), silent = TRUE)
+            data.alphaBin_res$table.p_outbin = try(alpha.logit.reg.coef.bin.cov.gee.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
                                                                                      id.var =  alpha.bin.id.cov.out$id.var,
                                                                                      cov.var =  alpha.bin.id.cov.out$cov.var,
-                                                                                     alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE)
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+                                                                                     alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE), silent = TRUE)
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
             
           } else if (input$covariateslong == "None") {
-            data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.gee.func(bin.var = alpha.resultslong$bin.var, 
+            data.alphaBin_res$table.p_outbin = try(alpha.logit.reg.coef.bin.gee.func(bin.var = alpha.resultslong$bin.var, 
                                                                                  id.var = alpha.resultslong$id.var, 
-                                                                                 alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+                                                                                 alpha.div = alpha.resultslong$alpha.div, scale = TRUE), silent = TRUE)
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
           }
         } else if (input$chooseMethodlong == "GLMM (Binomial)") {
           
           incProgress(3/10, message = "GLMM (Binomial) with Covariate(s)")
           if (input$covariateslong == "Covariate(s)") {
-            alpha.bin.id.cov.out <- alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
+            alpha.bin.id.cov.out <- try(alpha.bin.id.cov.cat.ref.func(input$primvarlong, rename.catslong_ref,
                                                                   rename.catslong_com, input$clustervar, 
                                                                   input$covariatesOptionslong,
-                                                                  sam_dat.long, chooseData$alpha.div)
+                                                                  sam_dat.long, chooseData$alpha.div), silent = TRUE)
             
-            data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.cov.glmm.b.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
+            data.alphaBin_res$table.p_outbin = try(alpha.logit.reg.coef.bin.cov.glmm.b.func(bin.var =  alpha.bin.id.cov.out$bin.var, 
                                                                                         id.var =  alpha.bin.id.cov.out$id.var,
                                                                                         cov.var =  alpha.bin.id.cov.out$cov.var,
-                                                                                        alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE)
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+                                                                                        alpha.div =  alpha.bin.id.cov.out$alpha.div, scale = TRUE), silent = TRUE)
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
             
           } else if (input$covariateslong == "None") {
-            data.alphaBin_res$table.p_outbin = alpha.logit.reg.coef.bin.glmm.b.func(bin.var = alpha.resultslong$bin.var, 
+            data.alphaBin_res$table.p_outbin = try(alpha.logit.reg.coef.bin.glmm.b.func(bin.var = alpha.resultslong$bin.var, 
                                                                                     id.var = alpha.resultslong$id.var, 
-                                                                                    alpha.div = alpha.resultslong$alpha.div, scale = TRUE)
-            data.alphaBin_res$data.output = q.func(data.alphaBin_res$table.p_outbin, method = "BH")
+                                                                                    alpha.div = alpha.resultslong$alpha.div, scale = TRUE), silent = TRUE)
+            data.alphaBin_res$data.output = try(q.func(data.alphaBin_res$table.p_outbin, method = "BH"), silent = TRUE)
           }
         }
         
@@ -2270,7 +2270,7 @@ server = function(input, output, session) {
         
         
         output$graph_plotslong = renderPlot({
-          alpha.forest.lmer.plot(data.alphaBin_res$data.output, multi.test.long$boolval)
+          try(alpha.forest.lmer.plot(data.alphaBin_res$data.output, multi.test.long$boolval), silent = TRUE)
         })
         
         ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethodlong), FDR = isolate(input$chooseAdjustmentlong))
@@ -2339,11 +2339,11 @@ server = function(input, output, session) {
           if (input$covariates_contlong == "None") {
             incProgress(3/10, message = "LMM without Covariate(s)")
             
-            data.results.cont_long$table_p.out = alpha.lmer.con.id.func(con.var = alpha.noncovs_res$con.var, 
+            data.results.cont_long$table_p.out = try(alpha.lmer.con.id.func(con.var = alpha.noncovs_res$con.var, 
                                                                         id.var = alpha.noncovs_res$id.var,
-                                                                        alpha.div = alpha.noncovs_res$alpha.div, scale = TRUE)
+                                                                        alpha.div = alpha.noncovs_res$alpha.div, scale = TRUE), silent = TRUE)
             
-            data.results.cont_long$data.q.out = q.func(data.results.cont_long$table_p.out, method = "BH")
+            data.results.cont_long$data.q.out = try(q.func(data.results.cont_long$table_p.out, method = "BH"), silent = TRUE)
             
           } else if (input$covariates_contlong == "Covariate(s)") {
             incProgress(3/10, message = "LMM with Covariate(s)")
@@ -2351,11 +2351,11 @@ server = function(input, output, session) {
                                                          input$covariatesOptions_contlong, input$rename.con.varlong,
                                                          chooseData$alpha.div)
             
-            data.results.cont_long$table_p.out = alpha.lmer.con.id.cov.func(con.var = alpha.cov_res$con.var, 
+            data.results.cont_long$table_p.out = try(alpha.lmer.con.id.cov.func(con.var = alpha.cov_res$con.var, 
                                                                             cov.var = alpha.cov_res$cov.var, 
                                                                             id.var = alpha.cov_res$id.var,
-                                                                            alpha.div = alpha.cov_res$alpha.div, scale = TRUE)
-            data.results.cont_long$data.q.out = q.func(data.results.cont_long$table_p.out, method = "BH")
+                                                                            alpha.div = alpha.cov_res$alpha.div, scale = TRUE), silent = TRUE)
+            data.results.cont_long$data.q.out = try(q.func(data.results.cont_long$table_p.out, method = "BH"), silent = TRUE)
             
           }
         }
@@ -2414,7 +2414,7 @@ server = function(input, output, session) {
         )
         
         output$graph_plotslong = renderPlot({
-          alpha.forest.lmer.plot(data.results.cont_long$data.q.out, multi.test.long$boolval)
+          try(alpha.forest.lmer.plot(data.results.cont_long$data.q.out, multi.test.long$boolval), silent = TRUE)
         })
         
         ref_string = REFERENCE_CHECK(method_name = isolate(input$chooseMethodlong_cont), FDR = isolate(input$chooseAdjustment_contlong))
@@ -2522,14 +2522,14 @@ server = function(input, output, session) {
         })
         
         if (input$beta_covariates_bin == "None") {
-          beta.down.results$CS = mirkat.bin(beta.data.results$data.q.out)
+          beta.down.results$CS = try(mirkat.bin(beta.data.results$data.q.out), silent = TRUE)
           output$beta_graph_plots.bin = renderPlot({
-            isolate(mirkat.bin.plot(beta.down.results$CS, beta.data.results$data.q.out))
+            try(isolate(mirkat.bin.plot(beta.down.results$CS, beta.data.results$data.q.out)), silent = TRUE)
           })
         } else if (input$beta_covariates_bin == "Covariate(s)") {
-          beta.down.results$CS = mirkat.bin.cov(beta.data.results$data.q.out)
+          beta.down.results$CS = try(mirkat.bin.cov(beta.data.results$data.q.out), silent = TRUE)
           output$beta_graph_plots.bin = renderPlot({
-            isolate(mirkat.bin.cov.plot(beta.down.results$CS, beta.data.results$data.q.out))
+            try(isolate(mirkat.bin.cov.plot(beta.down.results$CS, beta.data.results$data.q.out)), silent = TRUE)
           })
         }
         
@@ -2642,14 +2642,14 @@ server = function(input, output, session) {
                    })
                    
                    if (input$beta.covariates_cont == "None") {
-                     beta.down.results$CS = mirkat.con(beta.resultscont$beta.cont.out)
+                     beta.down.results$CS = try(mirkat.con(beta.resultscont$beta.cont.out), silent = TRUE)
                      output$beta_graph_plots.cont = renderPlot({
-                       isolate(mirkat.con.plot(beta.down.results$CS, beta.resultscont$beta.cont.out))
+                       try(isolate(mirkat.con.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)), silent = TRUE)
                      })
                    } else if (input$beta.covariates_cont == "Covariate(s)") {
-                     beta.down.results$CS = mirkat.con.cov(beta.resultscont$beta.cont.out)
+                     beta.down.results$CS = try(mirkat.con.cov(beta.resultscont$beta.cont.out), silent = TRUE)
                      output$beta_graph_plots.cont = renderPlot({
-                       isolate(mirkat.con.cov.plot(beta.down.results$CS, beta.resultscont$beta.cont.out))
+                       try(isolate(mirkat.con.cov.plot(beta.down.results$CS, beta.resultscont$beta.cont.out)), silent = TRUE)
                      })
                    }
                    
@@ -2791,14 +2791,14 @@ server = function(input, output, session) {
         })
         
         if (input$beta_covariates_bin.long == "None") {
-          beta.down.results$LONG = glmm.mirkat.bin(beta.data.results_long$beta.bin.out)
+          beta.down.results$LONG = try(glmm.mirkat.bin(beta.data.results_long$beta.bin.out), silent = TRUE)
           output$beta_graph_plots.bin_long = renderPlot({
-            isolate(glmm.mirkat.bin.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out))
+            try(isolate(glmm.mirkat.bin.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)), silent = TRUE)
           })
         } else if (input$beta_covariates_bin.long == "Covariate(s)") {
-          beta.down.results$LONG = glmm.mirkat.bin.cov(beta.data.results_long$beta.bin.out)
+          beta.down.results$LONG = try(glmm.mirkat.bin.cov(beta.data.results_long$beta.bin.out), silent = TRUE)
           output$beta_graph_plots.bin_long = renderPlot({
-            isolate(glmm.mirkat.bin.cov.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out))
+            try(isolate(glmm.mirkat.bin.cov.plot(beta.down.results$LONG,beta.data.results_long$beta.bin.out)), silent = TRUE)
           })
         }
         
@@ -2917,14 +2917,14 @@ server = function(input, output, session) {
         })
         
         if (input$beta.covariates_contLong == "None") {
-          beta.down.results$LONG = glmm.mirkat.con(beta.con.id.out = beta.resultscon_long$beta.con.out)
+          beta.down.results$LONG = try(glmm.mirkat.con(beta.con.id.out = beta.resultscon_long$beta.con.out), silent = TRUE)
           output$beta_graph_plots.conLong = renderPlot({
-            isolate(glmm.mirkat.con.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out))
+            try(isolate(glmm.mirkat.con.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)), silent = TRUE)
           })
         } else if (input$beta.covariates_contLong == "Covariate(s)") {
-          beta.down.results$LONG = glmm.mirkat.con.cov(beta.con.id.cov.out = beta.resultscon_long$beta.con.out) 
+          beta.down.results$LONG = try(glmm.mirkat.con.cov(beta.con.id.cov.out = beta.resultscon_long$beta.con.out) , silent = TRUE)
           output$beta_graph_plots.conLong = renderPlot({
-            isolate(glmm.mirkat.con.cov.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out))
+            try(isolate(glmm.mirkat.con.cov.plot(beta.down.results$LONG,beta.resultscon_long$beta.con.out)), silent = TRUE)
           })
         }
         
@@ -4321,4 +4321,5 @@ server = function(input, output, session) {
       }
     )
   }, ignoreNULL = TRUE, ignoreInit = TRUE)
+  
 }
