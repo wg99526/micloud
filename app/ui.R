@@ -78,6 +78,72 @@ library(glmm)
   HOME_COMMENT5 = ("Adjustable/downloadable/publishable data, tables and graphs.")
   HOME_COMMENT6 = p("Reference: Gu, W., Moon, J., Chisina, C., Kang, B., Park, T., Koh, H. MiCloud: A unified web platform for comprehensive microbiome data analysis. (Under review)", style = "font-size:13pt")
   
+  INPUT_PHYLOSEQ_COMMENT1 = p("Description:", br(), br(), "This should be an '.Rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
+                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
+                              "). The phyloseq object should contain all the four necessary data, feature (OTU or ASV) table, taxonomic table, 
+                              metadata/sample information, and phylogenetic tree.", 
+                              br(), br(), "Details:", br(), br(), 
+                              "1) The feature table should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                              (row names are feature IDs and column names are subject IDs).", br(),
+                              "2) The taxonomic table should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                              (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                              'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species').", br(),
+                              "3) The metadata/sample information should contain variables for the subjects about host phenotypes, medical interventions, 
+                              disease status or environmental/behavioral factors, where rows are subjects and columns are variables 
+                              (row names are subject IDs, and column names are variable names).", br(), 
+                              "4) The phylogenetic tree should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint rooting (phangorn::midpoint). 
+                              The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                              "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                              The subjects should be matched and identical between feature table and metadata/sample information. 
+                              MiCloud will analyze only the matched features and subjects."
+                              , style = "font-size:11pt")
+  INPUT_PHYLOSEQ_COMMENT2 = p("You can download example microbiome data 'biom.Rdata' in 'phyloseq' format. The name of the 
+                              phyloseq object should be 'biom'. For more details about 'phyloseq', see ", 
+                              a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"), br(), br(), 
+                              "> setwd('/yourdatadirectory/')", br(), br(), 
+                              "> load(file = 'biom.Rdata')", br(), br(), 
+                              "> library(phyloseq)", br(), br(), 
+                              " > otu.tab <- otu_table(biom)", br(), 
+                              " > tax.tab <- tax_table(biom)", br(), 
+                              " > tree <- phy_tree(biom)", br(), 
+                              " > sam.dat <- sample_data(biom)", br(), br(), 
+                              "You can check if the features are matched and identical across feature table, taxonomic table and 
+                              phylogenetic tree, and the subjects are matched and identical between feature table and metadata/sample information 
+                              using following code.", br(), br(), 
+                              " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
+                              " > identical(rownames(otu.tab), tree$tip.label)", br(), 
+                              " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT = p("Description:", br(), br(), 
+                                    "1) The feature table (.txt or .csv) should contain counts, where rows are features (OTUs or ASVs) and columns are subjects 
+                                    (row names are feature IDs and column names are subject IDs). Alternatively, you can upload .biom file processed by QIIME.", br(), 
+                                    "2) The taxonomic table (.txt) should contain taxonomic names, where rows are features and columns are seven taxonomic ranks 
+                                    (row names are feature IDs and column names are 'Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species' or 
+                                    'Domain', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'). Alternatively, you can upload .tsv file processed by QIIME.", br(), 
+                                    "3) The metadata/sample information (.txt or .csv) should contain variables for the subjects about host phenotypes, medical interventions, 
+                                    disease status or environmental/behavioral factors, where rows are subjects and columns are variables (row names are subject IDs, and 
+                                    column names are variable names).", br(), 
+                                    "4) The phylogenetic tree (.tre or .nwk) should be a rooted tree. Otherwise, MiCloud automatically roots the tree through midpoint 
+                                    rooting (phangorn::midpoint). The tip labels of the phylogenetic tree are feature IDs.", br(), br(), 
+                                    "* The features should be matched and identical across feature table, taxonomic table and phylogenetic tree. 
+                                    The subjects should be matched and identical between feature table and metadata/sample information. 
+                                    MiCloud will analyze only the matched features and subjects.", style = "font-size:11pt")
+  INPUT_INDIVIDUAL_DATA_COMMENT2 = p("You can download example microbiome data 'biom.zip'. This zip file contains four necessary data, feature table (otu.tab.txt), 
+                                     taxonomic table (tax.tab.txt), metadata/sample information (sam.dat.txt), and phylogenetic tree (tree.tre).", br(), br(),
+                                     "> setwd('/yourdatadirectory/')", br(), br(), 
+                                     "> otu.tab <- read.table(file = 'otu.tab.txt', check.names = FALSE) ", br(), 
+                                     "> tax.tab <- read.table(file = 'tax.tab.txt', check.names = FALSE)", br(), 
+                                     " > sam.dat <- read.table(file = 'sam.dat.txt', check.names = FALSE) ", br(),
+                                     "> tree <- read.tree(file = 'tree.tre')", br(), br(), 
+                                     "You can check if the features are matched and identical across feature table, taxonomic table and phylogenetic tree, 
+                                     and the subjects are matched and identical between feature table and metadata/sample information using following code.", br(), br(), 
+                                     " > identical(rownames(otu.tab), rownames(tax.tab))", br(), 
+                                     " > identical(rownames(otu.tab), tree$tip.label)", br(), 
+                                     " > identical(colnames(otu.tab), rownames(sam.dat))", style = "font-size:11pt")
+  
+  EXTERNAL_RESOURCE_COMMENT = p("MiCloud does not take raw sequence data. For the raw sequence data processing and microbiome profiling, we recommend following popular and well-established bioinformatic pipelines.", br(), br(),
+                              "For web platforms:", p(" ", style = "margin-bottom: 10px;"),"Nephele (https://nephele.niaid.nih.gov), Qiita (https://qiita.ucsd.edu), QIIME2 (q2studio) (https://qiime2.org) and PUMAA (https://sites.google.com/g.ucla.edu/pumaa)", br(), br(),
+                              "For command line interfaces:", p(" ", style = "margin-bottom: 10px;"), "QIIME (http://qiime.org), QIIME2 (q2cli) (https://qiime2.org), MG-RAST (https://www.mg-rast.org), Mothur (https://mothur.org), MEGAN (http://ab.inf.uni-tuebingen.de/software/megan6) and MetaPhlAn (https://huttenhower.sph.harvard.edu/metaphlan)", style = "font-size:11pt")
+  
   QC_KINGDOM_COMMENT = p("A microbial kingdom to be analyzed. Default is 'Bacteria' for 16S data. Alternatively, you can type 'Fungi' for ITS data 
                          or any other kingdom of interest for shotgun metagenomic data.", style = "font-size:11pt")
   QC_LIBRARY_SIZE_COMMENT1 = p("Remove subjects that have low library sizes (total read counts). Default is 3,000.", style = "font-size:11pt")
