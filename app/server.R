@@ -1,4 +1,22 @@
 {
+  TITLE = p("MiCloud: A Unified Web Platform for Comprehensive Microbiome Data Analysis", style = "font-size:18pt")
+  HOME_COMMENT = p(strong("MiCloud", style = "font-size:15pt"), "is a unified web platform for comprehensive microbiome data analysis. 
+                   MiCloud provides step-by-step user-friendly web environments for a breadth of data processing, analytic and graphical procedures. 
+                   MiCloud performs both ecological (alpha- and beta-diversity) and taxonomical (phylum, class, order, family, genus, 
+                   species) analyses for various types of host phenotypes (or disease status) and study designs with or without covariate 
+                   adjustment(s). More details are as follows.", style = "font-size:13pt")
+  HOME_COMMENT1 = ("Interactive procedures for various data inputs (.rdata, .rds, .biom, .txt, .csv, .tsv, .tre), quality controls (kingdom, 
+                   library size, mean proportion, taxonomic name) and data transformations (alpha- and beta-diversity, rarefaction, 
+                   proportion, centered log-ratio).")
+  HOME_COMMENT2 = ("Comparative analysis for both ecological (alpha- and beta-diversity) indices and microbial taxa in relative abundance 
+                   (phylum, class, order, family, genus, species).")
+  HOME_COMMENT3 = ("Comparative analysis for both binary and continuous traits of host phenotypes 
+                   (or medical interventions, disease status or environmental/behavioral factors).")
+  HOME_COMMENT4 = ("Comparative analysis with or without covariate (e.g., age, gender) adjustment(s) for either 
+                   cross-sectional or longitudinal/family-based microbiome study design.")
+  HOME_COMMENT5 = ("Adjustable/downloadable/publishable data, tables and graphs.")
+  HOME_COMMENT6 = p("Reference: Gu, W., Moon, J., Chisina, C., Kang, B., Park, T., Koh, H. MiCloud: A unified web platform for comprehensive microbiome data analysis. (Under review)", style = "font-size:13pt")
+  
   INPUT_PHYLOSEQ_COMMENT1 = p("Description:", br(), br(), "This should be an '.Rdata' or '.rds' file, and the data should be in 'phyloseq' format (see ", 
                               a(tags$u("https://bioconductor.org/packages/release/bioc/html/phyloseq.html"), style = "color:red3"),
                               "). The phyloseq object should contain all the four necessary data, feature (OTU or ASV) table, taxonomic table, 
@@ -64,6 +82,42 @@
   EXTERNAL_RESOURCE_COMMENT = p("MiCloud does not take raw sequence data. For the raw sequence data processing and microbiome profiling, we recommend following popular and well-established bioinformatic pipelines.", br(), br(),
                               "For web platforms:", p(" ", style = "margin-bottom: 10px;"),"Nephele (https://nephele.niaid.nih.gov), Qiita (https://qiita.ucsd.edu), QIIME2 (q2studio) (https://qiime2.org) and PUMAA (https://sites.google.com/g.ucla.edu/pumaa)", br(), br(),
                               "For command line interfaces:", p(" ", style = "margin-bottom: 10px;"), "QIIME (http://qiime.org), QIIME2 (q2cli) (https://qiime2.org), MG-RAST (https://www.mg-rast.org), Mothur (https://mothur.org), MEGAN (http://ab.inf.uni-tuebingen.de/software/megan6) and MetaPhlAn (https://huttenhower.sph.harvard.edu/metaphlan)", style = "font-size:11pt")
+  
+  QC_KINGDOM_COMMENT = p("A microbial kingdom to be analyzed. Default is 'Bacteria' for 16S data. Alternatively, you can type 'Fungi' for ITS data 
+                         or any other kingdom of interest for shotgun metagenomic data.", style = "font-size:11pt")
+  QC_LIBRARY_SIZE_COMMENT1 = p("Remove subjects that have low library sizes (total read counts). Default is 3,000.", style = "font-size:11pt")
+  QC_LIBRARY_SIZE_COMMENT2 = p("Library size: The total read count per subject.", style = "font-size:11pt")
+  QC_MEAN_PROP_COMMENT1 = p("Remove features (OTUs or ASVs) that have low mean relative abundances (Unit: %). Default is 0.002%.",style = "font-size:11pt")
+  QC_MEAN_PROP_COMMENT2 = p("Mean proportion: The average of relative abundances (i.e., proportions) per feature.", style = "font-size:11pt")
+  QC_TAXA_NAME_COMMENT1 = p('Remove taxonomic names in the taxonomic table that are completely matched with the specified character strings. 
+                            Multiple character strings should be separated by a comma. Default is "", "metagenome", "gut metagenome", "mouse gut metagenome".',
+                            style = "font-size:11pt")
+  QC_TAXA_NAME_COMMENT2 = p('Remove taxonomic names in the taxonomic table that are partially matched with the specified character strings (i.e., taxonomic names that contain 
+                            the specified character strings). Multiple character strings should be separated by a comma. Default is "uncultured", "incertae", "Incertae",
+                            "unidentified", "unclassified", "unknown".',style = "font-size:11pt")
+  
+  ALPHA_COMMENT = p("Calculate alpha-diversity indices: Richness (Observed), Shannon (Shannon, 1948), Simpson (Simpson, 1949), Inverse Simpson (Simpson, 1949), 
+                    Fisher (Fisher et al., 1943), Chao1 (Chao, 1984), ACE (Chao and Lee, 1992), ICE (Lee and Chao, 1994), PD (Faith, 1992).")
+  ALPHA_REFERENCES = p("1. Chao A, Lee S. Estimating the number of classes via sample coverage. J Am Stat Assoc. 1992:87:210-217.", br(),
+                       "2. Chao A. Non-parametric estimation of the number of classes in a population. Scand J Stat. 1984:11:265-270.", br(),
+                       "3. Faith DP. Conservation evaluation and phylogenetic diversity. Biol Conserv. 1992:61:1-10.", br(),
+                       "4. Fisher RA, Corbet AS, Williams CB. The relation between the number of species and the number of individuals 
+                       in a random sample of an animal population. J Anim Ecol. 1943:12:42-58.", br(),
+                       "5. Lee S, Chao A. Estimating population size via sample coverage for closed capture-recapture models. Biometrics. 1994:50:1:88-97.", br(),
+                       "6. Shannon CE. A mathematical theory of communication. Bell Syst Tech J. 1948:27:379-423 & 623-656.", br(),
+                       "7. Simpson EH. Measurement of diversity. Nature 1949:163:688.", br())
+  BETA_COMMENT = p("Calculate beta-diversity indices: Jaccard dissimilarity (Jaccard, 1912), Bray-Curtis dissimilarity (Bray and Curtis, 1957), Unweighted UniFrac distance 
+                   (Lozupone and Knight, 2005), Generalized UniFrac distance (Chen et al., 2012), Weighted UniFrac distance (Lozupone et al., 2007).")
+  BETA_REFERENCES = p("1. Bray JR, Curtis JT. An ordination of the upland forest communities of Southern Wisconsin. Ecol Monogr. 1957;27(32549).", br(),
+                      "2. Chen J, Bittinger K, Charlson ES, Hoffmann C, Lewis J, Wu GD., et al. Associating microbiome composition with environmental 
+                      covariates using generalized UniFrac distances. Bioinformatics. 2012;28(16):2106-13.", br(),
+                      "3. Jaccard P. The distribution of the flora in the alpine zone. New Phytol. 1912;11(2):37-50.", br(),
+                      "4. Lozupone CA, Hamady M, Kelley ST, Knight R. Quantitative and qualitative 棺-diversity measures lead to 
+                      different insights into factors that structure microbial communities. Appl Environ Microbiol. 2007;73(5):1576-85.", br(),
+                      "5. Lozupone CA, Knight R. UniFrac: A new phylogenetic method for comparing microbial communities. Appl Environ Microbiol. 2005;71(12):8228-35.")
+  DATA_TRANSFORM_COMMENT = p("Transform the data into four different formats 1) count, 2) count (rarefied), 3) proportion, 
+                             4) CLR (centered log ratio) (Aitchison, 1982) for each taxonomic rank (phylum, class, order, familiy, genus, species).")
+  DATA_TRANSFORM_REFERENCE = p("1. Aitchison J. The statistical analysis of compositional data. J R Statist Soc B. 1982;44:2:139-77")
 }
 
 server = function(input, output, session) {
