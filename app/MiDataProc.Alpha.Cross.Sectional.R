@@ -800,8 +800,8 @@ alpha.con.cov.recode.func <- function(sam.dat, sel.con.var, sel.cov.var, rename.
   ind.sel <- which(colnames(sam.dat) == sel.con.var)
   colnames(sam.dat)[ind.sel] <- rename.con.var
   ind.nona <- !is.na(sam.dat[,ind.sel])
-  con.var <- as.data.frame(as.matrix(sam.dat[ind.nona,ind.sel]))
-  cov.var <- as.data.frame(as.matrix(sam.dat[ind.nona, sel.cov.var]))
+  con.var <- as.data.frame(as.matrix(sam.dat[ind.nona, ind.sel]))
+  cov.var <- as.data.frame(sam.dat[ind.nona, sel.cov.var])
   colnames(cov.var) <- sel.cov.var
   alpha.div = alpha.div[ind.nona,]
   return(list(con.var = con.var, cov.var = cov.var, alpha.div = alpha.div))
