@@ -499,7 +499,7 @@ alpha.con.id.cov.recode.func <- function(sam.dat, sel.con.var, sel.id.var, sel.c
   colnames(sam.dat)[ind.sel] <- rename.con.var
   ind.nona <- !is.na(sam.dat[,ind.sel])
   con.var <- as.data.frame(as.matrix(sam.dat[ind.nona,ind.sel]))
-  cov.var <- as.data.frame(as.matrix(sam.dat[ind.nona, sel.cov.var]))
+  cov.var <- as.data.frame(sam.dat[ind.nona, sel.cov.var])
   id.var <- as.data.frame(as.matrix(sam.dat[ind.nona, sel.id.var]))
   alpha.div = alpha.div[ind.nona,]
   return(list(con.var = con.var, id.var = id.var, cov.var = cov.var, alpha.div = alpha.div))
