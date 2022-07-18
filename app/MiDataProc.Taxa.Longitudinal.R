@@ -2,16 +2,6 @@
 # Quality control and transformation #
 ######################################
 
-library(phangorn)
-library(phyloseq)
-library(zCompositions)
-library(plotly)
-library(dplyr)
-library(forestplot)
-library(quantreg)
-library(fossil)
-library(picante)
-library(entropart)
 library(lme4)
 library(lmerTest)
 library(MiRKAT)
