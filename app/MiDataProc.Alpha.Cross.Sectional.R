@@ -2,15 +2,8 @@
 # Quality control and transformation #
 ######################################
 
-library(phangorn)
-library(phyloseq)
-library(zCompositions)
-library(plotly)
-library(dplyr)
-library(forestplot)
 library(quantreg)
 library(fossil)
-library(picante)
 
 rem.tax.d <- c("", "metagenome", "gut metagenome", "mouse gut metagenome")
 rem.tax.str.d <- c("uncultured", "incertae", "Incertae", "unidentified", "unclassified", "unknown")
